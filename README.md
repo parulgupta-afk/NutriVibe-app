@@ -135,3 +135,6 @@ A few real issues found and resolved during development, since they're a fair re
 ## 📄 License
 
 This project was built as a personal learning/portfolio project.
+
+## 🔗 Live Demo
+[https://nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)
