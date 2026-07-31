@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium 
+           hover:bg-primary-700 transition-all duration-200 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-medium 
+           hover:bg-gray-300 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           transition-all duration-200;
+  }
+  
+  .label-field {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+  
+  .safety-safe {
+    @apply bg-green-50 text-green-700 border-green-200;
+  }
+  
+  .safety-caution {
+    @apply bg-yellow-50 text-yellow-700 border-yellow-200;
+  }
+  
+  .safety-unsafe {
+    @apply bg-red-50 text-red-700 border-red-200;
+  }
+}
+
+/* Barcode scanner "laser line" overlay effect */
+@keyframes scan-line-move {
+  0% {
+    top: 4%;
+    opacity: 0.3;
+  }
+  50% {
+    top: 96%;
+    opacity: 1;
+  }
+  100% {
+    top: 4%;
+    opacity: 0.3;
+  }
+}
+
+.scan-line {
+  animation: scan-line-move 2s ease-in-out infinite;
+}
