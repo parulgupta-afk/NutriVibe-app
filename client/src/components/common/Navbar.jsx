@@ -24,7 +24,7 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             <FiHome className="text-lg" />
-            <span className="hidden sm:inline">Dashboard</span>
+            <span>Dashboard</span>
           </Link>
           <Link
             to="/scanner"
@@ -32,7 +32,7 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             <FiCamera className="text-lg" />
-            <span className="hidden sm:inline">Scan</span>
+            <span>Scan</span>
           </Link>
           <Link
             to="/profiles"
@@ -40,14 +40,14 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             <FiUsers className="text-lg" />
-            <span className="hidden sm:inline">Profiles</span>
+            <span>Profiles</span>
           </Link>
           <button
             onClick={handleLogout}
             className="text-gray-600 hover:text-red-600 transition-colors flex items-center gap-1"
           >
             <FiLogOut className="text-lg" />
-            <span className="hidden sm:inline">Logout</span>
+            <span>Logout</span>
           </button>
         </>
       ) : (

@@ -12,6 +12,9 @@ const Onboarding = () => {
     medications: [],
   });
   const [medicationInput, setMedicationInput] = useState('');
+  const [allergyInput, setAllergyInput] = useState('');
+  const [dietaryInput, setDietaryInput] = useState('');
+  const [goalInput, setGoalInput] = useState('');
   const { updatePreferences, user } = useAuth();
   const navigate = useNavigate();
 
@@ -45,6 +48,69 @@ const Onboarding = () => {
     setPreferences({ ...preferences, [category]: updated });
   };
 
+  const handleAddAllergy = () => {
+    const trimmed = allergyInput.trim();
+    if (!trimmed) return;
+    if (preferences.allergies.some(a => a.toLowerCase() === trimmed.toLowerCase())) {
+      setAllergyInput('');
+      return;
+    }
+    setPreferences({
+      ...preferences,
+      allergies: [...preferences.allergies, trimmed]
+    });
+    setAllergyInput('');
+  };
+
+  const handleRemoveAllergy = (allergy) => {
+    setPreferences({
+      ...preferences,
+      allergies: preferences.allergies.filter(a => a !== allergy)
+    });
+  };
+
+  const handleAddDietary = () => {
+    const trimmed = dietaryInput.trim();
+    if (!trimmed) return;
+    if (preferences.dietaryRestrictions.some(d => d.toLowerCase() === trimmed.toLowerCase())) {
+      setDietaryInput('');
+      return;
+    }
+    setPreferences({
+      ...preferences,
+      dietaryRestrictions: [...preferences.dietaryRestrictions, trimmed]
+    });
+    setDietaryInput('');
+  };
+
+  const handleRemoveDietary = (item) => {
+    setPreferences({
+      ...preferences,
+      dietaryRestrictions: preferences.dietaryRestrictions.filter(d => d !== item)
+    });
+  };
+
+  const handleAddGoal = () => {
+    const trimmed = goalInput.trim();
+    if (!trimmed) return;
+    if (preferences.healthGoals.some(g => g.toLowerCase() === trimmed.toLowerCase())) {
+      setGoalInput('');
+      return;
+    }
+    setPreferences({
+      ...preferences,
+      healthGoals: [...preferences.healthGoals, trimmed]
+    });
+    setGoalInput('');
+  };
+
+  const handleRemoveGoal = (goal) => {
+    setPreferences({
+      ...preferences,
+      healthGoals: preferences.healthGoals.filter(g => g !== goal)
+    });
+  };
+
   const handleAddMedication = () => {
     const trimmed = medicationInput.trim();
     if (!trimmed) return;
@@ -67,13 +133,6 @@ const Onboarding = () => {
   };
 
   const handleNext = () => {
-    if (step === 0) {
-      // Validate at least one allergy selected
-      if (preferences.allergies.length === 0) {
-        alert('Please select at least one allergen to track');
-        return;
-      }
-    }
     if (step < 3) {
       setStep(step + 1);
     } else {
@@ -96,8 +155,11 @@ const Onboarding = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Allergen Safety First
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-2">
               Select any allergens you need to avoid. This helps us give you instant safety verdicts.
+            </p>
+            <p className="text-sm text-gray-400 mb-6">
+              No allergies? No problem — just click "Next" to skip this step.
             </p>
             <div className="grid grid-cols-2 gap-3">
               {commonAllergens.map((allergen) => (
@@ -118,6 +180,51 @@ const Onboarding = () => {
                   </div>
                 </button>
               ))}
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Don't see it listed? Add your own
+              </label>
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={allergyInput}
+                  onChange={(e) => setAllergyInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddAllergy();
+                    }
+                  }}
+                  placeholder="e.g. Kiwi, Mustard, Sulfites"
+                  className="input-field flex-1"
+                />
+                <button
+                  onClick={handleAddAllergy}
+                  className="btn-primary px-4 flex items-center gap-1"
+                  type="button"
+                >
+                  <FiPlus /> Add
+                </button>
+              </div>
+              {preferences.allergies.filter(a => !commonAllergens.includes(a)).length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {preferences.allergies
+                    .filter(a => !commonAllergens.includes(a))
+                    .map((allergy) => (
+                      <span
+                        key={allergy}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm"
+                      >
+                        {allergy}
+                        <button onClick={() => handleRemoveAllergy(allergy)} type="button">
+                          <FiX className="text-red-500 hover:text-red-800" />
+                        </button>
+                      </span>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -150,6 +257,51 @@ const Onboarding = () => {
                   </div>
                 </button>
               ))}
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Following something else? Add your own
+              </label>
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={dietaryInput}
+                  onChange={(e) => setDietaryInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddDietary();
+                    }
+                  }}
+                  placeholder="e.g. Halal, Kosher, Low-Sodium"
+                  className="input-field flex-1"
+                />
+                <button
+                  onClick={handleAddDietary}
+                  className="btn-primary px-4 flex items-center gap-1"
+                  type="button"
+                >
+                  <FiPlus /> Add
+                </button>
+              </div>
+              {preferences.dietaryRestrictions.filter(d => !dietaryRestrictions.includes(d)).length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {preferences.dietaryRestrictions
+                    .filter(d => !dietaryRestrictions.includes(d))
+                    .map((item) => (
+                      <span
+                        key={item}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 border border-primary-200 text-primary-700 text-sm"
+                      >
+                        {item}
+                        <button onClick={() => handleRemoveDietary(item)} type="button">
+                          <FiX className="text-primary-500 hover:text-primary-800" />
+                        </button>
+                      </span>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -255,6 +407,51 @@ const Onboarding = () => {
                   </div>
                 </button>
               ))}
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Have a different goal in mind? Add your own
+              </label>
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={goalInput}
+                  onChange={(e) => setGoalInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddGoal();
+                    }
+                  }}
+                  placeholder="e.g. Train for a marathon"
+                  className="input-field flex-1"
+                />
+                <button
+                  onClick={handleAddGoal}
+                  className="btn-primary px-4 flex items-center gap-1"
+                  type="button"
+                >
+                  <FiPlus /> Add
+                </button>
+              </div>
+              {preferences.healthGoals.filter(g => !healthGoals.includes(g)).length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {preferences.healthGoals
+                    .filter(g => !healthGoals.includes(g))
+                    .map((goal) => (
+                      <span
+                        key={goal}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm"
+                      >
+                        {goal}
+                        <button onClick={() => handleRemoveGoal(goal)} type="button">
+                          <FiX className="text-green-500 hover:text-green-800" />
+                        </button>
+                      </span>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         );
