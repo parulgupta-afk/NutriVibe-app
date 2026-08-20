@@ -1,77 +1,57 @@
 require('dotenv').config();
-const app = require('./src/app');
+const { validateEnv, envSummary } = require('./src/config/validateEnv');
 const connectDB = require('./src/config/database');
 
+// Phase 4: validate before loading routes / listening
+const envInfo = validateEnv();
+
+const app = require('./src/app');
 const PORT = process.env.PORT || 5000;
 
-// Validate required environment variables
-const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-
-if (missingVars.length > 0) {
-  console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`);
-  console.log('💡 Please create a .env file with these variables');
-  process.exit(1);
-}
-
-console.log('📋 Environment Configuration:');
-console.log(`  PORT: ${PORT}`);
-console.log(`  NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
-console.log(`  MONGO_URI: ${process.env.MONGO_URI ? '✅ Set' : '❌ Missing'}`);
-console.log(`  JWT_SECRET: ${process.env.JWT_SECRET ? '✅ Set' : '❌ Missing'}`);
+const summary = envSummary();
+console.log('Environment:');
+console.log(`  NODE_ENV: ${summary.NODE_ENV}`);
+console.log(`  PORT: ${summary.PORT}`);
+console.log(`  MONGO_URI: ${summary.MONGO_URI}`);
+console.log(`  JWT_SECRET: ${summary.JWT_SECRET}`);
+console.log(`  CLIENT_URL: ${summary.CLIENT_URL}`);
+console.log(`  GEMINI_API_KEY: ${summary.GEMINI_API_KEY}`);
+console.log(`  GOOGLE_CLIENT_ID: ${summary.GOOGLE_CLIENT_ID}`);
 console.log('');
 
-// Connect to MongoDB
 connectDB();
 
-// Start server
 const server = app.listen(PORT, () => {
-  console.log('🚀 Server started successfully!');
-  console.log(`📡 Listening on http://localhost:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('');
-  console.log('📋 Available Endpoints:');
-  console.log('  GET  /api/health              - Health check');
-  console.log('  POST /api/auth/register       - Register a new user');
-  console.log('  POST /api/auth/login          - Login user');
-  console.log('  GET  /api/auth/me             - Get current user');
-  console.log('  PUT  /api/auth/preferences    - Update user preferences');
-  console.log('  GET  /api/products/barcode/:barcode - Get product by barcode');
-  console.log('  GET  /api/products/:id        - Get product details');
-  console.log('  GET  /api/products/:id/alternatives - Get alternatives');
-  console.log('  POST /api/tracking/log        - Log a product');
-  console.log('  GET  /api/tracking/daily      - Get daily tracking');
-  console.log('  GET  /api/tracking/history    - Get tracking history');
-  console.log('  GET  /api/safety/product/:id  - Get safety report');
-  console.log('');
-  console.log('🔑 Demo barcodes to try:');
-  console.log('  1234567890123 - Organic Almond Milk');
-  console.log('  9876543210987 - Wheat Bread Whole Grain');
-  console.log('  4567890123456 - Premium Greek Yogurt');
-  console.log('');
-  console.log('💡 Press Ctrl+C to stop the server');
+  console.log('Server started');
+  console.log(`  Listening on http://localhost:${PORT}`);
+  console.log(`  Health: http://localhost:${PORT}/api/health`);
+  if (envInfo.isProd) {
+    console.log('  Mode: production');
+  } else {
+    console.log('  Mode: development');
+    console.log('  Demo barcodes: 1234567890123, 9876543210987, 4567890123456');
+  }
 });
 
-// Handle server shutdown gracefully
-const gracefulShutdown = () => {
-  console.log('\n🔄 Received shutdown signal, closing server...');
+const gracefulShutdown = (signal) => {
+  console.log(`\n${signal} received, shutting down...`);
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log('HTTP server closed');
     process.exit(0);
   });
+  // Force exit if hang
+  setTimeout(() => process.exit(1), 10000).unref();
 };
 
-process.on('SIGTERM', gracefulShutdown);
-process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.error('❌ Unhandled Rejection:', err);
+  console.error('Unhandled Rejection:', err && err.message ? err.message : err);
   server.close(() => process.exit(1));
 });
 
-// Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
-  console.error('❌ Uncaught Exception:', err);
+  console.error('Uncaught Exception:', err && err.message ? err.message : err);
   server.close(() => process.exit(1));
 });

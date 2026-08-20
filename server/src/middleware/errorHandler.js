@@ -1,57 +1,60 @@
+/**
+ * Phase 4: never leak stacks, internal details, or tokens in production.
+ */
 const errorHandler = (err, req, res, next) => {
-  let error = { ...err };
-  error.message = err.message;
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Server Error';
 
-  // Log error for debugging
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Safe log — no Authorization headers, no body dumps
   console.error('Error:', {
     name: err.name,
     message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     path: req.path,
     method: req.method,
-    ip: req.ip,
+    statusCode,
+    ...(isDev ? { stack: err.stack } : {})
   });
 
-  // Mongoose bad ObjectId
   if (err.name === 'CastError') {
-    const message = `Resource not found with id: ${err.value}`;
-    error = { message, statusCode: 404 };
+    message = 'Resource not found';
+    statusCode = 404;
   }
 
-  // Mongoose duplicate key
   if (err.code === 11000) {
-    const field = Object.keys(err.keyPattern)[0];
-    const message = `Duplicate value for ${field}. Please use a unique value.`;
-    error = { message, statusCode: 400 };
+    const field = err.keyPattern ? Object.keys(err.keyPattern)[0] : 'field';
+    message = `Duplicate value for ${field}. Please use a unique value.`;
+    statusCode = 400;
   }
 
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors).map(val => val.message);
-    error = { message, statusCode: 400 };
+    message = Object.values(err.errors || {})
+      .map((val) => val.message)
+      .join(', ') || 'Validation failed';
+    statusCode = 400;
   }
 
-  // JWT errors
   if (err.name === 'JsonWebTokenError') {
-    error = { message: 'Invalid token', statusCode: 401 };
+    message = 'Invalid token';
+    statusCode = 401;
   }
 
   if (err.name === 'TokenExpiredError') {
-    error = { message: 'Token expired', statusCode: 401 };
+    message = 'Token expired';
+    statusCode = 401;
   }
 
-  // Send response
   const response = {
     success: false,
-    message: error.message || 'Server Error',
+    message: statusCode === 500 && !isDev ? 'Something went wrong. Please try again.' : message
   };
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     response.stack = err.stack;
-    response.details = err;
   }
 
-  res.status(error.statusCode || 500).json(response);
+  res.status(statusCode).json(response);
 };
 
 module.exports = { errorHandler };

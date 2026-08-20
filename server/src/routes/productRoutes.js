@@ -1,7 +1,7 @@
 const express = require('express');
-const { 
-  getProductByBarcode, 
-  getProductDetails, 
+const {
+  getProductByBarcode,
+  getProductDetails,
   getAlternatives,
   searchProducts,
   scanLabel,
@@ -9,29 +9,34 @@ const {
   refreshImage,
 } = require('../controllers/productController');
 const auth = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
 
 const router = express.Router();
 
-// Get product by barcode
-router.get('/barcode/:barcode', auth, getProductByBarcode);
+// Phase 4: AI explain gets its own tight limit (also set on app.locals)
+const aiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many AI explanation requests. Please try again in a few minutes.'
+  }
+});
 
-// Create a product from a scanned/OCR'd ingredient label
+router.get('/barcode/:barcode', auth, getProductByBarcode);
 router.post('/scan-label', auth, scanLabel);
 
-// Search products — must stay registered BEFORE '/:id' below, otherwise
-// Express treats "search" itself as an :id value and this route never matches.
+// Search must stay before '/:id'
 router.get('/search', auth, searchProducts);
 
-// Get product details by ID
 router.get('/:id', auth, getProductDetails);
-
-// Get product alternatives
 router.get('/:id/alternatives', auth, getAlternatives);
 
-// AI-generated plain-English ingredient explanation
-router.get('/:id/explain', auth, explainProduct);
+// AI explanation — rate limited
+router.get('/:id/explain', auth, aiLimiter, explainProduct);
 
-// Force-refresh a product's image from Open Food Facts
 router.post('/:id/refresh-image', auth, refreshImage);
 
 module.exports = router;

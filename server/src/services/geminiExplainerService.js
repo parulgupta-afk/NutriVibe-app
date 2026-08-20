@@ -78,25 +78,40 @@ async function explainIngredients(product, user) {
   }
 
   try {
-    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: buildPrompt(product, user) }]
+    // Phase 4: timeout so a hung Gemini call cannot block the request forever
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+
+    let response;
+    try {
+      response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: buildPrompt(product, user) }]
+            }
+          ],
+          generationConfig: {
+            maxOutputTokens: 2048
           }
-        ],
-        generationConfig: {
-          maxOutputTokens: 2048
-        }
-      })
-    });
+        })
+      });
+    } finally {
+      clearTimeout(timer);
+    }
 
     if (!response.ok) {
-      const errorBody = await response.text();
-      console.error('Gemini API error:', response.status, errorBody);
+      // Do not log response body in production (may contain prompt fragments)
+      if (process.env.NODE_ENV === 'development') {
+        const errorBody = await response.text();
+        console.error('Gemini API error:', response.status, errorBody.slice(0, 500));
+      } else {
+        console.error('Gemini API error status:', response.status);
+      }
       return {
         success: false,
         error: `AI explainer service returned an error (status ${response.status}). Check server logs.`
@@ -116,6 +131,9 @@ async function explainIngredients(product, user) {
 
     return { success: true, explanation };
   } catch (error) {
+    if (error.name === 'AbortError') {
+      return { success: false, error: 'AI explainer timed out. Please try again.' };
+    }
     console.error('Error calling Gemini API:', error.message);
     return { success: false, error: 'Could not reach the AI explainer service. Please try again.' };
   }
