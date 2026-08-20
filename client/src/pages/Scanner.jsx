@@ -4,6 +4,7 @@ import { FiCamera, FiAlertCircle, FiCheckCircle, FiInfo, FiX, FiImage, FiLoader,
 import { productApi } from '../api/products';
 import { useProfile } from '../contexts/ProfileContext';
 import ProfileSelector from '../components/common/ProfileSelector';
+import { saveLastScan, loadLastScan } from '../utils/lastScanCache';
 
 const CAMERA_REGION_ID = 'barcode-camera-region';
 
@@ -55,6 +56,13 @@ const Scanner = () => {
     try {
       const product = await productApi.searchByBarcode(codeToScan, activeProfileId);
       setResult(product);
+      const data = product?.data || product;
+      saveLastScan({
+        barcode: codeToScan,
+        name: data?.name,
+        brand: data?.brand,
+        safetyLevel: product?.safetyReport?.riskAssessment?.level
+      });
       // Navigate to product details after a short delay
       setTimeout(() => {
         navigate(`/product/${codeToScan}`);
@@ -233,6 +241,22 @@ const Scanner = () => {
         <div className="mt-4 flex justify-center">
           <ProfileSelector />
         </div>
+        {lastScan?.barcode && (
+          <div className="mt-4 max-w-md mx-auto text-left p-3 rounded-lg border border-primary-100 bg-primary-50/50">
+            <p className="text-xs text-gray-500 mb-1">Last scan on this device</p>
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {lastScan.name || lastScan.barcode}
+              {lastScan.brand ? <span className="text-gray-500 font-normal"> · {lastScan.brand}</span> : null}
+            </p>
+            <button
+              type="button"
+              className="mt-2 text-sm text-primary-700 hover:text-primary-900 font-medium"
+              onClick={() => navigate(`/product/${lastScan.barcode}`)}
+            >
+              Open again →
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="card max-w-2xl mx-auto">

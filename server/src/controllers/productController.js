@@ -434,25 +434,50 @@ exports.getAlternatives = async (req, res, next) => {
 
     const { effectiveUser } = await resolveEffectiveUser(req);
 
+    const processingRank = {
+      Unprocessed: 4,
+      'Processed Culinary Ingredient': 3,
+      Processed: 2,
+      'Ultra-Processed': 1,
+      Unknown: 0
+    };
+
     const evaluated = candidates.map((candidate) => {
       const verdict = computeSafetyVerdict(candidate, effectiveUser);
+      const levelBoost = verdict.level === 'Safe' ? 100 : verdict.level === 'Caution' ? 40 : 0;
+      const processBoost = (processingRank[candidate.processingLevel] || 0) * 5;
+      const brandBoost = candidate.brand && product.brand && candidate.brand === product.brand ? 3 : 0;
+      const rankScore = (verdict.score || 0) + levelBoost + processBoost + brandBoost;
+
+      let swapReason;
+      if (verdict.level === 'Safe' && verdict.factors.length === 0) {
+        swapReason = 'No allergen or medication conflicts for your profile';
+      } else if (verdict.level === 'Safe') {
+        swapReason = verdict.recommendations[0] || 'Safer match for your profile';
+      } else {
+        swapReason = verdict.recommendations[0] || 'Lower risk than the current product for your profile';
+      }
+
       return {
         ...candidate.toObject(),
         safetyLevel: verdict.level,
         safetyScore: verdict.score,
+        rankScore,
         barcode: candidate.barcode,
-        swapReason: verdict.level === 'Safe' && verdict.factors.length === 0
-          ? 'No allergen or medication conflicts found for your profile'
-          : (verdict.recommendations[0] || 'Matches your dietary profile better than the current product')
+        swapReason
       };
     });
 
-    // Only ever suggest something that's actually better for this
-    // specific user — never recommend an Unsafe swap.
+    // Prefer Safe over Caution; never suggest Unsafe. Rank by composite score.
     const safeSwaps = evaluated
       .filter((c) => c.safetyLevel === 'Safe' || c.safetyLevel === 'Caution')
-      .sort((a, b) => b.safetyScore - a.safetyScore)
-      .slice(0, 3);
+      .sort((a, b) => {
+        if (a.safetyLevel !== b.safetyLevel) {
+          return a.safetyLevel === 'Safe' ? -1 : 1;
+        }
+        return b.rankScore - a.rankScore;
+      })
+      .slice(0, 5);
 
     res.status(200).json({
       success: true,

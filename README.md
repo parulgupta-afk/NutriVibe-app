@@ -4,6 +4,24 @@
 
 NutriVibe turns a barcode scan, live camera scan, or photographed ingredient label into an instant, personalized food safety verdict — not a generic nutrition score, but one that's actually checked against **your own** allergies, dietary restrictions, health goals, and medications (or a family member's, if you're managing food safety for someone else).
 
+
+## 📸 Demo
+
+Live demo: [nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)
+
+> Tip for portfolio visitors: register, set an allergy (e.g. Dairy), then try demo barcode `4567890123456` (Greek Yogurt) to see an **Unsafe** verdict.
+
+## 📐 Architecture
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a system diagram and the safety-verdict data path.
+
+## 🧪 Tests
+
+```bash
+cd server
+npm test
+```
+
 ## ✨ Features
 
 ### Scanning
@@ -27,6 +45,8 @@ NutriVibe turns a barcode scan, live camera scan, or photographed ingredient lab
 - Click any safety category to see every matching item logged that day
 - Per-entry delete, and bulk "Clear Log" for a given day
 - Product photos throughout, with a manual "Check for photo" refresh and a polished default icon for products with no image on record
+- Search recent logs and **export the day as CSV**
+- Last successful scan remembered on-device for quick re-open
 
 ### Authentication
 - Email/password registration and login
@@ -135,6 +155,10 @@ A few real issues found and resolved during development, since they're a fair re
 ## 📄 License
 
 This project was built as a personal learning/portfolio project.
+
+MIT — see [LICENSE](LICENSE).
+
+See also [CONTRIBUTING.md](CONTRIBUTING.md) and [DEPLOY.md](DEPLOY.md) if present.
 
 ## 🔗 Live Demo
 [https://nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)

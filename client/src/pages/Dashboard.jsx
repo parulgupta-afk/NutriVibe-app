@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import { format } from 'date-fns';
 import ProductImage from '../components/common/ProductImage';
+import { downloadLogsCsv } from '../utils/exportCsv';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -28,6 +29,7 @@ const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState(null); // 'Safe' | 'Caution' | 'Unsafe' | null
   const [filteredLogs, setFilteredLogs] = useState([]);
   const [filterLoading, setFilterLoading] = useState(false);
+  const [logSearch, setLogSearch] = useState('');
 
   useEffect(() => {
     loadTrackingData();
@@ -167,6 +169,16 @@ const Dashboard = () => {
   ];
 
   const recentLogs = trackingData?.recentLogs || [];
+  const filteredRecentLogs = logSearch.trim()
+    ? recentLogs.filter((log) => {
+        const q = logSearch.toLowerCase();
+        return (
+          (log.productName || '').toLowerCase().includes(q) ||
+          (log.riskLevel || '').toLowerCase().includes(q) ||
+          (log.profileName || '').toLowerCase().includes(q)
+        );
+      })
+    : recentLogs;
 
   const filterColorClasses = {
     Safe: 'text-green-700 bg-green-50 border-green-200',
@@ -313,17 +325,42 @@ const Dashboard = () => {
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="card">
-          <div className="flex items-center gap-2 mb-4">
-            <FiClock className="text-primary-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Recent Logs</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2">
+              <FiClock className="text-primary-500" />
+              <h2 className="text-lg font-semibold text-gray-900">Recent Logs</h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                type="search"
+                value={logSearch}
+                onChange={(e) => setLogSearch(e.target.value)}
+                placeholder="Search logs..."
+                aria-label="Search recent logs"
+                className="input-field text-sm py-1.5 px-3 w-40"
+              />
+              <button
+                type="button"
+                className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700"
+                onClick={() => {
+                  const dateStr = selectedDate.toISOString().split('T')[0];
+                  const source = activeFilter ? filteredLogs : recentLogs;
+                  if (!source.length) return;
+                  downloadLogsCsv(source, dateStr);
+                }}
+                disabled={!(activeFilter ? filteredLogs : recentLogs).length}
+              >
+                Export CSV
+              </button>
+            </div>
           </div>
           {loading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
             </div>
-          ) : recentLogs.length > 0 ? (
+          ) : filteredRecentLogs.length > 0 ? (
             <div className="space-y-3">
-              {recentLogs.map((log, index) => (
+              {filteredRecentLogs.map((log, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <ProductImage src={log.productImage} alt={log.productName} size={40} rounded="rounded-md" />
@@ -362,8 +399,8 @@ const Dashboard = () => {
           ) : (
             <div className="text-center py-8 text-gray-500">
               <FiActivity className="text-3xl mx-auto mb-2 text-gray-300" />
-              <p>No scans logged yet today</p>
-              <p className="text-sm">Scan a product to start tracking</p>
+              <p>{logSearch.trim() ? 'No logs match your search' : 'No scans logged yet today'}</p>
+              <p className="text-sm">{logSearch.trim() ? 'Try a different name or safety level' : 'Scan a product to start tracking'}</p>
             </div>
           )}
         </div>
