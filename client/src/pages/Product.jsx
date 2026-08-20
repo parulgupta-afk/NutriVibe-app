@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { productApi } from '../api/products';
 import { useProfile } from '../contexts/ProfileContext';
 import ProductImage from '../components/common/ProductImage';
+import SafetyBadge from '../components/common/SafetyBadge';
 import { 
   FiArrowLeft, FiShield, FiAlertTriangle, FiCheckCircle, 
   FiInfo, FiActivity, FiStar, FiClock, FiCalendar,
@@ -55,7 +56,10 @@ const Product = () => {
         console.log('Alternatives not available');
       }
     } catch (err) {
-      setError('Product not found. Please try another barcode.');
+      const apiMsg = err.response?.data?.message;
+      if (apiMsg) setError(apiMsg);
+      else if (!err.response) setError('Cannot reach the server. Is the backend running?');
+      else setError('Product not found. Please try another barcode or scan the label instead.');
       console.error('Error loading product:', err);
     } finally {
       setLoading(false);
@@ -220,9 +224,14 @@ const Product = () => {
         <div className="flex items-start gap-4">
           {getSafetyIcon(safetyLevel)}
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">
-              Safety Verdict: {safetyLevel}
-            </h2>
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-900">Safety Verdict</h2>
+              <SafetyBadge
+                level={safetyLevel}
+                score={safetyReport?.riskAssessment?.score}
+                size="lg"
+              />
+            </div>
             {safetyReport?.riskAssessment?.factors && (
               <div className="mt-2">
                 <p className="text-sm text-gray-600">Key factors:</p>

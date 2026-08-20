@@ -209,19 +209,31 @@ exports.getProductByBarcode = async (req, res, next) => {
 
     // Not in our DB yet — try Open Food Facts before giving up
     if (!product) {
-      const offData = await fetchProductFromOpenFoodFacts(barcode);
+      const offResult = await fetchProductFromOpenFoodFacts(barcode);
 
-      if (!offData) {
-        return res.status(404).json({
+      if (!offResult.ok) {
+        const messages = {
+          not_found:
+            'Product not found in our database or Open Food Facts. Try scanning the ingredient label instead, or check the barcode.',
+          timeout:
+            'Open Food Facts took too long to respond. Please try again in a moment.',
+          upstream:
+            'Open Food Facts is temporarily unavailable. Please try again shortly.',
+          network:
+            'Could not reach Open Food Facts. Check your internet connection and try again.'
+        };
+        const status = offResult.reason === 'not_found' ? 404 : 503;
+        return res.status(status).json({
           success: false,
-          message: 'Product not found in our database or Open Food Facts'
+          reason: offResult.reason,
+          message: messages[offResult.reason] || messages.not_found
         });
       }
 
       // Cache it so future scans of this barcode are instant and don't
       // depend on Open Food Facts being reachable
       try {
-        product = await Product.create({ ...offData, imageCheckedAt: new Date() });
+        product = await Product.create({ ...offResult.product, imageCheckedAt: new Date() });
       } catch (createError) {
         // Race condition: another request cached it a moment ago
         if (createError.code === 11000) {
@@ -235,15 +247,11 @@ exports.getProductByBarcode = async (req, res, next) => {
       product.dataSource !== 'OCR Scan' &&
       (!product.imageCheckedAt || Date.now() - product.imageCheckedAt.getTime() > 7 * 24 * 60 * 60 * 1000)
     ) {
-      // Self-healing: this product was cached before we tracked images
-      // (or genuinely has none), and it's been a while since we last
-      // checked — try once more instead of requiring a manual DB delete.
-      // This silently no-ops for fictional/demo barcodes since Open Food
-      // Facts has no record of them at all.
-      const offData = await fetchProductFromOpenFoodFacts(barcode);
+      // Self-healing image recovery from Open Food Facts
+      const offResult = await fetchProductFromOpenFoodFacts(barcode);
       product.imageCheckedAt = new Date();
-      if (offData?.images?.length > 0) {
-        product.images = offData.images;
+      if (offResult.ok && offResult.product?.images?.length > 0) {
+        product.images = offResult.product.images;
       }
       await product.save();
     }
@@ -352,11 +360,11 @@ exports.refreshImage = async (req, res, next) => {
       });
     }
 
-    const offData = await fetchProductFromOpenFoodFacts(product.barcode);
+    const offResult = await fetchProductFromOpenFoodFacts(product.barcode);
     product.imageCheckedAt = new Date();
 
-    if (offData?.images?.length > 0) {
-      product.images = offData.images;
+    if (offResult.ok && offResult.product?.images?.length > 0) {
+      product.images = offResult.product.images;
       await product.save();
       return res.status(200).json({
         success: true,

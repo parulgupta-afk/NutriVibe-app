@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
@@ -14,7 +15,6 @@ const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-// Phase 0: general API limiter (unchanged default)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -26,7 +26,6 @@ const limiter = rateLimit({
   }
 });
 
-// Phase 0: stricter limiter for auth endpoints (login/register/reset)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 30,
@@ -38,35 +37,52 @@ const authLimiter = rateLimit({
   }
 });
 
-// Middleware
+// Phase 2: slightly stricter limit on product scan / lookup endpoints
+const scanLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many scan requests, please slow down a bit.'
+  }
+});
+
 app.use(helmet());
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 }));
-// Avoid logging full bodies / tokens in production
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);
 
-// Routes
 app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/products', productRoutes);
+app.use('/api/products', scanLimiter, productRoutes);
 app.use('/api/tracking', trackingRoutes);
 app.use('/api/safety', safetyRoutes);
 app.use('/api/dependents', dependentRoutes);
 
-// Health check
+// Phase 2: health check includes Mongo connection state
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    message: 'NutriVibe API is running',
+  const mongoState = mongoose.connection.readyState;
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  const mongoOk = mongoState === 1;
+  const status = mongoOk ? 'OK' : 'DEGRADED';
+
+  res.status(mongoOk ? 200 : 503).json({
+    status,
+    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
     timestamp: new Date().toISOString(),
+    mongo: {
+      connected: mongoOk,
+      readyState: mongoState
+    }
   });
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -74,7 +90,6 @@ app.use((req, res) => {
   });
 });
 
-// Error handling
 app.use(errorHandler);
 
 module.exports = app;

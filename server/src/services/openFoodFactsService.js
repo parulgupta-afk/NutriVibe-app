@@ -1,7 +1,8 @@
 const OFF_BASE_URL = 'https://world.openfoodfacts.org/api/v2/product';
+const OFF_TIMEOUT_MS = 8000;
 
 // Map Open Food Facts category tags to our schema's enum
-const mapCategory = (categoriesTags = [], productNameTags = []) => {
+const mapCategory = (categoriesTags = []) => {
   const tags = categoriesTags.join(' ').toLowerCase();
 
   if (tags.includes('beverage') || tags.includes('drink') || tags.includes('juice') || tags.includes('soda')) {
@@ -19,7 +20,6 @@ const mapCategory = (categoriesTags = [], productNameTags = []) => {
   return 'Other';
 };
 
-// NOVA group (1-4) -> our processingLevel enum
 const mapProcessingLevel = (novaGroup) => {
   switch (novaGroup) {
     case 1: return 'Unprocessed';
@@ -30,7 +30,6 @@ const mapProcessingLevel = (novaGroup) => {
   }
 };
 
-// "en:milk", "en:gluten" -> "Milk", "Gluten"
 const cleanTag = (tag) =>
   tag
     .replace(/^[a-z]{2,3}:/, '')
@@ -49,9 +48,6 @@ const buildWarnings = (allergensTags = [], tracesTags = []) => {
   return warnings;
 };
 
-// Best-effort baseline risk level. This is just a starting point —
-// the real, personalized verdict is computed later against the user's
-// own allergy/diet profile in productController.generateSafetyReport.
 const estimateBaselineRisk = (allergensTags = [], tracesTags = []) => {
   if (allergensTags.length > 0) return 'Caution';
   if (tracesTags.length > 0) return 'Caution';
@@ -59,30 +55,40 @@ const estimateBaselineRisk = (allergensTags = [], tracesTags = []) => {
 };
 
 /**
- * Fetch a product from Open Food Facts by barcode and map it into
- * our internal Product schema shape. Returns null if not found or
- * if the API call fails for any reason (network, rate limit, etc.)
- * so the caller can fall back to a clean 404 instead of crashing.
+ * Phase 2: fetch with timeout + structured outcome so callers can show
+ * better errors (not found vs timeout vs upstream down).
+ *
+ * Returns:
+ *   { ok: true, product }
+ *   { ok: false, reason: 'not_found' | 'timeout' | 'upstream' | 'network', status?: number }
  */
 async function fetchProductFromOpenFoodFacts(barcode) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), OFF_TIMEOUT_MS);
+
   try {
     const response = await fetch(`${OFF_BASE_URL}/${barcode}.json`, {
       headers: {
-        // OFF asks API consumers to identify themselves
-        'User-Agent': 'NutriVibe/1.0 (https://github.com/nutrivibe)'
-      }
+        'User-Agent': 'NutriVibe/1.0 (https://github.com/parulgupta-afk/NutriVibe-app)'
+      },
+      signal: controller.signal
     });
 
+    if (response.status === 404) {
+      return { ok: false, reason: 'not_found', status: 404 };
+    }
+
     if (!response.ok) {
-      console.error(`Open Food Facts responded with status ${response.status} for barcode ${barcode}`);
-      return null;
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`Open Food Facts status ${response.status} for barcode ${barcode}`);
+      }
+      return { ok: false, reason: 'upstream', status: response.status };
     }
 
     const json = await response.json();
 
-    // status === 0 means "product not found" in OFF's API
     if (json.status !== 1 || !json.product) {
-      return null;
+      return { ok: false, reason: 'not_found' };
     }
 
     const p = json.product;
@@ -90,18 +96,16 @@ async function fetchProductFromOpenFoodFacts(barcode) {
     const tracesTags = p.traces_tags || [];
     const nutriments = p.nutriments || {};
 
-    // ingredients_text is a comma-separated string; OFF also exposes a
-    // structured `ingredients` array but text is more consistently present
     const ingredients = (p.ingredients_text || '')
       .split(',')
       .map((i) => i.trim())
       .filter(Boolean);
 
-    const mapped = {
+    const product = {
       barcode,
       name: p.product_name || p.product_name_en || 'Unknown Product',
       brand: (p.brands || 'Unknown Brand').split(',')[0].trim(),
-      category: mapCategory(p.categories_tags),
+      category: mapCategory(p.categories_tags || []),
       description: p.generic_name || p.categories || '',
       ingredients,
       nutritionalInfo: {
@@ -126,11 +130,27 @@ async function fetchProductFromOpenFoodFacts(barcode) {
       dataSource: 'Open Food Facts'
     };
 
-    return mapped;
+    return { ok: true, product };
   } catch (error) {
-    console.error(`Error fetching from Open Food Facts for barcode ${barcode}:`, error.message);
-    return null;
+    if (error.name === 'AbortError') {
+      return { ok: false, reason: 'timeout' };
+    }
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`OFF fetch error for ${barcode}:`, error.message);
+    }
+    return { ok: false, reason: 'network' };
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-module.exports = { fetchProductFromOpenFoodFacts };
+/** Back-compat helper: returns product or null (old callers). */
+async function fetchProductOrNull(barcode) {
+  const result = await fetchProductFromOpenFoodFacts(barcode);
+  return result.ok ? result.product : null;
+}
+
+module.exports = {
+  fetchProductFromOpenFoodFacts,
+  fetchProductOrNull
+};

@@ -60,8 +60,16 @@ const Scanner = () => {
         navigate(`/product/${codeToScan}`);
       }, 1200);
     } catch (err) {
-      setError('Product not found. Please try again.');
-      console.error('Scan error:', err);
+      const apiMsg = err.response?.data?.message;
+      const reason = err.response?.data?.reason;
+      if (apiMsg) {
+        setError(apiMsg);
+      } else if (!err.response) {
+        setError('Cannot reach the server. Is the backend running on port 5000?');
+      } else {
+        setError('Product not found. Try another barcode or scan the ingredient label instead.');
+      }
+      console.error('Scan error:', reason || err.message || err);
     } finally {
       setScanning(false);
     }
