@@ -66,21 +66,25 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// ✅ CORRECT pre-save – no `next` parameter, just async
-userSchema.pre('save', async function() {
+// Async pre-save — no `next` parameter (Mongoose modern style)
+userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    console.log('🔐 Password hashed successfully');
+    // Phase 0: only log in development — avoid noisy / leaky prod logs
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Password hashed successfully');
+    }
   } catch (err) {
-    console.error('❌ Error hashing password:', err);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error hashing password:', err);
+    }
     throw err; // will abort save
   }
 });
 
-// ✅ Compare password – unchanged
-userSchema.methods.comparePassword = async function(enteredPassword) {
+userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

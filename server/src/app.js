@@ -14,10 +14,28 @@ const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-// Rate limiting
+// Phase 0: general API limiter (unchanged default)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again later.'
+  }
+});
+
+// Phase 0: stricter limiter for auth endpoints (login/register/reset)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many auth attempts, please try again later.'
+  }
 });
 
 // Middleware
@@ -26,13 +44,14 @@ app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 }));
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Avoid logging full bodies / tokens in production
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/tracking', trackingRoutes);
 app.use('/api/safety', safetyRoutes);
