@@ -4,15 +4,17 @@ const ThemeContext = createContext();
 
 const STORAGE_KEY = 'nutrivibe_theme';
 
+/**
+ * Phase 19: default to light (day) mode.
+ * Only use dark if the user previously chose it.
+ * (Do not auto-switch to system dark — that felt broken for daylight UI.)
+ */
 function getInitialTheme() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'dark' || saved === 'light') return saved;
   } catch {
     // ignore
-  }
-  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
   }
   return 'light';
 }
@@ -24,8 +26,10 @@ export const ThemeProvider = ({ children }) => {
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
     try {
       localStorage.setItem(STORAGE_KEY, theme);

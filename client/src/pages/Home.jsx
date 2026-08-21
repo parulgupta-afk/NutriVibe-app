@@ -32,14 +32,14 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 via-white to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-primary-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               Scan First,
               <span className="text-primary-600"> Worry Never</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-10">
               NutriVibe turns any barcode into personalized food intelligence — 
               instantly telling you if a product is safe for you, before you see the nutrition label.
             </p>
@@ -59,7 +59,7 @@ const Home = () => {
                 </>
               )}
             </div>
-            <div className="mt-8 flex items-center justify-center gap-2 text-sm text-gray-500">
+            <div className="mt-8 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
               <FiCamera className="text-lg" />
               <span>Scan any product • Instant safety verdict • Personalized recommendations</span>
             </div>
@@ -68,19 +68,19 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-12">
             Why Choose NutriVibe?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="card text-center">
                 <div className="flex justify-center mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -88,9 +88,9 @@ const Home = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-12">
             How It Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -98,21 +98,21 @@ const Home = () => {
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiCamera className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">1. Scan</h3>
-              <p className="text-gray-600">Point your camera at any barcode or product label</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">1. Scan</h3>
+              <p className="text-gray-600 dark:text-gray-300">Point your camera at any barcode or product label</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiDatabase className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">2. Analyze</h3>
-              <p className="text-gray-600">We cross-check ingredients against your profile</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">2. Analyze</h3>
+              <p className="text-gray-600 dark:text-gray-300">We cross-check ingredients against your profile</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiShield className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">3. Decide</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">3. Decide</h3>
               <p className="text-gray-600">Get instant safety verdict and personalized insights</p>
             </div>
           </div>
