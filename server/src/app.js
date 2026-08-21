@@ -14,6 +14,7 @@ const safetyRoutes = require('./routes/safetyRoutes');
 const dependentRoutes = require('./routes/dependentRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
+const { requestTiming } = require('./middleware/requestTiming');
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use(cors({
 
 // Phase 4: production logs stay compact; never log bodies
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(requestTiming);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);

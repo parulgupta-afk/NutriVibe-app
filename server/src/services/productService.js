@@ -4,6 +4,8 @@
  * Behavior matches the previous productController implementation.
  */
 const { computeSafetyVerdict } = require('./safetyEngine');
+const { rankRecommendations } = require('./recommendationService');
+const { cacheGet, cacheSet } = require('../config/redis');
 
 function getProductModel() {
   return require('../models/Product');
@@ -77,6 +79,20 @@ function mapOffFailure(reason) {
  * @returns {{ ok: true, product } | { ok: false, status, reason, message }}
  */
 async function findOrFetchByBarcode(barcode) {
+  // Phase 11: optional Redis hot cache (barcode → lean product JSON)
+  const cacheKey = `product:barcode:${barcode}`;
+  try {
+    const cached = await cacheGet(cacheKey);
+    if (cached && cached._id) {
+      // Re-hydrate as mongoose doc for downstream code
+      const Product = getProductModel();
+      const existing = await Product.findById(cached._id);
+      if (existing) return { ok: true, product: existing, cache: 'hit' };
+    }
+  } catch {
+    // ignore cache errors
+  }
+
   let product = await getProductModel().findOne({ barcode });
 
   if (!product) {
@@ -114,60 +130,27 @@ async function findOrFetchByBarcode(barcode) {
     await product.save();
   }
 
+  try {
+    await cacheSet(cacheKey, {
+      _id: product._id.toString(),
+      barcode: product.barcode
+    }, 3600);
+  } catch {
+    // ignore
+  }
+
   return { ok: true, product };
+
 }
 
 /**
  * Rank alternative products for a user (pure ranking over an in-memory list).
  * Exported for unit tests — same scoring as previous controller.
  */
-function rankAlternatives(product, candidates, user) {
-  const evaluated = candidates.map((candidate) => {
-    const plain =
-      typeof candidate.toObject === 'function' ? candidate.toObject() : { ...candidate };
-    const verdict = computeSafetyVerdict(candidate, user);
-    const levelBoost =
-      verdict.level === 'Safe' ? 100 : verdict.level === 'Caution' ? 40 : 0;
-    const processBoost = (PROCESSING_RANK[candidate.processingLevel] || 0) * 5;
-    const brandBoost =
-      candidate.brand && product.brand && candidate.brand === product.brand ? 3 : 0;
-    const rankScore = (verdict.score || 0) + levelBoost + processBoost + brandBoost;
-
-    let swapReason;
-    if (verdict.level === 'Safe' && verdict.factors.length === 0) {
-      swapReason = 'No allergen or medication conflicts for your profile';
-    } else if (verdict.level === 'Safe') {
-      swapReason = verdict.recommendations[0] || 'Safer match for your profile';
-    } else {
-      swapReason =
-        verdict.recommendations[0] ||
-        'Lower risk than the current product for your profile';
-    }
-
-    return {
-      ...plain,
-      safetyLevel: verdict.level,
-      safetyScore: verdict.score,
-      rankScore,
-      barcode: candidate.barcode,
-      swapReason
-    };
-  });
-
-  return evaluated
-    .filter((c) => c.safetyLevel === 'Safe' || c.safetyLevel === 'Caution')
-    .sort((a, b) => {
-      if (a.safetyLevel !== b.safetyLevel) {
-        return a.safetyLevel === 'Safe' ? -1 : 1;
-      }
-      return b.rankScore - a.rankScore;
-    })
-    .slice(0, 5);
+function rankAlternatives(product, candidates, user, limit = 5) {
+  return rankRecommendations(product, candidates, user, limit);
 }
 
-/**
- * Load candidates and return ranked alternatives.
- */
 async function getAlternativesForProduct(productId, user) {
   const product = await getProductModel().findById(productId);
   if (!product) {

@@ -1,5 +1,7 @@
 const OFF_BASE_URL = 'https://world.openfoodfacts.org/api/v2/product';
 const OFF_TIMEOUT_MS = 8000;
+const OFF_MAX_ATTEMPTS = 2; // Phase 14: one retry on timeout/network
+const OFF_RETRY_DELAY_MS = 400;
 
 // Map Open Food Facts category tags to our schema's enum
 const mapCategory = (categoriesTags = []) => {
@@ -62,7 +64,7 @@ const estimateBaselineRisk = (allergensTags = [], tracesTags = []) => {
  *   { ok: true, product }
  *   { ok: false, reason: 'not_found' | 'timeout' | 'upstream' | 'network', status?: number }
  */
-async function fetchProductFromOpenFoodFacts(barcode) {
+async function fetchProductFromOpenFoodFactsOnce(barcode) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), OFF_TIMEOUT_MS);
 
@@ -145,6 +147,30 @@ async function fetchProductFromOpenFoodFacts(barcode) {
 }
 
 /** Back-compat helper: returns product or null (old callers). */
+
+async function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/**
+ * Phase 14: retry once on timeout/network only (not on not_found).
+ */
+async function fetchProductFromOpenFoodFacts(barcode) {
+  let last = null;
+  for (let attempt = 1; attempt <= OFF_MAX_ATTEMPTS; attempt++) {
+    last = await fetchProductFromOpenFoodFactsOnce(barcode);
+    if (last.ok) return last;
+    if (last.reason === 'not_found') return last;
+    if (last.reason === 'upstream' && last.status && last.status < 500) return last;
+    if (attempt < OFF_MAX_ATTEMPTS && (last.reason === 'timeout' || last.reason === 'network' || last.reason === 'upstream')) {
+      await sleep(OFF_RETRY_DELAY_MS * attempt);
+      continue;
+    }
+    return last;
+  }
+  return last;
+}
+
 async function fetchProductOrNull(barcode) {
   const result = await fetchProductFromOpenFoodFacts(barcode);
   return result.ok ? result.product : null;
