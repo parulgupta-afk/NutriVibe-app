@@ -6,56 +6,85 @@
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-gray-200 dark:border-gray-700;
   }
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* Phase 10: clearer keyboard focus */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium 
-           hover:bg-primary-700 transition-all duration-200 
+    @apply bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium
+           hover:bg-primary-700 transition-all duration-200
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-medium 
+    @apply bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-medium
            hover:bg-gray-300 transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
+           dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600;
   }
-  
+
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200;
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200
+           dark:bg-gray-800 dark:border-gray-700;
   }
-  
+
   .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-           transition-all duration-200;
+           transition-all duration-200
+           dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100;
   }
-  
+
   .label-field {
-    @apply block text-sm font-medium text-gray-700 mb-1.5;
+    @apply block text-sm font-medium text-gray-700 mb-1.5 dark:text-gray-300;
   }
-  
+
   .safety-safe {
     @apply bg-green-50 text-green-700 border-green-200;
   }
-  
+
   .safety-caution {
     @apply bg-yellow-50 text-yellow-700 border-yellow-200;
   }
-  
+
   .safety-unsafe {
     @apply bg-red-50 text-red-700 border-red-200;
   }
+
+  /* Screen-reader only utility (Phase 10) */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
 }
 
-/* Barcode scanner "laser line" overlay effect */
 @keyframes scan-line-move {
   0% {
     top: 4%;
