@@ -22,6 +22,24 @@ cd server
 npm test
 ```
 
+
+## 🚀 Deploy
+
+Step-by-step: [DEPLOY.md](DEPLOY.md)
+
+- Frontend: Vercel (`client/`) with `VITE_API_BASE_URL`
+- Backend: Render/Railway (`server/`) with `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL`
+- Optional Blueprint: [render.yaml](render.yaml)
+
+## 🎥 Demo script
+
+[docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) — 90-second Loom outline  
+[docs/PORTFOLIO.md](docs/PORTFOLIO.md) — interview talking points  
+
+## 🔒 Security
+
+See [SECURITY.md](SECURITY.md).
+
 ## ✨ Features
 
 ### Scanning

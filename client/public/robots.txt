@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Optional: disallow private app routes from being treated as public content
+# Disallow: /dashboard
+# Disallow: /scanner

@@ -14,6 +14,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    // Phase 7: smaller prod bundles; enable source maps only when debugging
+    sourcemap: process.env.NODE_ENV === 'development',
   },
 });
