@@ -1,9 +1,14 @@
 const Product = require('../models/Product');
 const { fetchProductFromOpenFoodFacts } = require('../services/openFoodFactsService');
-const { computeSafetyVerdict } = require('../services/safetyEngine');
 const { parseIngredientText } = require('../data/allergenKeywords');
 const { resolveEffectiveUser } = require('../services/profileResolver');
 const { explainIngredients } = require('../services/geminiExplainerService');
+const {
+  generateSafetyReport,
+  findOrFetchByBarcode,
+  getAlternativesForProduct,
+  searchByText
+} = require('../services/productService');
 
 // Seed some demo products
 const demoProducts = [
@@ -207,59 +212,17 @@ if (process.env.NODE_ENV !== 'production') {
 exports.getProductByBarcode = async (req, res, next) => {
   try {
     const { barcode } = req.params;
-    let product = await Product.findOne({ barcode });
+    const result = await findOrFetchByBarcode(barcode);
 
-    // Not in our DB yet — try Open Food Facts before giving up
-    if (!product) {
-      const offResult = await fetchProductFromOpenFoodFacts(barcode);
-
-      if (!offResult.ok) {
-        const messages = {
-          not_found:
-            'Product not found in our database or Open Food Facts. Try scanning the ingredient label instead, or check the barcode.',
-          timeout:
-            'Open Food Facts took too long to respond. Please try again in a moment.',
-          upstream:
-            'Open Food Facts is temporarily unavailable. Please try again shortly.',
-          network:
-            'Could not reach Open Food Facts. Check your internet connection and try again.'
-        };
-        const status = offResult.reason === 'not_found' ? 404 : 503;
-        return res.status(status).json({
-          success: false,
-          reason: offResult.reason,
-          message: messages[offResult.reason] || messages.not_found
-        });
-      }
-
-      // Cache it so future scans of this barcode are instant and don't
-      // depend on Open Food Facts being reachable
-      try {
-        product = await Product.create({ ...offResult.product, imageCheckedAt: new Date() });
-      } catch (createError) {
-        // Race condition: another request cached it a moment ago
-        if (createError.code === 11000) {
-          product = await Product.findOne({ barcode });
-        } else {
-          throw createError;
-        }
-      }
-    } else if (
-      product.images.length === 0 &&
-      product.dataSource !== 'OCR Scan' &&
-      (!product.imageCheckedAt || Date.now() - product.imageCheckedAt.getTime() > 7 * 24 * 60 * 60 * 1000)
-    ) {
-      // Self-healing image recovery from Open Food Facts
-      const offResult = await fetchProductFromOpenFoodFacts(barcode);
-      product.imageCheckedAt = new Date();
-      if (offResult.ok && offResult.product?.images?.length > 0) {
-        product.images = offResult.product.images;
-      }
-      await product.save();
+    if (!result.ok) {
+      return res.status(result.status).json({
+        success: false,
+        reason: result.reason,
+        message: result.message
+      });
     }
 
-    // Generate safety report for whichever profile this scan is for —
-    // the account owner themself, or a dependent they've selected
+    const product = result.product;
     const { effectiveUser, profileId, profileName } = await resolveEffectiveUser(req);
     const safetyReport = generateSafetyReport(product, effectiveUser);
 
@@ -274,10 +237,6 @@ exports.getProductByBarcode = async (req, res, next) => {
   }
 };
 
-// @desc    Create a product from a scanned/OCR'd label when no barcode
-//          is available (or the barcode wasn't found anywhere)
-// @route   POST /api/products/scan-label
-// @access  Private
 exports.scanLabel = async (req, res, next) => {
   try {
     const { rawText, productName } = req.body;
@@ -415,75 +374,19 @@ exports.getProductDetails = async (req, res, next) => {
 // @access  Private
 exports.getAlternatives = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
-    
-    if (!product) {
-      return res.status(404).json({
+    const { effectiveUser } = await resolveEffectiveUser(req);
+    const result = await getAlternativesForProduct(req.params.id, effectiveUser);
+
+    if (!result.ok) {
+      return res.status(result.status).json({
         success: false,
-        message: 'Product not found'
+        message: result.message
       });
     }
 
-    // Pull a decent-sized pool of same-category candidates. We can't
-    // filter by riskLevel in the DB query anymore because that field is
-    // a generic baseline, not personalized — we need to compute each
-    // candidate's verdict against THIS user before we know if it's
-    // actually safe for them.
-    const candidates = await Product.find({
-      category: product.category,
-      _id: { $ne: product._id }
-    }).limit(25);
-
-    const { effectiveUser } = await resolveEffectiveUser(req);
-
-    const processingRank = {
-      Unprocessed: 4,
-      'Processed Culinary Ingredient': 3,
-      Processed: 2,
-      'Ultra-Processed': 1,
-      Unknown: 0
-    };
-
-    const evaluated = candidates.map((candidate) => {
-      const verdict = computeSafetyVerdict(candidate, effectiveUser);
-      const levelBoost = verdict.level === 'Safe' ? 100 : verdict.level === 'Caution' ? 40 : 0;
-      const processBoost = (processingRank[candidate.processingLevel] || 0) * 5;
-      const brandBoost = candidate.brand && product.brand && candidate.brand === product.brand ? 3 : 0;
-      const rankScore = (verdict.score || 0) + levelBoost + processBoost + brandBoost;
-
-      let swapReason;
-      if (verdict.level === 'Safe' && verdict.factors.length === 0) {
-        swapReason = 'No allergen or medication conflicts for your profile';
-      } else if (verdict.level === 'Safe') {
-        swapReason = verdict.recommendations[0] || 'Safer match for your profile';
-      } else {
-        swapReason = verdict.recommendations[0] || 'Lower risk than the current product for your profile';
-      }
-
-      return {
-        ...candidate.toObject(),
-        safetyLevel: verdict.level,
-        safetyScore: verdict.score,
-        rankScore,
-        barcode: candidate.barcode,
-        swapReason
-      };
-    });
-
-    // Prefer Safe over Caution; never suggest Unsafe. Rank by composite score.
-    const safeSwaps = evaluated
-      .filter((c) => c.safetyLevel === 'Safe' || c.safetyLevel === 'Caution')
-      .sort((a, b) => {
-        if (a.safetyLevel !== b.safetyLevel) {
-          return a.safetyLevel === 'Safe' ? -1 : 1;
-        }
-        return b.rankScore - a.rankScore;
-      })
-      .slice(0, 5);
-
     res.status(200).json({
       success: true,
-      alternatives: safeSwaps
+      alternatives: result.alternatives
     });
   } catch (error) {
     next(error);
@@ -532,17 +435,15 @@ exports.explainProduct = async (req, res, next) => {
 exports.searchProducts = async (req, res, next) => {
   try {
     const { query } = req.query;
-    
+
     if (!query) {
       return res.status(400).json({
         success: false,
         message: 'Search query is required'
       });
     }
-    
-    const products = await Product.find({
-      $text: { $search: query }
-    }).limit(10);
+
+    const products = await searchByText(query, 10);
 
     res.status(200).json({
       success: true,
@@ -553,19 +454,3 @@ exports.searchProducts = async (req, res, next) => {
   }
 };
 
-// Helper: Generate safety report based on user preferences
-function generateSafetyReport(product, user) {
-  const verdict = computeSafetyVerdict(product, user);
-
-  return {
-    product: product._id,
-    user: user._id,
-    riskAssessment: {
-      level: verdict.level,
-      score: verdict.score,
-      factors: verdict.factors
-    },
-    recommendations: verdict.recommendations,
-    reviewedAt: new Date()
-  };
-}
