@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ProfileProvider } from './contexts/ProfileContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './index.css';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Local dev: empty baseURL → Vite proxies /api → :5000
 // Production: set VITE_API_BASE_URL to your API origin
@@ -16,6 +17,7 @@ axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || '';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <ThemeProvider>
         <AuthProvider>
           <ProfileProvider>

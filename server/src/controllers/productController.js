@@ -194,10 +194,12 @@ const seedProducts = async () => {
   }
 };
 
-// Call seed on module load (but wait for connection)
-setTimeout(() => {
-  seedProducts();
-}, 2000);
+// Phase 16: only auto-seed demo barcodes in development
+if (process.env.NODE_ENV !== 'production') {
+  setTimeout(() => {
+    seedProducts();
+  }, 2000);
+}
 
 // @desc    Get product by barcode
 // @route   GET /api/products/barcode/:barcode
