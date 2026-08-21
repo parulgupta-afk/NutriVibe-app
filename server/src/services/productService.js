@@ -38,13 +38,24 @@ function generateSafetyReport(product, user) {
   return {
     product: product._id,
     user: user._id,
+    // Existing shape (frontend)
     riskAssessment: {
       level: verdict.level,
       score: verdict.score,
       factors: verdict.factors
     },
     recommendations: verdict.recommendations,
-    reviewedAt: new Date()
+    reviewedAt: new Date(),
+    // Phase 8 additive fields — safe for old clients to ignore
+    safety: verdict.safety || {
+      level: verdict.level,
+      score: verdict.score,
+      factors: verdict.factors
+    },
+    nutrition: verdict.nutrition || null,
+    processing: verdict.processing || {
+      level: product.processingLevel || 'Unknown'
+    }
   };
 }
 

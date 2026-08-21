@@ -6,14 +6,20 @@ const {
   searchProducts,
   scanLabel,
   explainProduct,
-  refreshImage,
+  refreshImage
 } = require('../controllers/productController');
 const auth = require('../middleware/auth');
 const rateLimit = require('express-rate-limit');
+const {
+  validate,
+  validateBarcodeParam,
+  validateMongoIdParam,
+  validateScanLabel,
+  validateProductSearch
+} = require('../middleware/validation');
 
 const router = express.Router();
 
-// Phase 4: AI explain gets its own tight limit (also set on app.locals)
 const aiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -25,18 +31,36 @@ const aiLimiter = rateLimit({
   }
 });
 
-router.get('/barcode/:barcode', auth, getProductByBarcode);
-router.post('/scan-label', auth, scanLabel);
+router.get(
+  '/barcode/:barcode',
+  auth,
+  validate(validateBarcodeParam),
+  getProductByBarcode
+);
 
-// Search must stay before '/:id'
-router.get('/search', auth, searchProducts);
+router.post('/scan-label', auth, validate(validateScanLabel), scanLabel);
 
-router.get('/:id', auth, getProductDetails);
-router.get('/:id/alternatives', auth, getAlternatives);
+router.get('/search', auth, validate(validateProductSearch), searchProducts);
 
-// AI explanation — rate limited
-router.get('/:id/explain', auth, aiLimiter, explainProduct);
-
-router.post('/:id/refresh-image', auth, refreshImage);
+router.get('/:id', auth, validate(validateMongoIdParam('id')), getProductDetails);
+router.get(
+  '/:id/alternatives',
+  auth,
+  validate(validateMongoIdParam('id')),
+  getAlternatives
+);
+router.get(
+  '/:id/explain',
+  auth,
+  validate(validateMongoIdParam('id')),
+  aiLimiter,
+  explainProduct
+);
+router.post(
+  '/:id/refresh-image',
+  auth,
+  validate(validateMongoIdParam('id')),
+  refreshImage
+);
 
 module.exports = router;
