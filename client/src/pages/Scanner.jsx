@@ -30,6 +30,7 @@ const Scanner = () => {
   const [ocrImagePreview, setOcrImagePreview] = useState(null);
   const [ocrProductName, setOcrProductName] = useState('');
   const [submittingLabel, setSubmittingLabel] = useState(false);
+  const [lastScan, setLastScan] = useState(() => loadLastScan());
   const fileInputRef = useRef(null);
 
   // Always stop the camera if the component unmounts while it's running
@@ -57,12 +58,14 @@ const Scanner = () => {
       const product = await productApi.searchByBarcode(codeToScan, activeProfileId);
       setResult(product);
       const data = product?.data || product;
-      saveLastScan({
+      const scanMeta = {
         barcode: codeToScan,
         name: data?.name,
         brand: data?.brand,
         safetyLevel: product?.safetyReport?.riskAssessment?.level
-      });
+      };
+      saveLastScan(scanMeta);
+      setLastScan(scanMeta);
       // Navigate to product details after a short delay
       setTimeout(() => {
         navigate(`/product/${codeToScan}`);
