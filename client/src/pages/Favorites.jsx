@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FiHeart, FiTrash2, FiCamera } from 'react-icons/fi';
-import { favoritesApi } from '../api/favorites';
-import ProductImage from '../components/common/ProductImage';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiHeart, FiTrash2, FiCamera } from "react-icons/fi";
+import { favoritesApi } from "../api/favorites";
+import ProductImage from "../components/common/ProductImage";
 
 /**
  * Phase 15: list saved products for quick re-open.
@@ -20,7 +20,7 @@ const Favorites = () => {
       const res = await favoritesApi.list();
       setItems(res.data || []);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not load saved products');
+      setError(err.response?.data?.message || "Could not load saved products");
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,9 @@ const Favorites = () => {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="flex items-center gap-2 mb-6">
         <FiHeart className="text-primary-600 text-xl" aria-hidden="true" />
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Saved products</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Saved products
+        </h1>
       </div>
 
       {loading && (
@@ -54,14 +56,21 @@ const Favorites = () => {
       )}
 
       {error && (
-        <p className="text-red-600 text-sm mb-4" role="alert">{error}</p>
+        <p className="text-red-600 text-sm mb-4" role="alert">
+          {error}
+        </p>
       )}
 
       {!loading && !error && items.length === 0 && (
         <div className="card text-center py-12 text-gray-500 dark:text-gray-400">
           <p className="mb-2">No saved products yet.</p>
-          <p className="text-sm mb-4">Open a product and tap Save to bookmark it here.</p>
-          <Link to="/scanner" className="btn-primary inline-flex items-center gap-2">
+          <p className="text-sm mb-4">
+            Open a product and tap Save to bookmark it here.
+          </p>
+          <Link
+            to="/scanner"
+            className="btn-primary inline-flex items-center gap-2"
+          >
             <FiCamera /> Scan a product
           </Link>
         </div>
@@ -79,7 +88,9 @@ const Favorites = () => {
               >
                 {p.name}
               </button>
-              <p className="text-sm text-gray-500 truncate">{p.brand}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                {p.brand}
+              </p>
             </div>
             <button
               type="button"

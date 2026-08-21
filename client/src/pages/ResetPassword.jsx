@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { FiLock, FiArrowRight } from 'react-icons/fi';
+import React, { useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { FiLock, FiArrowRight } from "react-icons/fi";
 
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const { resetPassword } = useAuth();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,11 +17,11 @@ const ResetPassword = () => {
     setError(null);
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
@@ -30,7 +30,7 @@ const ResetPassword = () => {
     setLoading(false);
 
     if (result.success) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     } else {
       setError(result.error);
     }
@@ -38,15 +38,21 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:border dark:border-gray-700">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Set a New Password</h2>
-          <p className="text-gray-600 mt-2">Choose a new password for your account.</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Set a New Password
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Choose a new password for your account.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="password" className="label-field">New Password</label>
+            <label htmlFor="password" className="label-field">
+              New Password
+            </label>
             <div className="relative">
               <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -62,7 +68,9 @@ const ResetPassword = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="label-field">Confirm New Password</label>
+            <label htmlFor="confirmPassword" className="label-field">
+              Confirm New Password
+            </label>
             <div className="relative">
               <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -77,9 +85,7 @@ const ResetPassword = () => {
             </div>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-600 text-center">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
           <button
             type="submit"
@@ -96,9 +102,12 @@ const ResetPassword = () => {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Remembered your password?{' '}
-          <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+          Remembered your password?{" "}
+          <Link
+            to="/login"
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
             Sign in
           </Link>
         </p>

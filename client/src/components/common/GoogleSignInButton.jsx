@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -17,14 +17,16 @@ const GoogleSignInButton = () => {
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) {
-      console.warn('VITE_GOOGLE_CLIENT_ID is not set — Google sign-in button will not render.');
+      console.warn(
+        "VITE_GOOGLE_CLIENT_ID is not set — Google sign-in button will not render.",
+      );
       return;
     }
 
     const handleCredentialResponse = async (response) => {
       const result = await googleLogin(response.credential);
       if (result.success) {
-        navigate(result.isNewUser ? '/onboarding' : '/dashboard');
+        navigate(result.isNewUser ? "/onboarding" : "/dashboard");
       }
     };
 
@@ -40,10 +42,10 @@ const GoogleSignInButton = () => {
       });
       if (buttonRef.current) {
         window.google.accounts.id.renderButton(buttonRef.current, {
-          theme: 'outline',
-          size: 'large',
+          theme: "outline",
+          size: "large",
           width: 320,
-          text: 'continue_with',
+          text: "continue_with",
         });
       }
     };
@@ -54,7 +56,7 @@ const GoogleSignInButton = () => {
 
   if (!GOOGLE_CLIENT_ID) {
     return (
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
         Google sign-in isn't configured yet.
       </p>
     );

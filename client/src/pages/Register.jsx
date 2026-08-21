@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { FiUser, FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { FiUser, FiMail, FiLock, FiArrowRight } from "react-icons/fi";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -20,10 +20,9 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    
+
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      alert("Passwords do not match");
       return;
     }
 
@@ -31,18 +30,22 @@ const Register = () => {
     const { confirmPassword, ...userData } = formData;
     const result = await register(userData);
     setLoading(false);
-    
+
     if (result.success) {
-      navigate('/onboarding');
+      navigate("/onboarding");
     }
   };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:border dark:border-gray-700">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-          <p className="text-gray-600 mt-2">Start your personalized food safety journey</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Create Account
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Start your personalized food safety journey
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -138,9 +141,12 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
             Sign in
           </Link>
         </p>

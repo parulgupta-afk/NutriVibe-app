@@ -1,7 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { FiShield, FiZap, FiTrendingUp, FiHeart, FiCamera, FiDatabase } from 'react-icons/fi';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  FiShield,
+  FiZap,
+  FiTrendingUp,
+  FiHeart,
+  FiCamera,
+  FiDatabase,
+} from "react-icons/fi";
 
 const Home = () => {
   const { user } = useAuth();
@@ -9,24 +16,28 @@ const Home = () => {
   const features = [
     {
       icon: <FiShield className="text-4xl text-primary-600" />,
-      title: 'Allergen Safety First',
-      description: 'Get an instant safety verdict before you see nutrition facts. Know what\'s safe for you.'
+      title: "Allergen Safety First",
+      description:
+        "Get an instant safety verdict before you see nutrition facts. Know what's safe for you.",
     },
     {
       icon: <FiZap className="text-4xl text-primary-600" />,
-      title: '2-Second Verdict',
-      description: 'Scan any barcode and get personalized allergen and safety information in under 2 seconds.'
+      title: "2-Second Verdict",
+      description:
+        "Scan any barcode and get personalized allergen and safety information in under 2 seconds.",
     },
     {
       icon: <FiTrendingUp className="text-4xl text-primary-600" />,
-      title: 'Smart Alternatives',
-      description: 'Discover healthier alternatives that fit your dietary needs and health goals.'
+      title: "Smart Alternatives",
+      description:
+        "Discover healthier alternatives that fit your dietary needs and health goals.",
     },
     {
       icon: <FiHeart className="text-4xl text-primary-600" />,
-      title: 'Personalized Goals',
-      description: 'Set health goals like weight loss, muscle gain, or diabetic-friendly nutrition tracking.'
-    }
+      title: "Personalized Goals",
+      description:
+        "Set health goals like weight loss, muscle gain, or diabetic-friendly nutrition tracking.",
+    },
   ];
 
   return (
@@ -40,8 +51,9 @@ const Home = () => {
               <span className="text-primary-600"> Worry Never</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-10">
-              NutriVibe turns any barcode into personalized food intelligence — 
-              instantly telling you if a product is safe for you, before you see the nutrition label.
+              NutriVibe turns any barcode into personalized food intelligence —
+              instantly telling you if a product is safe for you, before you see
+              the nutrition label.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (
@@ -50,7 +62,10 @@ const Home = () => {
                 </Link>
               ) : (
                 <>
-                  <Link to="/register" className="btn-primary text-lg px-8 py-3">
+                  <Link
+                    to="/register"
+                    className="btn-primary text-lg px-8 py-3"
+                  >
                     Get Started Free
                   </Link>
                   <Link to="/login" className="btn-secondary text-lg px-8 py-3">
@@ -61,7 +76,10 @@ const Home = () => {
             </div>
             <div className="mt-8 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
               <FiCamera className="text-lg" />
-              <span>Scan any product • Instant safety verdict • Personalized recommendations</span>
+              <span>
+                Scan any product • Instant safety verdict • Personalized
+                recommendations
+              </span>
             </div>
           </div>
         </div>
@@ -80,7 +98,9 @@ const Home = () => {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -98,22 +118,34 @@ const Home = () => {
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiCamera className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">1. Scan</h3>
-              <p className="text-gray-600 dark:text-gray-300">Point your camera at any barcode or product label</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                1. Scan
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Point your camera at any barcode or product label
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiDatabase className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">2. Analyze</h3>
-              <p className="text-gray-600 dark:text-gray-300">We cross-check ingredients against your profile</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                2. Analyze
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                We cross-check ingredients against your profile
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiShield className="text-2xl text-primary-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">3. Decide</h3>
-              <p className="text-gray-600">Get instant safety verdict and personalized insights</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                3. Decide
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Get instant safety verdict and personalized insights
+              </p>
             </div>
           </div>
         </div>

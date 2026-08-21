@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
-import GoogleSignInButton from '../components/common/GoogleSignInButton';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { FiMail, FiLock, FiArrowRight } from "react-icons/fi";
+import GoogleSignInButton from "../components/common/GoogleSignInButton";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -23,16 +23,20 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
     setLoading(false);
     if (result.success) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
   };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:border dark:border-gray-700">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome Back</h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">Sign in to continue your health journey</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Welcome Back
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Sign in to continue your health journey
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -60,7 +64,10 @@ const Login = () => {
               <label htmlFor="password" className="label-field">
                 Password
               </label>
-              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary-600 hover:text-primary-700"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -95,20 +102,23 @@ const Login = () => {
         </form>
 
         <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-sm text-gray-400">or</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
+          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
+          <span className="text-sm text-gray-400 dark:text-gray-500">or</span>
+          <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
 
         <GoogleSignInButton />
 
         <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
             Create one now
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };

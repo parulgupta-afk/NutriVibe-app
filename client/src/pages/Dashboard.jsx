@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useProfile } from '../contexts/ProfileContext';
-import { productApi } from '../api/products';
-import { 
-  FiTrendingUp, FiShield, FiClock, FiCalendar, 
-  FiActivity, FiBarChart2, FiCheck, FiX, FiAlertCircle,
-  FiTrash2, FiFilter, FiUsers
-} from 'react-icons/fi';
-import { format } from 'date-fns';
-import ProductImage from '../components/common/ProductImage';
-import { downloadLogsCsv } from '../utils/exportCsv';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useProfile } from "../contexts/ProfileContext";
+import { productApi } from "../api/products";
+import {
+  FiTrendingUp,
+  FiShield,
+  FiClock,
+  FiCalendar,
+  FiActivity,
+  FiBarChart2,
+  FiCheck,
+  FiX,
+  FiAlertCircle,
+  FiTrash2,
+  FiFilter,
+  FiUsers,
+} from "react-icons/fi";
+import { format } from "date-fns";
+import ProductImage from "../components/common/ProductImage";
+import { downloadLogsCsv } from "../utils/exportCsv";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -29,7 +38,7 @@ const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState(null); // 'Safe' | 'Caution' | 'Unsafe' | null
   const [filteredLogs, setFilteredLogs] = useState([]);
   const [filterLoading, setFilterLoading] = useState(false);
-  const [logSearch, setLogSearch] = useState('');
+  const [logSearch, setLogSearch] = useState("");
 
   useEffect(() => {
     loadTrackingData();
@@ -44,11 +53,14 @@ const Dashboard = () => {
       // date-fns' local-timezone `format`, so this always matches
       // the exact calendar day picked in the native date input —
       // regardless of the browser's local timezone offset.
-      const dateStr = selectedDate.toISOString().split('T')[0];
-      const response = await productApi.getDailyTracking(dateStr, viewProfileId);
+      const dateStr = selectedDate.toISOString().split("T")[0];
+      const response = await productApi.getDailyTracking(
+        dateStr,
+        viewProfileId,
+      );
       setTrackingData(response.data);
     } catch (error) {
-      console.error('Error loading tracking data:', error);
+      console.error("Error loading tracking data:", error);
     } finally {
       setLoading(false);
     }
@@ -59,7 +71,7 @@ const Dashboard = () => {
     try {
       // Build boundaries directly in UTC, matching the same approach
       // as loadTrackingData — no local-timezone setHours() involved.
-      const dateStr = selectedDate.toISOString().split('T')[0];
+      const dateStr = selectedDate.toISOString().split("T")[0];
       const dayStart = new Date(`${dateStr}T00:00:00.000Z`);
       const dayEnd = new Date(`${dateStr}T23:59:59.999Z`);
 
@@ -67,16 +79,16 @@ const Dashboard = () => {
         riskLevel: level,
         startDate: dayStart.toISOString(),
         endDate: dayEnd.toISOString(),
-        limit: 100
+        limit: 100,
       };
       if (viewProfileId !== undefined) {
-        params.profileId = viewProfileId === null ? 'null' : viewProfileId;
+        params.profileId = viewProfileId === null ? "null" : viewProfileId;
       }
 
       const response = await productApi.getTrackingHistory(params);
       setFilteredLogs(response.data || []);
     } catch (error) {
-      console.error('Error loading filtered logs:', error);
+      console.error("Error loading filtered logs:", error);
       setFilteredLogs([]);
     } finally {
       setFilterLoading(false);
@@ -96,9 +108,9 @@ const Dashboard = () => {
   };
 
   const handleClearLogs = async () => {
-    const dateStr = selectedDate.toISOString().split('T')[0];
+    const dateStr = selectedDate.toISOString().split("T")[0];
     const confirmed = window.confirm(
-      `Clear all logs for ${format(selectedDate, 'MMM d, yyyy')}? This clears logs for everyone, not just the selected profile view. This cannot be undone.`
+      `Clear all logs for ${format(selectedDate, "MMM d, yyyy")}? This clears logs for everyone, not just the selected profile view. This cannot be undone.`,
     );
     if (!confirmed) return;
 
@@ -109,15 +121,15 @@ const Dashboard = () => {
       setFilteredLogs([]);
       await loadTrackingData();
     } catch (error) {
-      console.error('Error clearing logs:', error);
-      alert('Failed to clear logs. Please try again.');
+      console.error("Error clearing logs:", error);
+      alert("Failed to clear logs. Please try again.");
     } finally {
       setClearing(false);
     }
   };
 
   const handleDeleteEntry = async (logId) => {
-    const confirmed = window.confirm('Delete this logged item?');
+    const confirmed = window.confirm("Delete this logged item?");
     if (!confirmed) return;
 
     try {
@@ -128,44 +140,44 @@ const Dashboard = () => {
         await fetchFilteredLogs(activeFilter); // refresh, don't toggle
       }
     } catch (error) {
-      console.error('Error deleting log entry:', error);
-      alert('Failed to delete this entry. Please try again.');
+      console.error("Error deleting log entry:", error);
+      alert("Failed to delete this entry. Please try again.");
     }
   };
 
   const stats = [
     {
-      key: 'Safe',
+      key: "Safe",
       icon: <FiShield className="text-green-500" />,
-      label: 'Safe Products',
+      label: "Safe Products",
       value: trackingData?.safeCount || 0,
-      color: 'bg-green-50 border-green-200',
-      activeColor: 'ring-2 ring-green-400'
+      color: "bg-green-50 border-green-200",
+      activeColor: "ring-2 ring-green-400",
     },
     {
-      key: 'Caution',
+      key: "Caution",
       icon: <FiAlertCircle className="text-yellow-500" />,
-      label: 'Caution',
+      label: "Caution",
       value: trackingData?.cautionCount || 0,
-      color: 'bg-yellow-50 border-yellow-200',
-      activeColor: 'ring-2 ring-yellow-400'
+      color: "bg-yellow-50 border-yellow-200",
+      activeColor: "ring-2 ring-yellow-400",
     },
     {
-      key: 'Unsafe',
+      key: "Unsafe",
       icon: <FiX className="text-red-500" />,
-      label: 'Unsafe',
+      label: "Unsafe",
       value: trackingData?.unsafeCount || 0,
-      color: 'bg-red-50 border-red-200',
-      activeColor: 'ring-2 ring-red-400'
+      color: "bg-red-50 border-red-200",
+      activeColor: "ring-2 ring-red-400",
     },
     {
       key: null,
       icon: <FiActivity className="text-primary-500" />,
-      label: 'Total Scans',
+      label: "Total Scans",
       value: trackingData?.totalScans || 0,
-      color: 'bg-primary-50 border-primary-200',
-      activeColor: ''
-    }
+      color: "bg-primary-50 border-primary-200",
+      activeColor: "",
+    },
   ];
 
   const recentLogs = trackingData?.recentLogs || [];
@@ -173,17 +185,17 @@ const Dashboard = () => {
     ? recentLogs.filter((log) => {
         const q = logSearch.toLowerCase();
         return (
-          (log.productName || '').toLowerCase().includes(q) ||
-          (log.riskLevel || '').toLowerCase().includes(q) ||
-          (log.profileName || '').toLowerCase().includes(q)
+          (log.productName || "").toLowerCase().includes(q) ||
+          (log.riskLevel || "").toLowerCase().includes(q) ||
+          (log.profileName || "").toLowerCase().includes(q)
         );
       })
     : recentLogs;
 
   const filterColorClasses = {
-    Safe: 'text-green-700 bg-green-50 border-green-200',
-    Caution: 'text-yellow-700 bg-yellow-50 border-yellow-200',
-    Unsafe: 'text-red-700 bg-red-50 border-red-200'
+    Safe: "text-green-700 bg-green-50 border-green-200",
+    Caution: "text-yellow-700 bg-yellow-50 border-yellow-200",
+    Unsafe: "text-red-700 bg-red-50 border-red-200",
   };
 
   return (
@@ -191,17 +203,17 @@ const Dashboard = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
             Welcome back, {user?.name}
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             Here's your food safety summary
           </p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <input
             type="date"
-            value={selectedDate.toISOString().split('T')[0]}
+            value={selectedDate.toISOString().split("T")[0]}
             onChange={(e) => setSelectedDate(new Date(e.target.value))}
             className="input-field w-auto"
           />
@@ -212,7 +224,7 @@ const Dashboard = () => {
             title="Clear all logs for this day"
           >
             <FiTrash2 />
-            {clearing ? 'Clearing...' : 'Clear Log'}
+            {clearing ? "Clearing..." : "Clear Log"}
           </button>
         </div>
       </div>
@@ -220,20 +232,32 @@ const Dashboard = () => {
       {/* Family profile filter — only shown once there's at least one dependent */}
       {dependents.length > 0 && (
         <div className="flex items-center gap-2 mb-6">
-          <FiUsers className="text-gray-400" />
-          <label className="text-sm text-gray-600">Showing:</label>
+          <FiUsers className="text-gray-400 dark:text-gray-300" />
+          <label className="text-sm text-gray-600 dark:text-gray-300">
+            Showing:
+          </label>
           <select
-            value={viewProfileId === undefined ? 'all' : viewProfileId === null ? 'me' : viewProfileId}
+            value={
+              viewProfileId === undefined
+                ? "all"
+                : viewProfileId === null
+                  ? "me"
+                  : viewProfileId
+            }
             onChange={(e) => {
               const val = e.target.value;
-              setViewProfileId(val === 'all' ? undefined : val === 'me' ? null : val);
+              setViewProfileId(
+                val === "all" ? undefined : val === "me" ? null : val,
+              );
             }}
             className="input-field w-auto text-sm py-1.5"
           >
             <option value="all">All Profiles (combined)</option>
             <option value="me">Me ({user?.name})</option>
             {dependents.map((dep) => (
-              <option key={dep._id} value={dep._id}>{dep.name}</option>
+              <option key={dep._id} value={dep._id}>
+                {dep.name}
+              </option>
             ))}
           </select>
         </div>
@@ -246,36 +270,46 @@ const Dashboard = () => {
           return (
             <div
               key={index}
-              onClick={clickable ? () => handleFilterClick(stat.key) : undefined}
-              className={`card ${stat.color} ${clickable ? 'cursor-pointer transition-shadow hover:shadow-md' : ''} ${
-                activeFilter === stat.key ? stat.activeColor : ''
+              onClick={
+                clickable ? () => handleFilterClick(stat.key) : undefined
+              }
+              className={`card ${stat.color} ${clickable ? "cursor-pointer transition-shadow hover:shadow-md" : ""} ${
+                activeFilter === stat.key ? stat.activeColor : ""
               }`}
             >
               <div className="flex items-center gap-3">
                 {stat.icon}
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    {stat.label}
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {stat.value}
+                  </p>
                 </div>
               </div>
             </div>
           );
         })}
       </div>
-      <p className="text-xs text-gray-400 mb-6 flex items-center gap-1">
-        <FiFilter className="inline" /> Click Safe, Caution, or Unsafe to see every item in that category for this day
+      <p className="text-xs text-gray-400 dark:text-gray-500 mb-6 flex items-center gap-1">
+        <FiFilter className="inline" /> Click Safe, Caution, or Unsafe to see
+        every item in that category for this day
       </p>
 
       {/* Filtered results panel — shown only when a stat card is active */}
       {activeFilter && (
         <div className={`card mb-8 border ${filterColorClasses[activeFilter]}`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">
-              All "{activeFilter}" items — {format(selectedDate, 'MMM d, yyyy')}
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              All "{activeFilter}" items — {format(selectedDate, "MMM d, yyyy")}
             </h2>
             <button
-              onClick={() => { setActiveFilter(null); setFilteredLogs([]); }}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              onClick={() => {
+                setActiveFilter(null);
+                setFilteredLogs([]);
+              }}
+              className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               Clear filter
             </button>
@@ -290,11 +324,19 @@ const Dashboard = () => {
               {filteredLogs.map((log) => {
                 const image = log.product?.images?.[0];
                 return (
-                  <div key={log.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100">
+                  <div
+                    key={log.id}
+                    className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100"
+                  >
                     <div className="flex items-center gap-3">
-                      <ProductImage src={image} alt={log.productName} size={40} rounded="rounded-md" />
+                      <ProductImage
+                        src={image}
+                        alt={log.productName}
+                        size={40}
+                        rounded="rounded-md"
+                      />
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
                           {log.productName}
                           {log.profileName && (
                             <span className="ml-2 text-xs font-normal text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
@@ -302,7 +344,9 @@ const Dashboard = () => {
                             </span>
                           )}
                         </p>
-                        <p className="text-sm text-gray-500">{format(new Date(log.createdAt), 'h:mm a')}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {format(new Date(log.createdAt), "h:mm a")}
+                        </p>
                       </div>
                     </div>
                     <button
@@ -317,7 +361,9 @@ const Dashboard = () => {
               })}
             </div>
           ) : (
-            <p className="text-center py-6 text-gray-500">No "{activeFilter}" items logged on this day</p>
+            <p className="text-center py-6 text-gray-500 dark:text-gray-400">
+              No "{activeFilter}" items logged on this day
+            </p>
           )}
         </div>
       )}
@@ -328,7 +374,9 @@ const Dashboard = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div className="flex items-center gap-2">
               <FiClock className="text-primary-500" />
-              <h2 className="text-lg font-semibold text-gray-900">Recent Logs</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Recent Logs
+              </h2>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <input
@@ -341,9 +389,9 @@ const Dashboard = () => {
               />
               <button
                 type="button"
-                className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700"
+                className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => {
-                  const dateStr = selectedDate.toISOString().split('T')[0];
+                  const dateStr = selectedDate.toISOString().split("T")[0];
                   const source = activeFilter ? filteredLogs : recentLogs;
                   if (!source.length) return;
                   downloadLogsCsv(source, dateStr);
@@ -361,11 +409,19 @@ const Dashboard = () => {
           ) : filteredRecentLogs.length > 0 ? (
             <div className="space-y-3">
               {filteredRecentLogs.map((log, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
                   <div className="flex items-center gap-3">
-                    <ProductImage src={log.productImage} alt={log.productName} size={40} rounded="rounded-md" />
+                    <ProductImage
+                      src={log.productImage}
+                      alt={log.productName}
+                      size={40}
+                      rounded="rounded-md"
+                    />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
                         {log.productName}
                         {log.profileName && (
                           <span className="ml-2 text-xs font-normal text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
@@ -373,16 +429,23 @@ const Dashboard = () => {
                           </span>
                         )}
                       </p>
-                      <p className="text-sm text-gray-500">{format(new Date(log.createdAt), 'h:mm a')}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {format(new Date(log.createdAt), "h:mm a")}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      log.riskLevel === 'Safe' ? 'bg-green-100 text-green-700' :
-                      log.riskLevel === 'Caution' ? 'bg-yellow-100 text-yellow-700' :
-                      log.riskLevel === 'Unsafe' ? 'bg-red-100 text-red-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        log.riskLevel === "Safe"
+                          ? "bg-green-100 text-green-700"
+                          : log.riskLevel === "Caution"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : log.riskLevel === "Unsafe"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
                       {log.riskLevel}
                     </span>
                     <button
@@ -397,10 +460,18 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <FiActivity className="text-3xl mx-auto mb-2 text-gray-300" />
-              <p>{logSearch.trim() ? 'No logs match your search' : 'No scans logged yet today'}</p>
-              <p className="text-sm">{logSearch.trim() ? 'Try a different name or safety level' : 'Scan a product to start tracking'}</p>
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <FiActivity className="text-3xl mx-auto mb-2 text-gray-300 dark:text-gray-500" />
+              <p>
+                {logSearch.trim()
+                  ? "No logs match your search"
+                  : "No scans logged yet today"}
+              </p>
+              <p className="text-sm">
+                {logSearch.trim()
+                  ? "Try a different name or safety level"
+                  : "Scan a product to start tracking"}
+              </p>
             </div>
           )}
         </div>
@@ -408,27 +479,37 @@ const Dashboard = () => {
         <div className="card">
           <div className="flex items-center gap-2 mb-4">
             <FiBarChart2 className="text-primary-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Safety Breakdown</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Safety Breakdown
+            </h2>
           </div>
           <div className="space-y-4">
             {stats.slice(0, 3).map((stat, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   {stat.icon}
-                  <span className="text-gray-700">{stat.label}</span>
+                  <span className="text-gray-700 dark:text-gray-200">
+                    {stat.label}
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
-                        index === 0 ? 'bg-green-500' :
-                        index === 1 ? 'bg-yellow-500' :
-                        'bg-red-500'
+                        index === 0
+                          ? "bg-green-500"
+                          : index === 1
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
                       }`}
-                      style={{ width: `${(stat.value / (trackingData?.totalScans || 1)) * 100}%` }}
+                      style={{
+                        width: `${(stat.value / (trackingData?.totalScans || 1)) * 100}%`,
+                      }}
                     />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{stat.value}</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                    {stat.value}
+                  </span>
                 </div>
               </div>
             ))}
