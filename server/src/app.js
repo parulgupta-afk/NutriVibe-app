@@ -14,6 +14,7 @@ const safetyRoutes = require('./routes/safetyRoutes');
 const dependentRoutes = require('./routes/dependentRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
+const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
 
 const app = express();
@@ -82,7 +83,7 @@ app.use(cors({
 
 // Phase 4: production logs stay compact; never log bodies
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
-app.use(requestTiming);
+app.use(requestLogger);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);
@@ -108,6 +109,25 @@ app.get('/api/health', (req, res) => {
       readyState: mongoState
     }
   });
+});
+
+
+// Phase 22: machine-readable API docs (matches real routes)
+const openapi = require('./docs/openapi.json');
+app.get('/api/openapi.json', (req, res) => {
+  res.json(openapi);
+});
+app.get('/api/docs', (req, res) => {
+  res.type('html').send(`<!DOCTYPE html>
+<html><head><title>NutriVibe API</title>
+<link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+</head><body>
+<div id="swagger-ui"></div>
+<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+SwaggerUIBundle({ url: '/api/openapi.json', dom_id: '#swagger-ui' });
+</script>
+</body></html>`);
 });
 
 app.use((req, res) => {
