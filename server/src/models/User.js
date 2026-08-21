@@ -60,6 +60,11 @@ const userSchema = new mongoose.Schema({
     healthGoals: { type: [String], default: [] },
     medications: { type: [String], default: [] }
   },
+  // Phase 14: products the user bookmarked for quick re-check
+  savedProducts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
+  }],
   createdAt: {
     type: Date,
     default: Date.now

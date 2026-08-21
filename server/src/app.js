@@ -12,6 +12,7 @@ const productRoutes = require('./routes/productRoutes');
 const trackingRoutes = require('./routes/trackingRoutes');
 const safetyRoutes = require('./routes/safetyRoutes');
 const dependentRoutes = require('./routes/dependentRoutes');
+const favoritesRoutes = require('./routes/favoritesRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -89,6 +90,7 @@ app.use('/api/products', scanLimiter, productRoutes);
 app.use('/api/tracking', trackingRoutes);
 app.use('/api/safety', safetyRoutes);
 app.use('/api/dependents', dependentRoutes);
+app.use('/api/favorites', favoritesRoutes);
 
 app.get('/api/health', (req, res) => {
   const mongoState = mongoose.connection.readyState;

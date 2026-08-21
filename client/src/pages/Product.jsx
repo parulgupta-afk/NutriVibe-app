@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { productApi } from '../api/products';
 import { useProfile } from '../contexts/ProfileContext';
 import ProductImage from '../components/common/ProductImage';
+import { favoritesApi } from '../api/favorites';
 import SafetyBadge from '../components/common/SafetyBadge';
 import { 
   FiArrowLeft, FiShield, FiAlertTriangle, FiCheckCircle, 
@@ -21,6 +22,8 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [logging, setLogging] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [explanation, setExplanation] = useState(null);
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState(null);
@@ -41,6 +44,15 @@ const Product = () => {
       const response = await productApi.searchByBarcode(barcode, activeProfileId);
       const productData = response.data;
       setProduct(productData);
+
+      // Phase 14: check if this product is already saved
+      try {
+        const fav = await favoritesApi.list();
+        const ids = (fav.data || []).map((p) => p._id);
+        setIsSaved(ids.includes(productData._id));
+      } catch {
+        setIsSaved(false);
+      }
 
       // The barcode lookup already returns a personalized safety report,
       // so use it directly instead of firing a second request
@@ -76,6 +88,25 @@ const Product = () => {
       alert('Failed to log product. Please try again.');
     } finally {
       setLogging(false);
+    }
+  };
+
+  const handleToggleSave = async () => {
+    if (!product?._id) return;
+    setSaving(true);
+    try {
+      if (isSaved) {
+        await favoritesApi.remove(product._id);
+        setIsSaved(false);
+      } else {
+        await favoritesApi.add(product._id);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error('Save error:', err);
+      alert(err.response?.data?.message || 'Could not update saved products');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -201,14 +232,26 @@ const Product = () => {
               <p className="text-sm text-gray-500 mt-1">Barcode: {product.barcode}</p>
             </div>
           </div>
-          <button
-            onClick={handleLogProduct}
-            disabled={logging}
-            className="btn-primary flex items-center gap-2 whitespace-nowrap"
-          >
-            <FiHeart />
-            {logging ? 'Logging...' : 'Log This'}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={handleToggleSave}
+              disabled={saving}
+              className="btn-secondary flex items-center gap-2 whitespace-nowrap"
+              aria-pressed={isSaved}
+            >
+              <FiHeart className={isSaved ? 'text-red-500 fill-current' : ''} />
+              {saving ? '…' : isSaved ? 'Saved' : 'Save'}
+            </button>
+            <button
+              type="button"
+              onClick={handleLogProduct}
+              disabled={logging}
+              className="btn-primary flex items-center gap-2 whitespace-nowrap"
+            >
+              {logging ? 'Logging...' : 'Log This'}
+            </button>
+          </div>
         </div>
       </div>
 

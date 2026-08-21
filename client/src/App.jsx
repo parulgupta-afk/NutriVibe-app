@@ -12,6 +12,7 @@ import Scanner from './pages/Scanner';
 import Product from './pages/Product';
 import Onboarding from './pages/Onboarding';
 import Profiles from './pages/Profiles';
+import Favorites from './pages/Favorites';
 import NotFound from './pages/NotFound';
 
 const ProtectedRoute = ({ children }) => {
@@ -81,6 +82,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorites />
               </ProtectedRoute>
             }
           />

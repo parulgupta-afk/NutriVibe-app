@@ -103,6 +103,5 @@ const productSchema = new mongoose.Schema({
 
 // Index for search
 productSchema.index({ name: 'text', brand: 'text', category: 'text' });
-productSchema.index({ barcode: 1 });
 
 module.exports = mongoose.model('Product', productSchema);
