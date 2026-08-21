@@ -36,6 +36,21 @@ Step-by-step: [DEPLOY.md](DEPLOY.md)
 [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) — 90-second Loom outline  
 [docs/PORTFOLIO.md](docs/PORTFOLIO.md) — interview talking points  
 
+
+## 📚 Documentation
+
+| Doc | Description |
+|-----|-------------|
+| [docs/development.md](docs/development.md) | Local setup |
+| [docs/current-architecture.md](docs/current-architecture.md) | Request flow + routes |
+| [docs/api.md](docs/api.md) | API overview |
+| [docs/database.md](docs/database.md) | Mongo models + indexes |
+| [DEPLOY.md](DEPLOY.md) | Production deploy |
+| [docs/FINAL_REVIEW.md](docs/FINAL_REVIEW.md) | Engineering sign-off checklist |
+| [docs/decisions/](docs/decisions/) | Design decisions |
+
+API browser (local): `http://localhost:5000/api/docs`
+
 ## 🔒 Security
 
 See [SECURITY.md](SECURITY.md).
