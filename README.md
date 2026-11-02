@@ -34,7 +34,6 @@ Step-by-step: [DEPLOY.md](DEPLOY.md)
 [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) — 90-second Loom outline  
 [docs/PORTFOLIO.md](docs/PORTFOLIO.md) — interview talking points  
 
-
 ## 📚 Documentation
 
 | Doc | Description |
