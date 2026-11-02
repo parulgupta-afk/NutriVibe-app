@@ -21,7 +21,6 @@ cd server
 npm test
 ```
 
-
 ## 🚀 Deploy
 
 Step-by-step: [DEPLOY.md](DEPLOY.md)
