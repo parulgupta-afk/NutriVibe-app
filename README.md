@@ -4,7 +4,6 @@
 
 NutriVibe turns a barcode scan, live camera scan, or photographed ingredient label into an instant, personalized food safety verdict — not a generic nutrition score, but one that's actually checked against **your own** allergies, dietary restrictions, health goals, and medications (or a family member's, if you're managing food safety for someone else).
 
-
 ## 📸 Demo
 
 Live demo: [nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)
