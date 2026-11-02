@@ -205,4 +205,6 @@ MIT — see [LICENSE](LICENSE).
 See also [CONTRIBUTING.md](CONTRIBUTING.md) and [DEPLOY.md](DEPLOY.md) if present.
 
 ## 🔗 Live Demo
+
 [https://nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)
+
