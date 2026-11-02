@@ -37,7 +37,7 @@ Step-by-step: [DEPLOY.md](DEPLOY.md)
 ## 📚 Documentation
 
 | Doc | Description |
-|-----|-------------|
+| --- | ----------- |
 | [docs/development.md](docs/development.md) | Local setup |
 | [docs/current-architecture.md](docs/current-architecture.md) | Request flow + routes |
 | [docs/api.md](docs/api.md) | API overview |
