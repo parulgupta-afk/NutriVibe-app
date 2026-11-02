@@ -68,11 +68,13 @@ See [SECURITY.md](SECURITY.md).
 - **Safe swap suggestions** — when a product isn't a great fit, see personalized alternative products that actually are, based on the same real-time verdict check (not a generic "similar products" list)
 
 ### Family Profiles
+
 - Manage allergy, diet, and medication data for multiple people under one account (e.g. a parent tracking a child's allergies)
 - A "Scanning for: [Me / Name]" selector applies the right profile's rules to every scan and log
 - Dashboard can show combined family stats or filter to one person
 
 ### Tracking & Dashboard
+
 - Daily/date-based tracking dashboard with Safe/Caution/Unsafe breakdowns
 - Click any safety category to see every matching item logged that day
 - Per-entry delete, and bulk "Clear Log" for a given day
