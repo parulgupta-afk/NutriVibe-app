@@ -91,6 +91,7 @@ See [SECURITY.md](SECURITY.md).
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - React 18 + Vite
 - Tailwind CSS
 - React Router v6
@@ -99,6 +100,7 @@ See [SECURITY.md](SECURITY.md).
 - Axios, React Hot Toast, Chart.js, date-fns
 
 ### Backend
+
 - Node.js + Express
 - MongoDB + Mongoose
 - JWT authentication + **Google OAuth** (`google-auth-library`)
@@ -106,6 +108,7 @@ See [SECURITY.md](SECURITY.md).
 - bcryptjs, express-validator, helmet, express-rate-limit
 
 ### External Services
+
 - **Open Food Facts API** — real product/ingredient/allergen data
 - **Google Gemini API** — personalized ingredient explanations
 - **Google OAuth** — social sign-in
