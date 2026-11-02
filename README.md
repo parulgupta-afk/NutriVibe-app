@@ -83,6 +83,7 @@ See [SECURITY.md](SECURITY.md).
 - Last successful scan remembered on-device for quick re-open
 
 ### Authentication
+
 - Email/password registration and login
 - **Google Sign-In**, with automatic account linking if the same email was already registered manually
 - Full **forgot password** flow with hashed, time-limited reset tokens
