@@ -162,7 +162,7 @@ GEMINI_API_KEY=your_gemini_api_key
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
-*(SMTP_HOST/SMTP_USER/SMTP_PASS are optional — omit them and password reset emails will use a free Ethereal test inbox automatically, with a preview link logged to your console.)*
+> **Note**: `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS` are optional — omit them and password reset emails will use a free Ethereal test inbox automatically, with a preview link logged to your console.
 
 ```bash
 npm run dev
@@ -207,4 +207,3 @@ See also [CONTRIBUTING.md](CONTRIBUTING.md) and [DEPLOY.md](DEPLOY.md) if presen
 ## 🔗 Live Demo
 
 [https://nutri-vibe-app-iota.vercel.app](https://nutri-vibe-app-iota.vercel.app/)
-
