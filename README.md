@@ -115,7 +115,7 @@ See [SECURITY.md](SECURITY.md).
 
 ## 📁 Project Structure
 
-\`\`\`
+```text
 nutrivibe-app/
 ├── client/                        # React frontend
 │   └── src/
@@ -133,7 +133,7 @@ nutrivibe-app/
 │       ├── routes/                 # API route definitions
 │       └── services/               # Open Food Facts, Gemini, email, safety engine, profile resolver
 └── README.md
-\`\`\`
+```
 
 ## ⚙️ Getting Started
 
