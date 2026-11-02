@@ -138,6 +138,7 @@ nutrivibe-app/
 ## ⚙️ Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - A MongoDB Atlas cluster (or local MongoDB)
 
