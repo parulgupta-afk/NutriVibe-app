@@ -55,6 +55,7 @@ See [SECURITY.md](SECURITY.md).
 ## ✨ Features
 
 ### Scanning
+
 - **Live camera barcode scanning** — point your camera at a real product barcode and get an instant read, no manual entry needed
 - **OCR label scanning** — for products without a scannable barcode, photograph the ingredients list directly; extracted text is editable before submitting, since OCR isn't perfect
 - **Real product data** via the [Open Food Facts](https://world.openfoodfacts.org/) open database, with automatic caching and self-healing image recovery for previously-scanned products
