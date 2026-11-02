@@ -143,13 +143,15 @@ nutrivibe-app/
 - A MongoDB Atlas cluster (or local MongoDB)
 
 ### Backend setup
-\`\`\`bash
+
+```bash
 cd server
 npm install
-\`\`\`
+```
 
-Create a \`.env\` file in \`server/\` with:
-\`\`\`
+Create a `.env` file in `server/` with:
+
+```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_random_secret
@@ -158,12 +160,13 @@ NODE_ENV=development
 CLIENT_URL=http://localhost:5173
 GEMINI_API_KEY=your_gemini_api_key
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
-\`\`\`
+```
+
 *(SMTP_HOST/SMTP_USER/SMTP_PASS are optional — omit them and password reset emails will use a free Ethereal test inbox automatically, with a preview link logged to your console.)*
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 ### Frontend setup
 \`\`\`bash
