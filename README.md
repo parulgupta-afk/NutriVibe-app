@@ -169,21 +169,23 @@ npm run dev
 ```
 
 ### Frontend setup
-\`\`\`bash
+
+```bash
 cd client
 npm install
-\`\`\`
+```
 
-Create a \`.env\` file in \`client/\` with:
-\`\`\`
+Create a `.env` file in `client/` with:
+
+```env
 VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-\`\`\`
+```
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
-Visit **http://localhost:5173**.
+Visit **[http://localhost:5173](http://localhost:5173)**.
 
 ## 🧩 Challenges & Fixes
 
