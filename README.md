@@ -61,6 +61,7 @@ See [SECURITY.md](SECURITY.md).
 - **Real product data** via the [Open Food Facts](https://world.openfoodfacts.org/) open database, with automatic caching and self-healing image recovery for previously-scanned products
 
 ### Personalized Safety Intelligence
+
 - **One unified safety verdict engine** — every scan is checked against the active profile's allergies, dietary restrictions, and medications through a single shared rules engine (not duplicated logic scattered across the app)
 - **Medication–food interaction warnings** — flags real, well-documented interactions (e.g. grapefruit + statins, vitamin K–rich foods + blood thinners, tyramine + MAOIs)
 - **AI-powered ingredient explainer** — uses Google Gemini to explain, in plain English, what's actually in a product and why it might matter to *this specific person* — never giving medical advice or telling the user whether to eat something
