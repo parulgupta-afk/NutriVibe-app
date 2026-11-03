@@ -131,15 +131,16 @@ async function runTests() {
   let demoProductId = null;
   await test('GET /api/products/barcode/4567890123456', async () => {
     const res = await request('GET', '/api/products/barcode/4567890123456');
-    if (res.status !== 200 || !res.data.product) {
+    const prod = res.data.data || res.data.product;
+    if (res.status !== 200 || !prod) {
       throw new Error(`Scan product failed with status ${res.status}: ${JSON.stringify(res.data)}`);
     }
-    demoProductId = res.data.product._id;
+    demoProductId = prod._id;
   });
 
   // 7. Product - Search
-  await test('GET /api/products/search?q=Greek', async () => {
-    const res = await request('GET', '/api/products/search?q=Greek');
+  await test('GET /api/products/search?query=Greek', async () => {
+    const res = await request('GET', '/api/products/search?query=Greek');
     if (res.status !== 200) {
       throw new Error(`Search products failed with status ${res.status}`);
     }
