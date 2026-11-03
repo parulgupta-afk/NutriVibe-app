@@ -87,8 +87,22 @@ app.use(helmet({
   contentSecurityPolicy: false // SPA + camera; tighten later if you add a strict CSP
 }));
 app.use(compression());
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g. curl, mobile/server-to-server)
+    if (!origin) return callback(null, true);
+    if (origin === clientUrl) return callback(null, true);
+
+    // In local development, also allow localhost on any port (Vite port jumps, Docker web)
+    if (process.env.NODE_ENV !== 'production') {
+      if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        return callback(null, true);
+      }
+    }
+
+    callback(new Error(`CORS policy does not allow access from origin: ${origin}`));
+  },
   credentials: true,
 }));
 
