@@ -4,7 +4,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { mealApi } from '../api/meals';
 import { hydrationApi } from '../api/hydration';
-import { FiPlus, FiTrash2, FiCoffee, FiSun, FiMoon, FiZap } from 'react-icons/fi';
+import { foodApi } from '../api/foods';
+import { FiPlus, FiTrash2, FiCoffee, FiSun, FiMoon, FiZap, FiSearch } from 'react-icons/fi';
 
 const MEAL_TYPES = [
   { id: 'breakfast', label: 'Breakfast', icon: FiCoffee },
@@ -58,6 +59,9 @@ export default function Nutrition() {
   const [mealType, setMealType] = useState('breakfast');
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [searchQ, setSearchQ] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -85,10 +89,40 @@ export default function Nutrition() {
 
   const toggleFood = (food) => {
     setSelectedFoods((prev) => {
-      const exists = prev.find((f) => f.name === food.name);
-      if (exists) return prev.filter((f) => f.name !== food.name);
-      return [...prev, { ...food, quantity: food.grams, unit: 'g', grams: food.grams, isEstimated: true }];
+      const key = food.foodItemId || food.name;
+      const exists = prev.find((f) => (f.foodItemId || f.name) === key);
+      if (exists) return prev.filter((f) => (f.foodItemId || f.name) !== key);
+      const grams = food.grams || food.servings?.[0]?.grams || 100;
+      return [
+        ...prev,
+        {
+          foodItemId: food._id || food.foodItemId,
+          name: food.name,
+          quantity: grams,
+          unit: 'g',
+          grams,
+          nutrition: food.nutrition || undefined,
+          isEstimated: !food._id,
+        },
+      ];
     });
+  };
+
+  const runSearch = async (q) => {
+    setSearchQ(q);
+    if (!q || q.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await foodApi.search(q, 12);
+      setSearchResults(res.data || []);
+    } catch {
+      setSearchResults([]);
+    } finally {
+      setSearching(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -239,10 +273,54 @@ export default function Nutrition() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Quick add (demo foods)</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                  <FiSearch /> Search food database
+                </label>
+                <input
+                  type="search"
+                  placeholder="e.g. paneer, roti, banana…"
+                  value={searchQ}
+                  onChange={(e) => runSearch(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-white"
+                />
+                {searching && <p className="text-xs text-gray-400 mt-1">Searching…</p>}
+                {searchResults.length > 0 && (
+                  <div className="mt-2 max-h-36 overflow-y-auto space-y-1">
+                    {searchResults.map((f) => {
+                      const selected = selectedFoods.some((s) => (s.foodItemId || s.name) === (f._id || f.name));
+                      const cal = f.per100g?.calories ?? '—';
+                      return (
+                        <button
+                          key={f._id || f.name}
+                          type="button"
+                          onClick={() =>
+                            toggleFood({
+                              ...f,
+                              grams: f.servings?.[0]?.grams || 100,
+                              nutrition: undefined,
+                            })
+                          }
+                          className={`w-full text-left px-3 py-2 rounded-lg border text-sm ${
+                            selected
+                              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30'
+                              : 'border-gray-200 dark:border-gray-600'
+                          }`}
+                        >
+                          <span className="font-medium text-gray-900 dark:text-white">{f.name}</span>
+                          <span className="block text-xs text-gray-500">
+                            {cal} kcal / 100g {f.region ? `· ${f.region}` : ''}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Quick add (offline demo)</label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   {QUICK_FOODS.map((f) => {
-                    const selected = selectedFoods.some((s) => s.name === f.name);
+                    const selected = selectedFoods.some((s) => s.name === f.name && !s.foodItemId);
                     return (
                       <button
                         key={f.name}

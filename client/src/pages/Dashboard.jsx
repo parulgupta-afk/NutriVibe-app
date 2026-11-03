@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useProfile } from "../contexts/ProfileContext";
 import { productApi } from "../api/products";
+import { mealApi } from "../api/meals";
+import { hydrationApi, streakApi } from "../api/hydration";
 import {
   FiTrendingUp,
   FiShield,
@@ -15,6 +18,9 @@ import {
   FiTrash2,
   FiFilter,
   FiUsers,
+  FiDroplet,
+  FiCamera,
+  FiPlus,
 } from "react-icons/fi";
 import { format } from "date-fns";
 import ProductImage from "../components/common/ProductImage";
@@ -39,12 +45,47 @@ const Dashboard = () => {
   const [filteredLogs, setFilteredLogs] = useState([]);
   const [filterLoading, setFilterLoading] = useState(false);
   const [logSearch, setLogSearch] = useState("");
+  const [wellness, setWellness] = useState({
+    calories: 0,
+    calorieGoal: 2000,
+    waterMl: 0,
+    waterGoal: 2000,
+    mealStreak: 0,
+    waterStreak: 0,
+  });
 
   useEffect(() => {
     loadTrackingData();
     setActiveFilter(null);
     setFilteredLogs([]);
   }, [selectedDate, viewProfileId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [mealRes, hydRes, streakRes] = await Promise.all([
+          mealApi.getToday().catch(() => null),
+          hydrationApi.getToday().catch(() => null),
+          streakApi.get().catch(() => null),
+        ]);
+        if (cancelled) return;
+        setWellness({
+          calories: mealRes?.data?.dailyTotals?.calories || 0,
+          calorieGoal: 2000,
+          waterMl: hydRes?.data?.totalMl || 0,
+          waterGoal: hydRes?.data?.goalMl || 2000,
+          mealStreak: streakRes?.data?.mealLogging?.current || 0,
+          waterStreak: streakRes?.data?.hydration?.current || 0,
+        });
+      } catch {
+        /* non-blocking */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const loadTrackingData = async () => {
     setLoading(true);
@@ -207,7 +248,7 @@ const Dashboard = () => {
             Welcome back, {user?.name}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-1">
-            Here's your food safety summary
+            Food safety, nutrition &amp; wellness at a glance
           </p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
@@ -262,6 +303,60 @@ const Dashboard = () => {
           </select>
         </div>
       )}
+
+      {/* Quick actions + wellness (NutriVibe 2.0) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <Link
+          to="/scanner"
+          className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-primary-400 transition"
+        >
+          <FiCamera className="text-primary-600 text-lg" />
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Scan Food</span>
+        </Link>
+        <Link
+          to="/nutrition"
+          className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-primary-400 transition"
+        >
+          <FiPlus className="text-primary-600 text-lg" />
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Log Meal</span>
+        </Link>
+        <Link
+          to="/hydration"
+          className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-sky-400 transition"
+        >
+          <FiDroplet className="text-sky-500 text-lg" />
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Add Water</span>
+        </Link>
+        <Link
+          to="/nutrition"
+          className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-orange-400 transition"
+        >
+          <FiActivity className="text-orange-500 text-lg" />
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+            {Math.round(wellness.calories)} / {wellness.calorieGoal} kcal
+          </span>
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="card bg-orange-50 dark:bg-orange-900/20 border-orange-100 dark:border-orange-800">
+          <p className="text-xs text-orange-700 dark:text-orange-300 font-medium">Today&apos;s calories</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+            {Math.round(wellness.calories)} <span className="text-sm font-normal text-gray-500">/ {wellness.calorieGoal}</span>
+          </p>
+        </div>
+        <div className="card bg-sky-50 dark:bg-sky-900/20 border-sky-100 dark:border-sky-800">
+          <p className="text-xs text-sky-700 dark:text-sky-300 font-medium">Hydration</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+            {wellness.waterMl} <span className="text-sm font-normal text-gray-500">/ {wellness.waterGoal} ml</span>
+          </p>
+        </div>
+        <div className="card bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800">
+          <p className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Streaks</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+            🔥 {wellness.mealStreak} meal · 💧 {wellness.waterStreak} water
+          </p>
+        </div>
+      </div>
 
       {/* Stats Cards — Safe / Caution / Unsafe are clickable filters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
