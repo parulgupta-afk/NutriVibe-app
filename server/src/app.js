@@ -18,6 +18,9 @@ const hydrationRoutes = require('./routes/hydrationRoutes');
 const streakRoutes = require('./routes/streakRoutes');
 const foodRoutes = require('./routes/foodRoutes');
 const dietRoutes = require('./routes/dietRoutes');
+const aiRoutes = require('./routes/aiRoutes');
+const reactionRoutes = require('./routes/reactionRoutes');
+const indianRoutes = require('./routes/indianRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
 const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
@@ -105,6 +108,9 @@ app.use('/api/hydration', hydrationRoutes);
 app.use('/api/streaks', streakRoutes);
 app.use('/api/foods', foodRoutes);
 app.use('/api/diet-planner', dietRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/reactions', reactionRoutes);
+app.use('/api/indian', indianRoutes);
 
 app.get('/api/health', (req, res) => {
   const mongoState = mongoose.connection.readyState;

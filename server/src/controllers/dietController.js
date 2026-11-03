@@ -1,4 +1,4 @@
-const { generatePlan, getActivePlan } = require('../services/dietPlannerService');
+const { generatePlan, getActivePlan, buildFallbackDay } = require('../services/dietPlannerService');
 const DietPlan = require('../models/DietPlan');
 
 async function createPlan(req, res, next) {
@@ -63,8 +63,82 @@ async function getHistory(req, res, next) {
   }
 }
 
+/** Regenerate a single meal without rebuilding the whole plan */
+async function regenerateMeal(req, res, next) {
+  try {
+    const plan = await DietPlan.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!plan) return res.status(404).json({ message: 'Plan not found' });
+
+    const dayIndex = Number(req.body.dayIndex ?? 0);
+    const mealType = req.body.mealType || 'lunch';
+    const day = plan.days.find((d) => d.dayIndex === dayIndex);
+    if (!day) return res.status(400).json({ message: 'Invalid dayIndex' });
+
+    const prefs = plan.preferences || {};
+    prefs.allergies = prefs.allergies || req.user.preferences?.allergies || [];
+    prefs.restrictions = prefs.restrictions || req.user.preferences?.dietaryRestrictions || [];
+    prefs.medications = req.user.preferences?.medications || [];
+    prefs.dietType = plan.dietType;
+
+    const fresh = await buildFallbackDay(prefs);
+    const replacement = (fresh.meals || []).find((m) => m.mealType === mealType) || fresh.meals?.[0];
+    if (!replacement) return res.status(400).json({ message: 'Could not generate replacement' });
+
+    const idx = day.meals.findIndex((m) => m.mealType === mealType);
+    if (idx >= 0) day.meals[idx] = replacement;
+    else day.meals.push(replacement);
+
+    plan.markModified('days');
+    await plan.save();
+    res.json({ success: true, data: plan });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** Grocery list from plan ingredients */
+async function groceryList(req, res, next) {
+  try {
+    const plan = await DietPlan.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!plan) return res.status(404).json({ message: 'Plan not found' });
+
+    const counts = {};
+    for (const day of plan.days || []) {
+      for (const meal of day.meals || []) {
+        for (const ing of meal.ingredients || [meal.mealName]) {
+          const key = (ing || '').trim();
+          if (!key) continue;
+          counts[key] = (counts[key] || 0) + 1;
+        }
+      }
+    }
+
+    const items = Object.entries(counts)
+      .map(([name, qty]) => ({
+        name,
+        quantity: qty,
+        unit: 'servings',
+        category: /dal|paneer|chicken|egg|yogurt|milk/i.test(name)
+          ? 'protein'
+          : /rice|roti|oat|bread/i.test(name)
+            ? 'grain'
+            : /banana|fruit|veg/i.test(name)
+              ? 'produce'
+              : 'other',
+        purchased: false,
+      }))
+      .sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+
+    res.json({ success: true, data: { planId: plan._id, items } });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   createPlan,
   getCurrent,
   getHistory,
+  regenerateMeal,
+  groceryList,
 };

@@ -1,12 +1,4 @@
 const mongoose = require('mongoose');
-const dns = require('dns');
-
-// Fix for Windows / router DNS resolvers failing on MongoDB SRV lookups (querySrv ENOTFOUND)
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch {
-  // Ignore in environments where setting DNS servers is restricted
-}
 
 const connectDB = async () => {
   try {

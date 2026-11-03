@@ -19,6 +19,8 @@ const Favorites = lazy(() => import('./pages/Favorites'));
 const Nutrition = lazy(() => import('./pages/Nutrition'));
 const Hydration = lazy(() => import('./pages/Hydration'));
 const VibeDiet = lazy(() => import('./pages/VibeDiet'));
+const VibeAI = lazy(() => import('./pages/VibeAI'));
+const Reactions = lazy(() => import('./pages/Reactions'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const PageFallback = () => (
@@ -128,6 +130,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <VibeDiet />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/vibe-ai"
+                element={
+                  <ProtectedRoute>
+                    <VibeAI />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reactions"
+                element={
+                  <ProtectedRoute>
+                    <Reactions />
                   </ProtectedRoute>
                 }
               />
