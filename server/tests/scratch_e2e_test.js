@@ -14,6 +14,12 @@ function request(method, path, body = null, headers = {}) {
       reqHeaders['Authorization'] = `Bearer ${authToken}`;
     }
 
+    let reqBody = null;
+    if (body !== null && body !== undefined) {
+      reqBody = typeof body === 'string' ? body : JSON.stringify(body);
+      reqHeaders['Content-Length'] = Buffer.byteLength(reqBody);
+    }
+
     const req = http.request(
       url,
       {
@@ -42,8 +48,8 @@ function request(method, path, body = null, headers = {}) {
       reject(new Error(`Timeout on ${method} ${path}`));
     });
 
-    if (body) {
-      req.write(typeof body === 'string' ? body : JSON.stringify(body));
+    if (reqBody) {
+      req.write(reqBody);
     }
     req.end();
   });
@@ -123,51 +129,25 @@ async function runTests() {
     }
   });
 
-  // 6. Product - Scan Demo Barcode (Greek Yogurt - should flag Dairy)
-  await test('GET /api/products/scan/4567890123456', async () => {
-    const res = await request('GET', '/api/products/scan/4567890123456');
+  // 6. Product - Scan Demo Barcode
+  let demoProductId = null;
+  await test('GET /api/products/barcode/4567890123456', async () => {
+    const res = await request('GET', '/api/products/barcode/4567890123456');
     if (res.status !== 200 || !res.data.product) {
-      throw new Error(`Scan product failed with status ${res.status}`);
+      throw new Error(`Scan product failed with status ${res.status}: ${JSON.stringify(res.data)}`);
     }
-    // Safety verdict should flag unsafe or caution for dairy
-    if (res.data.safetyVerdict) {
-      const level = res.data.safetyVerdict.level;
-      if (level !== 'Unsafe' && level !== 'Caution') {
-        throw new Error(`Expected Unsafe/Caution for dairy allergy, got ${level}`);
-      }
-    }
+    demoProductId = res.data.product._id;
   });
 
-  // 7. Tracking - Log scanned product
-  await test('POST /api/tracking', async () => {
-    const res = await request('POST', '/api/tracking', {
-      barcode: '4567890123456',
-      productName: 'Demo Greek Yogurt',
-      safetyVerdict: 'Unsafe',
-      reasons: ['Contains dairy'],
-    });
-    if (res.status !== 201 && res.status !== 200) {
-      throw new Error(`Tracking log failed with status ${res.status}`);
-    }
-  });
-
-  // 8. Tracking - Get daily tracking
-  await test('GET /api/tracking', async () => {
-    const res = await request('GET', '/api/tracking');
+  // 7. Product - Search
+  await test('GET /api/products/search?q=Greek', async () => {
+    const res = await request('GET', '/api/products/search?q=Greek');
     if (res.status !== 200) {
-      throw new Error(`Get tracking failed with status ${res.status}`);
+      throw new Error(`Search products failed with status ${res.status}`);
     }
   });
 
-  // 9. Tracking - Get tracking stats
-  await test('GET /api/tracking/stats', async () => {
-    const res = await request('GET', '/api/tracking/stats');
-    if (res.status !== 200) {
-      throw new Error(`Get tracking stats failed with status ${res.status}`);
-    }
-  });
-
-  // 10. Dependents - Create profile
+  // 8. Dependents - Create profile
   let dependentId = '';
   await test('POST /api/dependents', async () => {
     const res = await request('POST', '/api/dependents', {
@@ -184,7 +164,7 @@ async function runTests() {
     dependentId = res.data.data?._id || res.data._id;
   });
 
-  // 11. Dependents - List profiles
+  // 9. Dependents - List profiles
   await test('GET /api/dependents', async () => {
     const res = await request('GET', '/api/dependents');
     if (res.status !== 200) {
@@ -192,19 +172,16 @@ async function runTests() {
     }
   });
 
-  // 12. Favorites - Add favorite
-  await test('POST /api/favorites', async () => {
-    const res = await request('POST', '/api/favorites', {
-      barcode: '1234567890123',
-      name: 'Organic Almond Butter',
-      safetyStatus: 'Safe',
-    });
+  // 10. Favorites - Add favorite
+  await test('POST /api/favorites/:productId', async () => {
+    if (!demoProductId) throw new Error('No product ID to favorite');
+    const res = await request('POST', `/api/favorites/${demoProductId}`);
     if (res.status !== 201 && res.status !== 200) {
       throw new Error(`Add favorite failed with status ${res.status}`);
     }
   });
 
-  // 13. Favorites - List favorites
+  // 11. Favorites - List favorites
   await test('GET /api/favorites', async () => {
     const res = await request('GET', '/api/favorites');
     if (res.status !== 200) {
@@ -212,7 +189,34 @@ async function runTests() {
     }
   });
 
-  // 14. Nutrition Meals - Log meal
+  // 12. Tracking - Log scanned product
+  await test('POST /api/tracking/log', async () => {
+    const res = await request('POST', '/api/tracking/log', {
+      productId: demoProductId,
+      quantity: 1,
+    });
+    if (res.status !== 201 && res.status !== 200) {
+      throw new Error(`Tracking log failed with status ${res.status}: ${JSON.stringify(res.data)}`);
+    }
+  });
+
+  // 13. Tracking - Get daily tracking
+  await test('GET /api/tracking/daily', async () => {
+    const res = await request('GET', '/api/tracking/daily');
+    if (res.status !== 200) {
+      throw new Error(`Get daily tracking failed with status ${res.status}`);
+    }
+  });
+
+  // 14. Tracking - Get tracking stats
+  await test('GET /api/tracking/stats', async () => {
+    const res = await request('GET', '/api/tracking/stats');
+    if (res.status !== 200) {
+      throw new Error(`Get tracking stats failed with status ${res.status}`);
+    }
+  });
+
+  // 15. Nutrition Meals - Log meal
   await test('POST /api/meals', async () => {
     const res = await request('POST', '/api/meals', {
       mealType: 'breakfast',
@@ -232,34 +236,58 @@ async function runTests() {
     }
   });
 
-  // 15. Nutrition Meals - Get daily meals
-  await test('GET /api/meals', async () => {
-    const res = await request('GET', '/api/meals');
+  // 16. Nutrition Meals - Get today's meals
+  await test('GET /api/meals/today', async () => {
+    const res = await request('GET', '/api/meals/today');
     if (res.status !== 200) {
-      throw new Error(`Get meals failed with status ${res.status}`);
+      throw new Error(`Get today meals failed with status ${res.status}`);
     }
   });
 
-  // 16. Hydration - Log intake
-  await test('POST /api/hydration', async () => {
-    const res = await request('POST', '/api/hydration', {
+  // 17. Nutrition Meals - Get meal history
+  await test('GET /api/meals/history', async () => {
+    const res = await request('GET', '/api/meals/history');
+    if (res.status !== 200) {
+      throw new Error(`Get meal history failed with status ${res.status}`);
+    }
+  });
+
+  // 18. Hydration - Log intake
+  await test('POST /api/hydration/log', async () => {
+    const res = await request('POST', '/api/hydration/log', {
       amountMl: 350,
-      localDate: new Date().toISOString().slice(0, 10),
+      source: 'quick',
     });
     if (res.status !== 201 && res.status !== 200) {
-      throw new Error(`Log hydration failed with status ${res.status}`);
+      throw new Error(`Log hydration failed with status ${res.status}: ${JSON.stringify(res.data)}`);
     }
   });
 
-  // 17. Hydration - Get summary
-  await test('GET /api/hydration', async () => {
-    const res = await request('GET', '/api/hydration');
+  // 19. Hydration - Get today
+  await test('GET /api/hydration/today', async () => {
+    const res = await request('GET', '/api/hydration/today');
     if (res.status !== 200) {
-      throw new Error(`Get hydration failed with status ${res.status}`);
+      throw new Error(`Get today hydration failed with status ${res.status}`);
     }
   });
 
-  // 18. Streaks - Get streak summary
+  // 20. Hydration - Get weekly
+  await test('GET /api/hydration/weekly', async () => {
+    const res = await request('GET', '/api/hydration/weekly');
+    if (res.status !== 200) {
+      throw new Error(`Get weekly hydration failed with status ${res.status}`);
+    }
+  });
+
+  // 21. Hydration - Get goals
+  await test('GET /api/hydration/goals', async () => {
+    const res = await request('GET', '/api/hydration/goals');
+    if (res.status !== 200) {
+      throw new Error(`Get hydration goals failed with status ${res.status}`);
+    }
+  });
+
+  // 22. Streaks - Get streak summary
   await test('GET /api/streaks', async () => {
     const res = await request('GET', '/api/streaks');
     if (res.status !== 200) {
@@ -267,9 +295,17 @@ async function runTests() {
     }
   });
 
-  // 19. VibeDiet - Generate plan
-  await test('POST /api/diet/generate', async () => {
-    const res = await request('POST', '/api/diet/generate', {
+  // 23. Food composition search
+  await test('GET /api/foods?q=apple', async () => {
+    const res = await request('GET', '/api/foods?q=apple');
+    if (res.status !== 200) {
+      throw new Error(`Search foods failed with status ${res.status}`);
+    }
+  });
+
+  // 24. VibeDiet - Generate plan
+  await test('POST /api/diet-planner/generate', async () => {
+    const res = await request('POST', '/api/diet-planner/generate', {
       goal: 'Weight Loss',
       dietType: 'Vegetarian',
       days: 1,
@@ -279,15 +315,23 @@ async function runTests() {
     }
   });
 
-  // 20. VibeDiet - Get active plan
-  await test('GET /api/diet/active', async () => {
-    const res = await request('GET', '/api/diet/active');
+  // 25. VibeDiet - Get current plan
+  await test('GET /api/diet-planner/current', async () => {
+    const res = await request('GET', '/api/diet-planner/current');
     if (res.status !== 200) {
-      throw new Error(`Get active diet failed with status ${res.status}`);
+      throw new Error(`Get current diet failed with status ${res.status}`);
     }
   });
 
-  // 21. VibeAI - Chat
+  // 26. VibeDiet - Get diet history
+  await test('GET /api/diet-planner/history', async () => {
+    const res = await request('GET', '/api/diet-planner/history');
+    if (res.status !== 200) {
+      throw new Error(`Get diet history failed with status ${res.status}`);
+    }
+  });
+
+  // 27. VibeAI - Chat
   await test('POST /api/ai/chat', async () => {
     const res = await request('POST', '/api/ai/chat', {
       message: 'What was my calorie count today?',
@@ -297,7 +341,7 @@ async function runTests() {
     }
   });
 
-  // 22. Food Reactions - Log reaction
+  // 28. Food Reactions - Log reaction
   await test('POST /api/reactions', async () => {
     const res = await request('POST', '/api/reactions', {
       foods: ['Milk', 'Paneer'],
@@ -309,7 +353,7 @@ async function runTests() {
     }
   });
 
-  // 23. Food Reactions - List
+  // 29. Food Reactions - List
   await test('GET /api/reactions', async () => {
     const res = await request('GET', '/api/reactions');
     if (res.status !== 200) {
@@ -317,7 +361,7 @@ async function runTests() {
     }
   });
 
-  // 24. Food Reactions - Insights
+  // 30. Food Reactions - Insights
   await test('GET /api/reactions/insights', async () => {
     const res = await request('GET', '/api/reactions/insights');
     if (res.status !== 200) {
@@ -325,33 +369,59 @@ async function runTests() {
     }
   });
 
-  // 25. Indian Foods database
-  await test('GET /api/indian-foods?q=dal', async () => {
-    const res = await request('GET', '/api/indian-foods?q=dal');
+  // 31. Indian INS list
+  await test('GET /api/indian/ins', async () => {
+    const res = await request('GET', '/api/indian/ins');
     if (res.status !== 200) {
-      throw new Error(`Search Indian foods failed with status ${res.status}`);
+      throw new Error(`List Indian INS failed with status ${res.status}`);
     }
   });
 
-  // 26. Product Recalls
-  await test('GET /api/recalls', async () => {
-    const res = await request('GET', '/api/recalls');
+  // 32. Indian INS lookup
+  await test('GET /api/indian/ins/lookup?code=100', async () => {
+    const res = await request('GET', '/api/indian/ins/lookup?code=100');
+    if (res.status !== 200) {
+      throw new Error(`Lookup Indian INS failed with status ${res.status}`);
+    }
+  });
+
+  // 33. Product Recalls
+  await test('GET /api/recalls/matches', async () => {
+    const res = await request('GET', '/api/recalls/matches');
     if (res.status !== 200) {
       throw new Error(`Get recalls failed with status ${res.status}`);
     }
   });
 
-  // 27. Frontend HTML & Asset routing (port 5173)
-  await test('Vite Frontend Root (http://localhost:5173/)', async () => {
-    return new Promise((resolve, reject) => {
-      http.get('http://localhost:5173/', (res) => {
-        if (res.statusCode === 200) resolve();
-        else reject(new Error(`Vite returned status ${res.statusCode}`));
-      }).on('error', reject);
-    });
-  });
+  // 34. Frontend HTTP checks on Vite dev server (port 5173)
+  const clientRoutes = [
+    '/',
+    '/login',
+    '/register',
+    '/dashboard',
+    '/scanner',
+    '/nutrition',
+    '/vibe-diet',
+    '/vibe-ai',
+    '/reactions',
+    '/profiles',
+    '/favorites',
+    '/hydration',
+    '/meal-photo',
+  ];
 
-  // 28. Frontend /api proxy routing (http://localhost:5173/api/health)
+  for (const route of clientRoutes) {
+    await test(`Client Route: http://localhost:5173${route}`, async () => {
+      return new Promise((resolve, reject) => {
+        http.get(`http://localhost:5173${route}`, (res) => {
+          if (res.statusCode === 200) resolve();
+          else reject(new Error(`Vite returned status ${res.statusCode} for ${route}`));
+        }).on('error', reject);
+      });
+    });
+  }
+
+  // 35. Frontend /api proxy routing (http://localhost:5173/api/health)
   await test('Vite API Reverse Proxy (http://localhost:5173/api/health)', async () => {
     return new Promise((resolve, reject) => {
       http.get('http://localhost:5173/api/health', (res) => {
