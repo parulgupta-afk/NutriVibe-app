@@ -13,6 +13,9 @@ const trackingRoutes = require('./routes/trackingRoutes');
 const safetyRoutes = require('./routes/safetyRoutes');
 const dependentRoutes = require('./routes/dependentRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
+const mealRoutes = require('./routes/mealRoutes');
+const hydrationRoutes = require('./routes/hydrationRoutes');
+const streakRoutes = require('./routes/streakRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
 const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
@@ -94,6 +97,10 @@ app.use('/api/tracking', trackingRoutes);
 app.use('/api/safety', safetyRoutes);
 app.use('/api/dependents', dependentRoutes);
 app.use('/api/favorites', favoritesRoutes);
+// NutriVibe 2.0 — Phase 2 & 3
+app.use('/api/meals', mealRoutes);
+app.use('/api/hydration', hydrationRoutes);
+app.use('/api/streaks', streakRoutes);
 
 app.get('/api/health', (req, res) => {
   const mongoState = mongoose.connection.readyState;
