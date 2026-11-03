@@ -5,7 +5,7 @@ const { matchInsInText } = require('../data/insAdditives');
 const insList = require('../data/insAdditives');
 
 async function lookupIns(req, res) {
-  const text = req.body.text || req.query.q || '';
+  const text = (req.body && req.body.text) || req.query.q || req.query.text || req.query.code || '';
   const hits = matchInsInText(text);
   res.json({
     success: true,

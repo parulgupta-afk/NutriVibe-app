@@ -80,7 +80,7 @@ async function runTests() {
   });
 
   // 2. Auth - Register
-  const testEmail = `test_${Date.now()}@nutrivibe.local`;
+  const testEmail = `tester_${Date.now()}@example.com`;
   const testPassword = 'Password123!';
   await test('POST /api/auth/register', async () => {
     const res = await request('POST', '/api/auth/register', {
@@ -115,17 +115,15 @@ async function runTests() {
     }
   });
 
-  // 5. Auth - Update Profile (set Dairy allergy)
-  await test('PUT /api/auth/profile', async () => {
-    const res = await request('PUT', '/api/auth/profile', {
-      preferences: {
-        allergies: ['Dairy'],
-        dietaryRestrictions: ['Vegetarian'],
-        healthGoals: ['Weight Loss'],
-      },
+  // 5. Auth - Update Preferences (set Dairy allergy)
+  await test('PUT /api/auth/preferences', async () => {
+    const res = await request('PUT', '/api/auth/preferences', {
+      allergies: ['Dairy'],
+      dietaryRestrictions: ['Vegetarian'],
+      healthGoals: ['Weight Loss'],
     });
     if (res.status !== 200) {
-      throw new Error(`Update profile failed with status ${res.status}`);
+      throw new Error(`Update preferences failed with status ${res.status}`);
     }
   });
 
@@ -413,10 +411,16 @@ async function runTests() {
   for (const route of clientRoutes) {
     await test(`Client Route: http://localhost:5173${route}`, async () => {
       return new Promise((resolve, reject) => {
-        http.get(`http://localhost:5173${route}`, (res) => {
+        const req = http.get(`http://localhost:5173${route}`, {
+          headers: {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          },
+        }, (res) => {
           if (res.statusCode === 200) resolve();
           else reject(new Error(`Vite returned status ${res.statusCode} for ${route}`));
-        }).on('error', reject);
+        });
+        req.on('error', reject);
       });
     });
   }
