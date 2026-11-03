@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: process.env.NODE_ENV === 'production' ? 100 : 2000,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -111,6 +111,23 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(requestLogger);
 app.use(express.json({ limit: '8mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+app.get('/api/health', (req, res) => {
+  const mongoState = mongoose.connection.readyState;
+  const mongoOk = mongoState === 1;
+  const status = mongoOk ? 'OK' : 'DEGRADED';
+
+  res.status(mongoOk ? 200 : 503).json({
+    status,
+    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
+    timestamp: new Date().toISOString(),
+    mongo: {
+      connected: mongoOk,
+      readyState: mongoState
+    }
+  });
+});
+
 app.use('/api', limiter);
 
 app.use('/api/auth', authLimiter, authRoutes);
@@ -131,23 +148,6 @@ app.use('/api/indian', indianRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/recalls', recallRoutes);
 app.use('/v1', publicV1Routes);
-
-app.get('/api/health', (req, res) => {
-  const mongoState = mongoose.connection.readyState;
-  const mongoOk = mongoState === 1;
-  const status = mongoOk ? 'OK' : 'DEGRADED';
-
-  res.status(mongoOk ? 200 : 503).json({
-    status,
-    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
-    timestamp: new Date().toISOString(),
-    mongo: {
-      connected: mongoOk,
-      readyState: mongoState
-    }
-  });
-});
-
 
 // Phase 22: machine-readable API docs (matches real routes)
 const openapi = require('./docs/openapi.json');

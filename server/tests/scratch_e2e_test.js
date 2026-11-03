@@ -3,7 +3,7 @@ const http = require('http');
 const API_BASE = 'http://localhost:5000';
 let authToken = '';
 
-function request(method, path, body = null, headers = {}) {
+function request(method, path, body = null, headers = {}, timeout = 25000) {
   return new Promise((resolve, reject) => {
     const url = new URL(path, API_BASE);
     const reqHeaders = {
@@ -25,7 +25,7 @@ function request(method, path, body = null, headers = {}) {
       {
         method,
         headers: reqHeaders,
-        timeout: 10000,
+        timeout,
       },
       (res) => {
         let data = '';
