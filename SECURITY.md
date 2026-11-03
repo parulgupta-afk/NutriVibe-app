@@ -1,24 +1,33 @@
-# Security notes (Phase 9)
+# Security Policy
 
-## What we do
+## Supported Versions
 
-- Passwords hashed with bcrypt  
-- JWT auth on private API routes  
-- Helmet, CORS locked to `CLIENT_URL` in production  
-- Rate limits on general API, auth, scans, and AI explain  
-- Body size limits (1mb)  
-- `.env` gitignored; `.env.example` has placeholders only  
-- Production error handler does not send stack traces to clients  
-- Gemini timeouts; AI responses are never treated as medical advice  
+| Version | Supported          |
+| ------- | ------------------ |
+| 2.0.x   | :white_check_mark: |
+| 1.0.x   | :x:                |
 
-## What you should do when deploying
+---
 
-1. Use a strong unique `JWT_SECRET`  
-2. Restrict MongoDB Atlas network access when possible  
-3. Rotate any secret that was ever committed or pasted in chat  
-4. Keep `CLIENT_URL` exact (scheme + host, no path)  
-5. Do not enable CORS `*` in production  
+## Reporting a Vulnerability
 
-## Reporting
+The NutriVibe team takes the security of our application and users seriously. If you discover a security vulnerability, please do **NOT** disclose it publicly via GitHub Issues.
 
-This is a portfolio project. If you find a serious issue, open a private note to the maintainer via GitHub.
+### Reporting Procedure
+
+1. **Email**: Send vulnerability reports directly to the maintainers at `security@nutrivibe.app` (or contact via GitHub security advisory).
+2. **Details to Include**:
+   - Description of the vulnerability and affected endpoints/components.
+   - Proof of Concept (PoC) or step-by-step reproduction instructions.
+   - Potential impact of the issue.
+3. **Response Window**: You will receive an acknowledgment within 48 hours with an assessment and estimated timeline for a patch.
+
+---
+
+## Security Practices in NutriVibe
+
+- **Authentication & Sessions**: Passwords hashed using `bcryptjs` with salt rounds. Tokens issued via `jsonwebtoken` with explicit expiration.
+- **Rate Limiting**: Multi-tiered rate limiting via `express-rate-limit` prevents brute-force login attempts, AI quota exhaustion, and denial of service.
+- **Headers & Middleware**: `helmet` is enabled for HTTP header hardening.
+- **Data Protection**: CORS is strictly enforced, and secrets are never committed or returned in API responses.
+- **Deterministic Food Safety**: Allergen, medication, and dietary risk assessments are calculated deterministically by rules engines rather than ungrounded generative AI.
