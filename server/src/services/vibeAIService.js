@@ -170,4 +170,4 @@ Rules:
   }
 }
 
-module.exports = { chat, gatherContext };
+module.exports = { chat, gatherContext, isSafetyQuestion };
