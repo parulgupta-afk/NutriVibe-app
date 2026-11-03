@@ -43,6 +43,10 @@ const Navbar = () => {
             <FiActivity className="text-lg" aria-hidden="true" />
             <span>Nutrition</span>
           </Link>
+          <Link to="/meal-photo" className={linkClass} onClick={() => setIsMenuOpen(false)}>
+            <FiCamera className="text-lg" aria-hidden="true" />
+            <span>Meal photo</span>
+          </Link>
           <Link to="/hydration" className={linkClass} onClick={() => setIsMenuOpen(false)}>
             <FiDroplet className="text-lg" aria-hidden="true" />
             <span>Water</span>

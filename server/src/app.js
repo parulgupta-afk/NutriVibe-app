@@ -21,6 +21,9 @@ const dietRoutes = require('./routes/dietRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const reactionRoutes = require('./routes/reactionRoutes');
 const indianRoutes = require('./routes/indianRoutes');
+const submissionRoutes = require('./routes/submissionRoutes');
+const recallRoutes = require('./routes/recallRoutes');
+const publicV1Routes = require('./routes/publicV1Routes');
 const { errorHandler } = require('./middleware/errorHandler');
 const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
@@ -92,7 +95,7 @@ app.use(cors({
 // Phase 4: production logs stay compact; never log bodies
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(requestLogger);
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '8mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);
 
@@ -111,6 +114,9 @@ app.use('/api/diet-planner', dietRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/reactions', reactionRoutes);
 app.use('/api/indian', indianRoutes);
+app.use('/api/submissions', submissionRoutes);
+app.use('/api/recalls', recallRoutes);
+app.use('/v1', publicV1Routes);
 
 app.get('/api/health', (req, res) => {
   const mongoState = mongoose.connection.readyState;

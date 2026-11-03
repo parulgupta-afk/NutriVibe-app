@@ -182,8 +182,87 @@ async function suggestFromText(req, res, next) {
   }
 }
 
+
+async function analyzeMealImage(req, res, next) {
+  try {
+    const { imageBase64, mimeType = 'image/jpeg' } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ message: 'imageBase64 required' });
+    }
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.json({
+        success: true,
+        offline: true,
+        data: {
+          suggestions: [
+            { name: 'Roti', grams: 40, quantity: 40, unit: 'g', confidence: 0.4, isEstimated: true },
+            { name: 'Dal (cooked toor)', grams: 150, quantity: 150, unit: 'g', confidence: 0.4, isEstimated: true },
+          ],
+          note: 'GEMINI_API_KEY not set — demo suggestions only.',
+        },
+      });
+    }
+    const GEMINI_MODEL = 'gemini-flash-latest';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    const prompt = `Identify food items in this meal photo. Return ONLY JSON: {"items":[{"name":"string","estimatedGrams":number,"confidence":0-1}]}. No nutrition numbers.`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType, data: imageBase64.replace(/^data:[^;]+;base64,/, '') } },
+          ],
+        }],
+        generationConfig: { maxOutputTokens: 1024 },
+      }),
+    });
+    clearTimeout(timer);
+    if (!response.ok) {
+      const txt = await response.text();
+      return res.status(502).json({ success: false, message: `Vision API error: ${response.status}`, detail: txt.slice(0, 300) });
+    }
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') || '';
+    let items = [];
+    try {
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      items = parsed.items || [];
+    } catch { items = []; }
+    const FoodItem = require('../models/FoodItem');
+    const suggestions = [];
+    for (const it of items.slice(0, 10)) {
+      const grams = it.estimatedGrams || 100;
+      const food = await FoodItem.findOne({
+        $or: [
+          { name: new RegExp(String(it.name || '').slice(0, 30), 'i') },
+          { aliases: new RegExp(String(it.name || '').slice(0, 30), 'i') },
+        ],
+      });
+      if (food) {
+        suggestions.push({ foodItemId: food._id, name: food.name, grams, quantity: grams, unit: 'g', confidence: it.confidence ?? 0.6, isEstimated: false });
+      } else {
+        suggestions.push({ name: it.name || 'Unknown', grams, quantity: grams, unit: 'g', confidence: it.confidence ?? 0.4, isEstimated: true });
+      }
+    }
+    res.json({ success: true, data: { suggestions }, message: 'User must confirm before logging.' });
+  } catch (err) {
+    if (err.name === 'AbortError') return res.status(504).json({ message: 'Vision request timed out' });
+    next(err);
+  }
+}
+
 module.exports = {
   chatHandler,
   confirmAIMeal,
   suggestFromText,
+  analyzeMealImage,
 };
+

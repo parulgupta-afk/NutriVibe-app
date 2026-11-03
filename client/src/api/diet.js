@@ -15,4 +15,13 @@ export const dietApi = {
     const res = await axios.get(`${API_BASE}/diet-planner/history`);
     return res.data;
   },
+
+  regenerateMeal: async (id, payload) => {
+    const res = await axios.post(`${API_BASE}/diet-planner/${id}/regenerate-meal`, payload);
+    return res.data;
+  },
+  groceryList: async (id) => {
+    const res = await axios.post(`${API_BASE}/diet-planner/${id}/grocery-list`);
+    return res.data;
+  },
 };

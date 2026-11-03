@@ -14,4 +14,8 @@ export const aiApi = {
     const res = await axios.post(`${API_BASE}/ai/meals/confirm`, payload);
     return res.data;
   },
+  analyzeImage: async (imageBase64, mimeType = 'image/jpeg') => {
+    const res = await axios.post(`${API_BASE}/ai/meals/analyze-image`, { imageBase64, mimeType });
+    return res.data;
+  },
 };

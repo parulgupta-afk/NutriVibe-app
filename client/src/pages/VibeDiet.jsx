@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { dietApi } from '../api/diet';
+// regenerate + grocery via dietApi
 import { foodApi } from '../api/foods';
 import { FiRefreshCw, FiShield, FiCheck, FiAlertTriangle } from 'react-icons/fi';
 
@@ -174,6 +175,41 @@ export default function VibeDiet() {
           <p className="text-xs text-gray-400 text-center">
             Rules version: {plan.rulesVersion || 'n/a'} · Nutrition from verified FoodItem database
           </p>
+
+      {plan && (
+        <div className="flex flex-wrap gap-2 justify-center mt-4">
+          <button
+            type="button"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
+            onClick={async () => {
+              try {
+                const res = await dietApi.groceryList(plan._id);
+                const lines = (res.data?.items || []).map((i) => `• ${i.name} (${i.quantity} ${i.unit})`).join('\n');
+                alert(lines || 'No items');
+              } catch (e) {
+                setError(e.message);
+              }
+            }}
+          >
+            Grocery list
+          </button>
+          <button
+            type="button"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
+            onClick={async () => {
+              try {
+                const res = await dietApi.regenerateMeal(plan._id, { dayIndex: 0, mealType: 'lunch' });
+                setPlan(res.data);
+              } catch (e) {
+                setError(e.message);
+              }
+            }}
+          >
+            Swap lunch (day 1)
+          </button>
+        </div>
+      )}
+
         </div>
       )}
     </div>

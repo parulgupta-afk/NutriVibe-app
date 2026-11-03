@@ -16,7 +16,7 @@ const ALLERGEN_KEYWORDS = [
   {
     name: 'Peanuts',
     keywords: [
-      'peanut', 'peanuts', 'groundnut', 'arachis', 'arachis hypogaea'
+      'peanut', 'peanuts', 'groundnut', 'moongphali', 'mungfali', 'arachis', 'arachis hypogaea'
     ]
   },
   {
@@ -31,7 +31,7 @@ const ALLERGEN_KEYWORDS = [
     name: 'Dairy',
     keywords: [
       'milk', 'cream', 'butter', 'cheese', 'whey', 'casein', 'caseinate',
-      'lactose', 'yogurt', 'yoghurt', 'ghee', 'curd', 'buttermilk',
+      'lactose', 'yogurt', 'yoghurt', 'ghee', 'curd', 'dahi', 'doodh', 'makhan', 'buttermilk',
       'milk solids', 'milk powder', 'skim milk', 'whole milk',
       'lactoglobulin', 'lactalbumin'
     ],
@@ -59,7 +59,7 @@ const ALLERGEN_KEYWORDS = [
   {
     name: 'Gluten',
     keywords: [
-      'wheat', 'barley', 'rye', 'gluten', 'malt', 'semolina', 'spelt',
+      'wheat', 'gehun', 'atta', 'maida', 'barley', 'rye', 'gluten', 'malt', 'semolina', 'spelt',
       'kamut', 'triticale', 'farina', 'durum', 'bulgur', 'couscous',
       'seitan', 'graham flour'
     ]
