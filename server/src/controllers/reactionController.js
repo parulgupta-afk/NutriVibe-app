@@ -40,38 +40,44 @@ async function listReactions(req, res, next) {
   }
 }
 
+function calculateReactionInsights(list = []) {
+  const foodCounts = {};
+  const symptomCounts = {};
+  for (const r of list) {
+    for (const f of r.foods || []) {
+      const k = String(f).toLowerCase().trim();
+      if (k) foodCounts[k] = (foodCounts[k] || 0) + 1;
+    }
+    for (const s of r.symptoms || []) {
+      const k = String(s).toLowerCase().trim();
+      if (k) symptomCounts[k] = (symptomCounts[k] || 0) + 1;
+    }
+  }
+  const topFoods = Object.entries(foodCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([name, count]) => ({ name, count }));
+  const topSymptoms = Object.entries(symptomCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([name, count]) => ({ name, count }));
+
+  return {
+    totalEntries: list.length,
+    topFoodsMentioned: topFoods,
+    topSymptoms: topSymptoms,
+  };
+}
+
 /** Possible correlations only — never claims causation */
 async function insights(req, res, next) {
   try {
     const list = await Reaction.find({ userId: req.user._id }).limit(200);
-    const foodCounts = {};
-    const symptomCounts = {};
-    for (const r of list) {
-      for (const f of r.foods || []) {
-        const k = f.toLowerCase();
-        foodCounts[k] = (foodCounts[k] || 0) + 1;
-      }
-      for (const s of r.symptoms || []) {
-        const k = s.toLowerCase();
-        symptomCounts[k] = (symptomCounts[k] || 0) + 1;
-      }
-    }
-    const topFoods = Object.entries(foodCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([name, count]) => ({ name, count }));
-    const topSymptoms = Object.entries(symptomCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([name, count]) => ({ name, count }));
+    const data = calculateReactionInsights(list);
 
     res.json({
       success: true,
-      data: {
-        totalEntries: list.length,
-        topFoodsMentioned: topFoods,
-        topSymptoms: topSymptoms,
-      },
+      data,
       disclaimer: 'Correlations are observational only and are not a diagnosis.',
     });
   } catch (err) {
@@ -79,4 +85,9 @@ async function insights(req, res, next) {
   }
 }
 
-module.exports = { createReaction, listReactions, insights };
+module.exports = {
+  createReaction,
+  listReactions,
+  insights,
+  calculateReactionInsights,
+};
