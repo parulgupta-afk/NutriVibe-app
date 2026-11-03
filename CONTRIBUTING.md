@@ -1,32 +1,88 @@
 # Contributing to NutriVibe
 
-Thanks for interest in improving NutriVibe. This is primarily a portfolio / learning project; small, focused PRs are welcome.
+Thank you for your interest in improving NutriVibe! This guide outlines how to set up your local development environment, run test suites, and submit contributions.
 
-## Setup
+---
 
-1. Fork and clone the repo  
-2. Copy `server/.env.example` → `server/.env` and fill in values  
-3. Client: create `client/.env` with `VITE_GOOGLE_CLIENT_ID` if using Google sign-in  
+## 1. Prerequisites
 
+- **Node.js**: `v18.0.0` or higher (Node 20+ recommended)
+- **npm**: `v9.0.0` or higher
+- **MongoDB**: MongoDB Atlas cluster or a local instance (`mongodb://localhost:27017/nutrivibe`)
+- **Git**
+
+---
+
+## 2. Project Architecture
+
+NutriVibe is organized into a modular monorepo:
+- **`client/`**: React 18 + Vite SPA styled with Tailwind CSS, utilizing React Router v6 and Axios.
+- **`server/`**: Node.js + Express backend with MongoDB (Mongoose), strict rate limiting, and JWT authentication.
+- **`docs/`**: API specifications and developer guides.
+
+---
+
+## 3. Local Development Setup
+
+### 1. Clone & Configure
 ```bash
-cd server && npm install && npm run dev
-cd client && npm install && npm run dev
+git clone https://github.com/parulgupta-afk/NutriVibe-app.git
+cd NutriVibe-app
+cp server/.env.example server/.env
+cp client/.env.example client/.env
 ```
 
-## Tests
-
+### 2. Install Dependencies
 ```bash
-cd server && npm test
+cd server && npm install
+cd ../client && npm install
 ```
 
-## Guidelines
+### 3. Start Development Servers
+- Backend API server (runs on `http://localhost:5000`):
+  ```bash
+  cd server && npm run dev
+  ```
+- Frontend client (runs on `http://localhost:5173`):
+  ```bash
+  cd client && npm run dev
+  ```
 
-- Do not commit `.env` or secrets  
-- Prefer small PRs with a clear description  
-- Safety / allergy logic changes should include or update unit tests under `server/tests/`  
-- This app provides **decision-support information only**, not medical advice — keep messaging that way  
+---
 
-## Branching
+## 4. Running Tests
 
-- `main` — stable demo  
-- Feature branches: `feature/short-name` or `fix/short-name`  
+### Backend Unit Tests
+Runs the built-in Node.js test runner across all unit tests in `server/tests/`:
+```bash
+cd server
+npm test
+```
+
+### Backend End-to-End Tests
+Validates all authenticated and public REST API routes against the running server:
+```bash
+cd server
+npm run test:e2e
+```
+
+### Frontend Tests & Linting
+```bash
+cd client
+npm test
+npm run lint
+```
+
+---
+
+## 5. Development Guidelines
+
+- **Deterministic Safety**: Always route allergen, medication, and dietary evaluations through the deterministic safety engine (`server/src/services/safetyEngine.js`). Never allow an LLM to override safety evaluations.
+- **Rate Limiting**: Health checks (`/api/health`) must remain outside general rate limiters so monitoring probes function reliably.
+- **Conventional Commits**: Format commit messages clearly using conventional prefixes:
+  - `feat: <feature description>`
+  - `fix: <bug fix description>`
+  - `test: <test suite addition>`
+  - `docs: <documentation updates>`
+  - `chore: <maintenance tasks>`
+- **Security**: Never commit `.env` files or secrets.
