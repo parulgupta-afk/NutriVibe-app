@@ -55,3 +55,4 @@ describe('reaction insights correlation tests', () => {
     assert.equal(result.topSymptoms[0].name, 'cough');
   });
 });
+
