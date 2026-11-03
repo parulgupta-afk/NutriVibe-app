@@ -16,6 +16,8 @@ const Product = lazy(() => import('./pages/Product'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const Profiles = lazy(() => import('./pages/Profiles'));
 const Favorites = lazy(() => import('./pages/Favorites'));
+const Nutrition = lazy(() => import('./pages/Nutrition'));
+const Hydration = lazy(() => import('./pages/Hydration'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const PageFallback = () => (
@@ -101,6 +103,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Favorites />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/nutrition"
+                element={
+                  <ProtectedRoute>
+                    <Nutrition />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/hydration"
+                element={
+                  <ProtectedRoute>
+                    <Hydration />
                   </ProtectedRoute>
                 }
               />

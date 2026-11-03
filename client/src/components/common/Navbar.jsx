@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { FiCamera, FiHome, FiUsers, FiLogOut, FiMenu, FiX, FiMoon, FiSun, FiHeart } from 'react-icons/fi';
+import { FiCamera, FiHome, FiUsers, FiLogOut, FiMenu, FiX, FiMoon, FiSun, FiHeart, FiActivity, FiDroplet } from 'react-icons/fi';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -38,6 +38,14 @@ const Navbar = () => {
           <Link to="/favorites" className={linkClass} onClick={() => setIsMenuOpen(false)}>
             <FiHeart className="text-lg" aria-hidden="true" />
             <span>Saved</span>
+          </Link>
+          <Link to="/nutrition" className={linkClass} onClick={() => setIsMenuOpen(false)}>
+            <FiActivity className="text-lg" aria-hidden="true" />
+            <span>Nutrition</span>
+          </Link>
+          <Link to="/hydration" className={linkClass} onClick={() => setIsMenuOpen(false)}>
+            <FiDroplet className="text-lg" aria-hidden="true" />
+            <span>Water</span>
           </Link>
           <button type="button" onClick={handleLogout} className={linkClass}>
             <FiLogOut className="text-lg" aria-hidden="true" />
