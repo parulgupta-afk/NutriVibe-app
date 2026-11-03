@@ -103,3 +103,4 @@ describe('submissionController unit tests', () => {
     assert.match(responseData.message, /status must be approved or rejected/i);
   });
 });
+

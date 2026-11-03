@@ -33,3 +33,4 @@ describe('profileResolver unit tests', () => {
     assert.equal(result.profileId, null);
   });
 });
+
