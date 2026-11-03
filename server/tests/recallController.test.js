@@ -43,3 +43,4 @@ describe('recallController unit tests', () => {
     assert.match(responseData.message, /Admin only/i);
   });
 });
+

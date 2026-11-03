@@ -67,3 +67,4 @@ describe('indianFoodController and INS additives tests', () => {
     assert.ok(codes.includes('INS 110'));
   });
 });
+

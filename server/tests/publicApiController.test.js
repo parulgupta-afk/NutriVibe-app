@@ -86,3 +86,4 @@ describe('publicApiController unit tests', () => {
     assert.ok(responseData.disclaimer);
   });
 });
+

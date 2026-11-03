@@ -71,3 +71,4 @@ describe('nutritionCalculator edge cases and boundary conditions', () => {
     assert.equal(rounded.fiber, 5.7);
   });
 });
+

@@ -82,3 +82,4 @@ describe('client lastScanCache utils', () => {
     assert.equal(loadLastScan(), null);
   });
 });
+
