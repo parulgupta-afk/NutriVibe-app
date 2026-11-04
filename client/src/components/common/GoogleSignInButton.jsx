@@ -51,7 +51,6 @@ const GoogleSignInButton = () => {
     };
 
     initGoogle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!GOOGLE_CLIENT_ID) {

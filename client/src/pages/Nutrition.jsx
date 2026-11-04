@@ -161,7 +161,8 @@ export default function Nutrition() {
   }));
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <AppShell title="My Meals" subtitle="Track meals and macros">
+      <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Nutrition</h1>

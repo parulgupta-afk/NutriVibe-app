@@ -45,9 +45,7 @@ const Scanner = () => {
 
   // Always stop the camera if the component unmounts while it's running
   useEffect(() => {
-    return (
-    <AppShell title="Food Scanner" subtitle="Barcode, label, or live camera">
-) => {
+    return () => {
       if (html5QrRef.current) {
         html5QrRef.current.stop().catch(() => {});
       }
@@ -263,7 +261,8 @@ const Scanner = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <AppShell title="Food Scanner" subtitle="Barcode, label, or live camera">
+      <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
           Scan a Product
