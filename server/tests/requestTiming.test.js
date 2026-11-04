@@ -29,3 +29,4 @@ describe('requestTiming middleware unit tests', () => {
     done();
   });
 });
+

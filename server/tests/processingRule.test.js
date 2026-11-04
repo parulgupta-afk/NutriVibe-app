@@ -59,3 +59,4 @@ describe('processingRule unit tests', () => {
     assert.equal(snap.score, 70);
   });
 });
+

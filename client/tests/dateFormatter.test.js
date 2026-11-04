@@ -26,3 +26,4 @@ describe('client dateFormatter utility tests', () => {
     assert.equal(isToday(null), false);
   });
 });
+

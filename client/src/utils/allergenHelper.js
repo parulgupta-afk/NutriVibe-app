@@ -34,3 +34,4 @@ export function formatAllergenTitle(allergen) {
   if (trimmed.length === 0) return '';
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 }
+

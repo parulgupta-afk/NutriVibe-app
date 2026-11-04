@@ -32,3 +32,4 @@ export function calculateBmi(weightKg, heightCm) {
     healthyWeightRange: { min: minNormalWeight, max: maxNormalWeight },
   };
 }
+

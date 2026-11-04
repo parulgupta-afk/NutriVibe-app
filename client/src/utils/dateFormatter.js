@@ -27,3 +27,4 @@ export function isToday(dateInput) {
     date.getFullYear() === today.getFullYear()
   );
 }
+

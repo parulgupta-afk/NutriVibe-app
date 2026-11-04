@@ -45,3 +45,4 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.carbs, 0);
   });
 });
+

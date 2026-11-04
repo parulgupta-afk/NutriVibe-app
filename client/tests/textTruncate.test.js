@@ -34,3 +34,4 @@ describe('client textTruncate utility tests', () => {
     assert.equal(toTitleCase(null), '');
   });
 });
+

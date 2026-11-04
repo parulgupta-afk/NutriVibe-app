@@ -21,3 +21,4 @@ export function calculateHydrationProgress(currentMl, targetMl = 2500) {
     isGoalMet: current >= target,
   };
 }
+

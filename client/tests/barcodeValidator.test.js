@@ -28,3 +28,4 @@ describe('client barcodeValidator utility tests', () => {
     assert.equal(isValidBarcode(null), false);
   });
 });
+

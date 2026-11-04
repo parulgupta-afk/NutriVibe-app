@@ -39,3 +39,4 @@ describe('client nutritionFormat utility tests', () => {
     assert.deepEqual(empty, { protein: 0, carbs: 0, fat: 0 });
   });
 });
+

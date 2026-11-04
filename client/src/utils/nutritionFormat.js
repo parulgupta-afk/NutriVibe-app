@@ -35,3 +35,4 @@ export function calculateMacroPercentages({ protein = 0, carbs = 0, fat = 0 }) {
     fat: Math.round((f / totalGrams) * 100),
   };
 }
+

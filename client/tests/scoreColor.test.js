@@ -36,3 +36,4 @@ describe('client scoreColor utility tests', () => {
     assert.equal(res2.label, 'Unknown');
   });
 });
+

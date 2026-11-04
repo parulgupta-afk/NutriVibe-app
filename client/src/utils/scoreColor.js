@@ -53,3 +53,4 @@ export function getScoreColor(score) {
     label: 'Poor',
   };
 }
+

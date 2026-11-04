@@ -30,3 +30,4 @@ describe('client safeStorage utility tests', () => {
     assert.equal(safeStorage.getItem('key_to_delete'), null);
   });
 });
+

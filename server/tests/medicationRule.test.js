@@ -50,3 +50,4 @@ describe('medicationRule unit tests', () => {
     assert.equal(state.score, 10);
   });
 });
+

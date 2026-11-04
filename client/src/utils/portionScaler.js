@@ -25,3 +25,4 @@ export function scaleNutrition(base100g = {}, targetGrams = 100) {
     sodium,
   };
 }
+

@@ -36,3 +36,4 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res2.bmi, null);
   });
 });
+

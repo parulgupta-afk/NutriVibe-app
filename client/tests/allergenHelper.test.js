@@ -35,3 +35,4 @@ describe('client allergenHelper utility tests', () => {
     assert.equal(formatAllergenTitle(''), '');
   });
 });
+

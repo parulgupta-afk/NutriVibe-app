@@ -28,3 +28,4 @@ describe('AppError class and Codes dictionary tests', () => {
     assert.equal(Codes.UPSTREAM_TIMEOUT, 'UPSTREAM_TIMEOUT');
   });
 });
+

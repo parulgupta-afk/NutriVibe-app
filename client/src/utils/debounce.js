@@ -24,3 +24,4 @@ export function debounce(func, wait = 300) {
 
   return debounced;
 }
+

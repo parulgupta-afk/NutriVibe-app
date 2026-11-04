@@ -33,3 +33,4 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.isGoalMet, true);
   });
 });
+

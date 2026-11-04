@@ -34,3 +34,4 @@ describe('client servingUnit utility tests', () => {
     assert.deepEqual(parseServingString(null), { quantity: 100, unit: 'g' });
   });
 });
+
