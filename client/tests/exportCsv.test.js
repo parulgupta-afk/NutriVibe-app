@@ -11,7 +11,6 @@ function escapeCell(value) {
 }
 
 function formatCsvRow(log) {
-  const headers = ['Time', 'Product', 'Brand', 'Safety', 'Profile', 'Barcode'];
   const values = [
     log.createdAt ? new Date(log.createdAt).toISOString() : '',
     log.productName || '',
