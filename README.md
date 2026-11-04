@@ -39,8 +39,8 @@ Step-by-step: [DEPLOY.md](DEPLOY.md)
 | Doc | Description |
 | --- | ----------- |
 | [docs/development.md](docs/development.md) | Local setup |
-| [docs/current-architecture.md](docs/current-architecture.md) | Request flow + routes |
-| [docs/api.md](docs/api.md) | API overview |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Request flow + routes |
+| [docs/API_GUIDE.md](docs/API_GUIDE.md) | API overview |
 | [docs/database.md](docs/database.md) | Mongo models + indexes |
 | [DEPLOY.md](DEPLOY.md) | Production deploy |
 | [docs/FINAL_REVIEW.md](docs/FINAL_REVIEW.md) | Engineering sign-off checklist |
