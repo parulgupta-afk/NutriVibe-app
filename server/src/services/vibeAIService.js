@@ -148,15 +148,7 @@ Rules:
 
     if (!response.ok) {
       const errText = await response.text();
-      console.warn(`Gemini API returned ${response.status}, falling back to grounded context: ${errText.slice(0, 100)}`);
-      const { nutrition, waterMl, waterGoal, calorieGoal } = context.today;
-      return {
-        success: true,
-        offline: true,
-        reply: `Here's what your data shows for today (AI assistant is temporarily high-demand):\n• Calories: ${Math.round(nutrition.calories)} / ${calorieGoal}\n• Protein: ${nutrition.protein}g · Carbs: ${nutrition.carbs}g · Fat: ${nutrition.fat}g\n• Water: ${waterMl} / ${waterGoal} ml\n• Meal streak: ${context.streaks?.mealLogging?.current || 0} days\n\nSafety questions are still checked by the rules engine.`,
-        context: { today: context.today, streaks: context.streaks },
-        safetyNote,
-      };
+      return { success: false, error: `Gemini error: ${response.status} ${errText.slice(0, 200)}` };
     }
 
     const data = await response.json();
@@ -171,15 +163,11 @@ Rules:
       safetyNote,
     };
   } catch (err) {
-    const { nutrition, waterMl, waterGoal, calorieGoal } = context.today;
     return {
-      success: true,
-      offline: true,
-      reply: `Here's what your data shows for today:\n• Calories: ${Math.round(nutrition.calories)} / ${calorieGoal}\n• Protein: ${nutrition.protein}g · Carbs: ${nutrition.carbs}g · Fat: ${nutrition.fat}g\n• Water: ${waterMl} / ${waterGoal} ml\n• Meal streak: ${context.streaks?.mealLogging?.current || 0} days\n\nSafety questions are still checked by the rules engine.`,
-      context: { today: context.today, streaks: context.streaks },
-      safetyNote,
+      success: false,
+      error: err.name === 'AbortError' ? 'AI timed out' : err.message,
     };
   }
 }
 
-module.exports = { chat, gatherContext, isSafetyQuestion };
+module.exports = { chat, gatherContext };

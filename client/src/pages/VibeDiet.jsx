@@ -2,6 +2,7 @@
  * VibeDiet — personalized plan (Phase 4 scaffold)
  * Meals are always safety-checked server-side before display.
  */
+import AppShell from '../components/layout/AppShell';
 import React, { useState, useEffect } from 'react';
 import { dietApi } from '../api/diet';
 // regenerate + grocery via dietApi
@@ -58,6 +59,8 @@ export default function VibeDiet() {
   };
 
   return (
+    <AppShell title="VibeDiet" subtitle="Personalized meal plans">
+
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -213,5 +216,6 @@ export default function VibeDiet() {
         </div>
       )}
     </div>
+      </AppShell>
   );
 }

@@ -6,10 +6,13 @@ import { productApi } from "../api/products";
 import { mealApi } from "../api/meals";
 import { hydrationApi, streakApi } from "../api/hydration";
 import {
+  FiTrendingUp,
   FiShield,
   FiClock,
+  FiCalendar,
   FiActivity,
   FiBarChart2,
+  FiCheck,
   FiX,
   FiAlertCircle,
   FiTrash2,

@@ -1,6 +1,7 @@
 /**
  * AI meal photo logging (Phase 5) — user must confirm
  */
+import AppShell from '../components/layout/AppShell';
 import React, { useState } from 'react';
 import { aiApi } from '../api/ai';
 import { FiCamera, FiCheck } from 'react-icons/fi';
@@ -60,6 +61,8 @@ export default function MealPhoto() {
   };
 
   return (
+    <AppShell title="Meal photo" subtitle="AI suggestions — you confirm">
+
     <div className="max-w-lg mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
         <FiCamera /> Meal photo
@@ -100,5 +103,6 @@ export default function MealPhoto() {
         </div>
       )}
     </div>
+      </AppShell>
   );
 }

@@ -14,23 +14,31 @@ const { calculateFromGrams, sumNutrition, roundTotals } = require('./nutritionCa
 const { computeSafetyVerdict } = require('./safetyEngine');
 
 /**
- * Pure filter: drop foods whose name/aliases match allergy keywords or vegetarian preferences.
+ * Build a minimal safe daily plan from the verified FoodItem collection.
+ * This is the non-AI fallback so the feature works even without Gemini.
  */
-function filterFoodsByPreferences(foods, preferences = {}) {
+async function buildFallbackDay(preferences = {}) {
   const allergies = (preferences.allergies || []).map((a) => a.toLowerCase());
   const isVeg =
     (preferences.dietType || '').toLowerCase().includes('veg') ||
     (preferences.restrictions || []).some((r) => /veg/i.test(r));
 
+  let foods = await FoodItem.find().limit(50);
+  if (foods.length === 0) {
+    // No seeded foods — return empty safe structure
+    return { meals: [] };
+  }
+
+  // Crude filter: drop foods whose name/aliases match allergy keywords
   const allergyHints = {
     milk: ['milk', 'paneer', 'yogurt', 'curd', 'ghee', 'cheese', 'whey', 'casein'],
     peanut: ['peanut', 'groundnut'],
     soy: ['soy', 'soya'],
-    gluten: ['wheat', 'roti', 'chapati', 'bread', 'oats'],
+    gluten: ['wheat', 'roti', 'chapati', 'bread', 'oats'], // oats optional
     egg: ['egg'],
   };
 
-  return (foods || []).filter((f) => {
+  foods = foods.filter((f) => {
     const name = `${f.name} ${(f.aliases || []).join(' ')}`.toLowerCase();
     for (const a of allergies) {
       const hints = allergyHints[a] || [a];
@@ -39,20 +47,6 @@ function filterFoodsByPreferences(foods, preferences = {}) {
     if (isVeg && /chicken|egg|fish|mutton|meat/i.test(name)) return false;
     return true;
   });
-}
-
-/**
- * Build a minimal safe daily plan from the verified FoodItem collection.
- * This is the non-AI fallback so the feature works even without Gemini.
- */
-async function buildFallbackDay(preferences = {}) {
-  let foods = await FoodItem.find().limit(50);
-  if (foods.length === 0) {
-    // No seeded foods — return empty safe structure
-    return { meals: [] };
-  }
-
-  foods = filterFoodsByPreferences(foods, preferences);
 
   const pick = (pred) => foods.find(pred) || foods[0];
 
@@ -172,5 +166,4 @@ module.exports = {
   generatePlan,
   getActivePlan,
   buildFallbackDay,
-  filterFoodsByPreferences,
 };

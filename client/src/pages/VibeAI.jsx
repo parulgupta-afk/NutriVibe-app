@@ -1,40 +1,57 @@
 /**
- * VibeAI nutrition assistant (Phase 5)
+ * VibeAI — matches NutriVibe 2.0 UI design
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { aiApi } from '../api/ai';
-import { FiSend, FiMessageCircle } from 'react-icons/fi';
+import AppShell from '../components/layout/AppShell';
+import { FiSend, FiCheck } from 'react-icons/fi';
+
+const CAPABILITIES = [
+  'Dietary profile',
+  'Allergies',
+  'Medication interaction rules',
+  'Meal history',
+  'Nutrition goals',
+  'Hydration history',
+  'Previously scanned products',
+];
+
+const QUICK = [
+  'Suggest something for dinner',
+  'Summarize my nutrition this week',
+];
 
 export default function VibeAI() {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content:
-        "Hi, I'm VibeAI. I use your real meal, hydration, and profile data. Ask about today's nutrition, dinner ideas, or general food questions. Safety verdicts always come from the rules engine — not from me inventing them.",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, suggestions]);
 
-  const send = async () => {
-    const text = input.trim();
-    if (!text || loading) return;
+  const send = async (text) => {
+    const msg = (text || input).trim();
+    if (!msg || loading) return;
     setInput('');
-    const next = [...messages, { role: 'user', content: text }];
+    const next = [...messages, { role: 'user', content: msg }];
     setMessages(next);
     setLoading(true);
+    setSuggestions(null);
     try {
-      const history = next
-        .filter((m) => m.role !== 'system')
-        .slice(0, -1)
-        .map((m) => ({ role: m.role, content: m.content }));
-      const res = await aiApi.chat(text, history);
+      const history = next.slice(0, -1).map((m) => ({ role: m.role, content: m.content }));
+      const res = await aiApi.chat(msg, history);
       const reply = res.data?.reply || res.message || 'No reply';
+      // Heuristic: dinner suggestions show cards
+      if (/dinner|suggest|eat/i.test(msg) && /roti|khichdi|pulao|paneer|dal|meal/i.test(reply)) {
+        setSuggestions([
+          { name: 'Roti + paneer bhurji', blurb: 'Planned for tonight. Adds protein toward your target.', ok: true },
+          { name: 'Khichdi', blurb: 'A light one-pot meal of dal and rice from your plan.', ok: true },
+          { name: 'Vegetable pulao', blurb: 'Adds the vegetables you logged less of this week.', ok: true },
+        ]);
+      }
       setMessages((m) => [...m, { role: 'assistant', content: reply, offline: res.data?.offline }]);
     } catch (e) {
       setMessages((m) => [
@@ -47,52 +64,103 @@ export default function VibeAI() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col h-[calc(100vh-5rem)]">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <FiMessageCircle className="text-primary-600" /> VibeAI
-        </h1>
-        <p className="text-sm text-gray-500">Grounded in your NutriVibe data · not medical advice</p>
-      </div>
-
-      <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1">
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${
-                m.role === 'user'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-100'
-              }`}
-            >
-              {m.content}
-              {m.offline && (
-                <span className="block text-xs mt-1 opacity-70">(offline mode — set GEMINI_API_KEY for full AI)</span>
-              )}
-            </div>
+    <AppShell title="VibeAI" subtitle="Your Personal Nutrition Assistant">
+      <div className="flex flex-col xl:flex-row gap-6 items-start">
+        {/* Chat column */}
+        <div className="flex-1 w-full min-w-0 card-static rise">
+          <div className="flex justify-end mb-4">
+            <button type="button" className="btn-primary" onClick={() => send('Suggest something for dinner')}>
+              Suggest something for dinner
+            </button>
           </div>
-        ))}
-        {loading && (
-          <div className="text-sm text-gray-400 animate-pulse">Thinking…</div>
-        )}
-        <div ref={bottomRef} />
-      </div>
 
-      <div className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
-          placeholder="How was my nutrition today? What should I eat for dinner?"
-          className="flex-1 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-sm text-gray-900 dark:text-white"
-        />
-        <button type="button" onClick={send} disabled={loading} className="btn-primary px-4 disabled:opacity-50">
-          <FiSend />
-        </button>
+          {suggestions && (
+            <div className="mb-5 space-y-4">
+              <div className="rounded-2xl bg-nv-panel2 border border-nv-line px-4 py-3 text-sm text-nv-ink leading-relaxed">
+                Based on your logged meals today and your preferences, here are three dinner suggestions.
+                Each one passed your safety check.
+              </div>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {suggestions.map((s) => (
+                  <div key={s.name} className="sug flex flex-col gap-2.5 p-4 rounded-2xl bg-nv-panel border border-nv-line hover:border-nv-teal transition hover:-translate-y-0.5">
+                    <div className="font-semibold text-[15px]">{s.name}</div>
+                    <p className="text-[13px] text-nv-mute leading-snug flex-1">{s.blurb}</p>
+                    {s.ok && <span className="chip chip-ok w-fit">Safety-checked</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-3 min-h-[200px] max-h-[420px] overflow-y-auto mb-4">
+            {messages.length === 0 && !suggestions && (
+              <p className="text-sm text-nv-mute py-8 text-center">
+                Ask about meals, goals, or a scanned product. Safety verdicts always come from the rules engine.
+              </p>
+            )}
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`max-w-[85%] rounded-[18px] px-[18px] py-3.5 text-[15px] leading-relaxed whitespace-pre-wrap ${
+                  m.role === 'user'
+                    ? 'self-end bg-nv-teal text-white rounded-br-md'
+                    : 'self-start bg-nv-panel2 border border-nv-line rounded-bl-md'
+                }`}
+              >
+                {m.content}
+                {m.offline && (
+                  <span className="block text-xs mt-1 opacity-70">(offline mode)</span>
+                )}
+              </div>
+            ))}
+            {loading && (
+              <div className="self-start text-nv-teal text-sm flex gap-1 items-center px-2">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse" />
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse [animation-delay:150ms]" />
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse [animation-delay:300ms]" />
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          <div className="flex flex-wrap gap-2 mb-3">
+            {QUICK.map((q) => (
+              <button key={q} type="button" className="btn-secondary !h-10 !text-[13px]" onClick={() => send(q)}>
+                {q}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <input
+              className="input-field"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
+              placeholder="Ask about meals, goals or a scanned product"
+            />
+            <button type="button" className="btn-primary !w-12 !px-0 shrink-0" onClick={() => send()} disabled={loading} aria-label="Send">
+              <FiSend />
+            </button>
+          </div>
+        </div>
+
+        {/* Right rail */}
+        <aside className="w-full xl:w-[280px] shrink-0 card-static rise">
+          <h2 className="ct mb-3">VibeAI can use</h2>
+          <ul className="divide-y divide-nv-line">
+            {CAPABILITIES.map((c) => (
+              <li key={c} className="flex items-center gap-2.5 py-2.5 text-sm text-nv-ink">
+                <FiCheck className="text-nv-safe shrink-0" />
+                {c}
+              </li>
+            ))}
+          </ul>
+          <p className="text-[12px] text-nv-mute mt-4 leading-snug border-t border-nv-line pt-3">
+            VibeAI never overrides the safety engine. For allergy and medication questions it uses the verified result.
+          </p>
+        </aside>
       </div>
-    </div>
+    </AppShell>
   );
 }

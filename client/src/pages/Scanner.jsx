@@ -1,3 +1,4 @@
+import AppShell from '../components/layout/AppShell';
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -44,7 +45,9 @@ const Scanner = () => {
 
   // Always stop the camera if the component unmounts while it's running
   useEffect(() => {
-    return () => {
+    return (
+    <AppShell title="Food Scanner" subtitle="Barcode, label, or live camera">
+) => {
       if (html5QrRef.current) {
         html5QrRef.current.stop().catch(() => {});
       }
@@ -586,6 +589,7 @@ const Scanner = () => {
         </div>
       </div>
     </div>
+      </AppShell>
   );
 };
 

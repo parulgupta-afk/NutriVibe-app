@@ -1,3 +1,4 @@
+import AppShell from '../components/layout/AppShell';
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiHeart, FiTrash2, FiCamera } from "react-icons/fi";
@@ -40,6 +41,8 @@ const Favorites = () => {
   };
 
   return (
+    <AppShell title="Saved products">
+
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="flex items-center gap-2 mb-6">
         <FiHeart className="text-primary-600 text-xl" aria-hidden="true" />
@@ -104,6 +107,7 @@ const Favorites = () => {
         ))}
       </ul>
     </div>
+      </AppShell>
   );
 };
 

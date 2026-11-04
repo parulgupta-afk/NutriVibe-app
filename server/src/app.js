@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 100 : 2000,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -87,22 +87,8 @@ app.use(helmet({
   contentSecurityPolicy: false // SPA + camera; tighten later if you add a strict CSP
 }));
 app.use(compression());
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow non-browser requests (e.g. curl, mobile/server-to-server)
-    if (!origin) return callback(null, true);
-    if (origin === clientUrl) return callback(null, true);
-
-    // In local development, also allow localhost on any port (Vite port jumps, Docker web)
-    if (process.env.NODE_ENV !== 'production') {
-      if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        return callback(null, true);
-      }
-    }
-
-    callback(new Error(`CORS policy does not allow access from origin: ${origin}`));
-  },
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 }));
 
@@ -111,23 +97,6 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(requestLogger);
 app.use(express.json({ limit: '8mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-
-app.get('/api/health', (req, res) => {
-  const mongoState = mongoose.connection.readyState;
-  const mongoOk = mongoState === 1;
-  const status = mongoOk ? 'OK' : 'DEGRADED';
-
-  res.status(mongoOk ? 200 : 503).json({
-    status,
-    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
-    timestamp: new Date().toISOString(),
-    mongo: {
-      connected: mongoOk,
-      readyState: mongoState
-    }
-  });
-});
-
 app.use('/api', limiter);
 
 app.use('/api/auth', authLimiter, authRoutes);
@@ -148,6 +117,23 @@ app.use('/api/indian', indianRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/recalls', recallRoutes);
 app.use('/v1', publicV1Routes);
+
+app.get('/api/health', (req, res) => {
+  const mongoState = mongoose.connection.readyState;
+  const mongoOk = mongoState === 1;
+  const status = mongoOk ? 'OK' : 'DEGRADED';
+
+  res.status(mongoOk ? 200 : 503).json({
+    status,
+    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
+    timestamp: new Date().toISOString(),
+    mongo: {
+      connected: mongoOk,
+      readyState: mongoState
+    }
+  });
+});
+
 
 // Phase 22: machine-readable API docs (matches real routes)
 const openapi = require('./docs/openapi.json');

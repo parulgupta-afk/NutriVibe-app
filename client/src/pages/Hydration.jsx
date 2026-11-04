@@ -1,6 +1,7 @@
 /**
  * Hydration Tracker (Phase 3)
  */
+import AppShell from '../components/layout/AppShell';
 import React, { useState, useEffect, useCallback } from 'react';
 import { hydrationApi, streakApi } from '../api/hydration';
 import { FiDroplet, FiPlus } from 'react-icons/fi';
@@ -59,6 +60,8 @@ export default function Hydration() {
   const progress = Math.min(100, Math.round((totalMl / (goalMl || 1)) * 100));
 
   return (
+    <AppShell title="Hydration" subtitle="Water tracking and streaks">
+
     <div className="max-w-lg mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Hydration</h1>
       <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Stay consistent — no guilt, just progress</p>
@@ -160,5 +163,6 @@ export default function Hydration() {
         )}
       </section>
     </div>
+      </AppShell>
   );
 }

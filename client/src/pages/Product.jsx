@@ -1,3 +1,4 @@
+import AppShell from '../components/layout/AppShell';
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { productApi } from "../api/products";
@@ -7,15 +8,20 @@ import { favoritesApi } from "../api/favorites";
 import SafetyBadge from "../components/common/SafetyBadge";
 import {
   FiArrowLeft,
+  FiShield,
   FiAlertTriangle,
   FiCheckCircle,
   FiInfo,
   FiActivity,
   FiStar,
   FiClock,
+  FiCalendar,
   FiThumbsUp,
+  FiThumbsDown,
   FiTrendingUp,
   FiFileText,
+  FiExternalLink,
+  FiCopy,
   FiHeart,
   FiUsers,
   FiZap,
@@ -196,6 +202,8 @@ const Product = () => {
 
   if (loading) {
     return (
+    <AppShell>
+
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
@@ -549,6 +557,7 @@ const Product = () => {
         </p>
       </div>
     </div>
+      </AppShell>
   );
 };
 

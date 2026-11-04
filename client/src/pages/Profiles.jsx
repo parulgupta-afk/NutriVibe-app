@@ -1,3 +1,4 @@
+import AppShell from '../components/layout/AppShell';
 import React, { useState } from "react";
 import {
   FiPlus,
@@ -209,6 +210,8 @@ const Profiles = () => {
   };
 
   return (
+    <AppShell title="Profiles">
+
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-8">
         <div>
@@ -674,6 +677,7 @@ const Profiles = () => {
         </>
       )}
     </div>
+      </AppShell>
   );
 };
 

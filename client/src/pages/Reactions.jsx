@@ -1,6 +1,7 @@
 /**
  * Reaction Journal (Phase 7) — patterns only, never diagnosis
  */
+import AppShell from '../components/layout/AppShell';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FiPlus, FiAlertCircle } from 'react-icons/fi';
@@ -55,6 +56,8 @@ export default function Reactions() {
   };
 
   return (
+    <AppShell title="Wellness Journey" subtitle="Reaction journal">
+
     <div className="max-w-2xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Reaction Journal</h1>
       <p className="text-sm text-amber-700 dark:text-amber-300 mb-6 flex items-start gap-2">
@@ -123,5 +126,6 @@ export default function Reactions() {
         ))}
       </ul>
     </div>
+      </AppShell>
   );
 }
