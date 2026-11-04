@@ -29,8 +29,6 @@ const QUICK_FOODS = [
 function ProgressBar({ value, max, color = 'bg-primary-500', label }) {
   const pct = Math.min(100, Math.round((value / (max || 1)) * 100));
   return (
-    <AppShell title="My Meals" subtitle="Track meals and macros">
-
     <div className="space-y-1">
       <div className="flex justify-between text-sm">
         <span className="text-gray-600 dark:text-gray-300">{label}</span>

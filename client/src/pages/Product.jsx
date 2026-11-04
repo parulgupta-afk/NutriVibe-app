@@ -202,33 +202,35 @@ const Product = () => {
 
   if (loading) {
     return (
-    <AppShell>
-
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
-            Loading product information...
-          </p>
+      <AppShell title="Product Details">
+        <div className="flex justify-center items-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
+              Loading product information...
+            </p>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="text-center">
-          <FiAlertTriangle className="text-4xl text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Product Not Found
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
-          <button onClick={() => navigate("/scanner")} className="btn-primary">
-            Scan Another Product
-          </button>
+      <AppShell title="Product Details">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <FiAlertTriangle className="text-4xl text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+              Product Not Found
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
+            <button onClick={() => navigate("/scanner")} className="btn-primary">
+              Scan Another Product
+            </button>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
@@ -238,7 +240,8 @@ const Product = () => {
   const safetyColor = getSafetyColor(safetyLevel);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <AppShell title="Product Details">
+      <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Back Button */}
       <button
         onClick={() => navigate("/scanner")}
