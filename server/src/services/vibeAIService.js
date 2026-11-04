@@ -170,4 +170,8 @@ Rules:
   }
 }
 
-module.exports = { chat, gatherContext };
+function isSafetyQuestion(text) {
+  return /safe|allerg|react|interact|medication|meds|can i eat|should i avoid|unsafe/i.test(text);
+}
+
+module.exports = { chat, gatherContext, isSafetyQuestion };

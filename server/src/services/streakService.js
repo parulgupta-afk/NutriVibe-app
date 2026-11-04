@@ -126,4 +126,6 @@ module.exports = {
   updateHydrationStreak,
   getStreakSummary,
   ACHIEVEMENTS,
+  dayDiff,
+  hasAchievement,
 };
