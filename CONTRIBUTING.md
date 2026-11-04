@@ -16,6 +16,7 @@ Thank you for your interest in improving NutriVibe! This guide outlines how to s
 ## 2. Project Architecture
 
 NutriVibe is organized into a modular monorepo:
+
 - **`client/`**: React 18 + Vite SPA styled with Tailwind CSS, utilizing React Router v6 and Axios.
 - **`server/`**: Node.js + Express backend with MongoDB (Mongoose), strict rate limiting, and JWT authentication.
 - **`docs/`**: API specifications and developer guides.
@@ -25,6 +26,7 @@ NutriVibe is organized into a modular monorepo:
 ## 3. Local Development Setup
 
 ### 1. Clone & Configure
+
 ```bash
 git clone https://github.com/parulgupta-afk/NutriVibe-app.git
 cd NutriVibe-app
@@ -33,17 +35,22 @@ cp client/.env.example client/.env
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 cd server && npm install
 cd ../client && npm install
 ```
 
 ### 3. Start Development Servers
+
 - Backend API server (runs on `http://localhost:5000`):
+
   ```bash
   cd server && npm run dev
   ```
+
 - Frontend client (runs on `http://localhost:5173`):
+
   ```bash
   cd client && npm run dev
   ```
@@ -53,20 +60,25 @@ cd ../client && npm install
 ## 4. Running Tests
 
 ### Backend Unit Tests
+
 Runs the built-in Node.js test runner across all unit tests in `server/tests/`:
+
 ```bash
 cd server
 npm test
 ```
 
 ### Backend End-to-End Tests
+
 Validates all authenticated and public REST API routes against the running server:
+
 ```bash
 cd server
 npm run test:e2e
 ```
 
 ### Frontend Tests & Linting
+
 ```bash
 cd client
 npm test
