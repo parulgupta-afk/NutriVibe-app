@@ -21,7 +21,7 @@ const Onboarding = () => {
   const [allergyInput, setAllergyInput] = useState("");
   const [dietaryInput, setDietaryInput] = useState("");
   const [goalInput, setGoalInput] = useState("");
-  const { updatePreferences, user } = useAuth();
+  const { updatePreferences } = useAuth();
   const navigate = useNavigate();
 
   const commonAllergens = [

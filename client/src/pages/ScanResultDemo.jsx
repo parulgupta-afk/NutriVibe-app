@@ -23,7 +23,6 @@ export default function ScanResultDemo() {
 
   const isCaution = /caution|warn/i.test(data.verdict);
   const isUnsafe = /unsafe|bad/i.test(data.verdict);
-  const isSafe = /safe/i.test(data.verdict) && !isUnsafe && !isCaution;
 
   const ring = isUnsafe
     ? 'border-nv-bad text-nv-bad'
