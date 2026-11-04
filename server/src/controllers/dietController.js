@@ -45,8 +45,7 @@ async function createPlan(req, res, next) {
 async function getCurrent(req, res, next) {
   try {
     const plan = await getActivePlan(req.user._id);
-    if (!plan) return res.status(404).json({ message: 'No active diet plan' });
-    res.json({ success: true, data: plan });
+    res.json({ success: true, data: plan || null });
   } catch (err) {
     next(err);
   }
