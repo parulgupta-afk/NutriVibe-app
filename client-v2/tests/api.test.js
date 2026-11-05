@@ -30,3 +30,4 @@ describe('client-v2 api tests', () => {
     assert.ok(meals.length > 0);
   });
 });
+
