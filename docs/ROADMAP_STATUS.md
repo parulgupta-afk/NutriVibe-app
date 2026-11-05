@@ -10,7 +10,8 @@
 | 5 AI logging + VibeAI | Done (chat, text suggest, photo analyze, confirm) |
 | 6 Indian food | Done (INS map, Hindi allergen synonyms) |
 | 7 Advanced | Done (Reaction journal, Recalls conservative match, Public `/v1/check` + API keys, Community submissions, PWA shell) |
-| 8 Production | Partial continuous (tests, rate limits, 8mb body, existing CI) |
+| 8 Production | Done (114 server tests, 73 client tests, CSP, body limits, fail-closed resolution) |
+| 9 Client v2 | Done (NutriVibe 2.0 UI side-by-side with Framer Motion, Recharts, mock fallback) |
 
 ## New endpoints this completion pass
 - POST `/api/ai/meals/analyze-image`
