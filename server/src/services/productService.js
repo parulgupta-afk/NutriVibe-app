@@ -43,6 +43,7 @@ function generateSafetyReport(product, user) {
     // Existing shape (frontend)
     riskAssessment: {
       level: verdict.level,
+      verdict: verdict.verdict,
       score: verdict.score,
       factors: verdict.factors
     },

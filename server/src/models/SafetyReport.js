@@ -16,9 +16,14 @@ const safetyReportSchema = new mongoose.Schema({
   riskAssessment: {
     level: {
       type: String,
-      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown'],
+      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown', 'CANNOT_VERIFY', 'SAFE', 'CAUTION', 'UNSAFE', 'Cannot Verify'],
       required: true,
       default: 'Unknown'
+    },
+    verdict: {
+      type: String,
+      enum: ['SAFE', 'CAUTION', 'UNSAFE', 'CANNOT_VERIFY', 'Safe', 'Caution', 'Unsafe', 'Unknown', 'Cannot Verify'],
+      default: 'CANNOT_VERIFY'
     },
     score: {
       type: Number,

@@ -46,7 +46,7 @@ const trackingSchema = new mongoose.Schema(
     },
     riskLevel: {
       type: String,
-      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown'],
+      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown', 'CANNOT_VERIFY', 'SAFE', 'CAUTION', 'UNSAFE', 'Cannot Verify'],
       default: 'Unknown'
     },
     context: {

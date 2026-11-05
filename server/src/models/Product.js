@@ -47,7 +47,7 @@ const productSchema = new mongoose.Schema({
   safetyInfo: {
     riskLevel: {
       type: String,
-      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown'],
+      enum: ['Safe', 'Caution', 'Unsafe', 'Unknown', 'CANNOT_VERIFY', 'SAFE', 'CAUTION', 'UNSAFE', 'Cannot Verify'],
       default: 'Unknown'
     },
     warnings: [String],

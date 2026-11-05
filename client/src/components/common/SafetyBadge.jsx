@@ -10,7 +10,17 @@ const STYLES = {
     icon: FiCheckCircle,
     label: 'Safe'
   },
+  SAFE: {
+    wrap: 'bg-green-50 border-green-200 text-green-800',
+    icon: FiCheckCircle,
+    label: 'Safe'
+  },
   Caution: {
+    wrap: 'bg-amber-50 border-amber-200 text-amber-800',
+    icon: FiAlertTriangle,
+    label: 'Caution'
+  },
+  CAUTION: {
     wrap: 'bg-amber-50 border-amber-200 text-amber-800',
     icon: FiAlertTriangle,
     label: 'Caution'
@@ -20,10 +30,30 @@ const STYLES = {
     icon: FiXCircle,
     label: 'Unsafe'
   },
+  UNSAFE: {
+    wrap: 'bg-red-50 border-red-200 text-red-800',
+    icon: FiXCircle,
+    label: 'Unsafe'
+  },
   Unknown: {
-    wrap: 'bg-gray-50 border-gray-200 text-gray-700',
+    wrap: 'bg-gray-100 border-gray-300 text-gray-700',
     icon: FiHelpCircle,
-    label: 'Unknown'
+    label: 'Cannot Verify'
+  },
+  'Cannot Verify': {
+    wrap: 'bg-gray-100 border-gray-300 text-gray-700',
+    icon: FiHelpCircle,
+    label: 'Cannot Verify'
+  },
+  UNKNOWN: {
+    wrap: 'bg-gray-100 border-gray-300 text-gray-700',
+    icon: FiHelpCircle,
+    label: 'Cannot Verify'
+  },
+  CANNOT_VERIFY: {
+    wrap: 'bg-gray-100 border-gray-300 text-gray-700',
+    icon: FiHelpCircle,
+    label: 'Cannot Verify'
   }
 };
 

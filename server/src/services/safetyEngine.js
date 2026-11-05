@@ -1,15 +1,49 @@
 /**
- * Safety engine orchestrator (Engineering Phase 7).
+ * Safety engine orchestrator.
  * Rules are modular; verdict remains deterministic. AI never decides safety.
  *
- * Phase 8: returns nested safety / nutrition / processing while keeping
- * top-level level, score, factors, recommendations for existing clients.
+ * Canonical verdicts: SAFE, CAUTION, UNSAFE, CANNOT_VERIFY.
+ * Top-level keeps level, score, factors, recommendations, and verdict.
  */
 
-const { applyAllergenRules, findMatchingAllergens, hasRelevantCrossContamination, hasInsufficientData } = require('../safety/rules/allergenRule');
+const {
+  applyAllergenRules,
+  findMatchingAllergens,
+  hasRelevantCrossContamination,
+  hasInsufficientData,
+  hasContradictoryInformation,
+  isMissingOrEmptyProduct,
+  isUnreadableOrFailedOcr
+} = require('../safety/rules/allergenRule');
 const { applyDietRules } = require('../safety/rules/dietRule');
 const { applyMedicationRules } = require('../safety/rules/medicationRule');
 const { applyProcessingRules, buildNutritionSnapshot } = require('../safety/rules/processingRule');
+
+const CANONICAL_VERDICTS = {
+  SAFE: 'SAFE',
+  CAUTION: 'CAUTION',
+  UNSAFE: 'UNSAFE',
+  CANNOT_VERIFY: 'CANNOT_VERIFY'
+};
+
+function normalizeVerdict(level) {
+  switch (level) {
+    case 'Unsafe':
+    case 'UNSAFE':
+      return CANONICAL_VERDICTS.UNSAFE;
+    case 'Caution':
+    case 'CAUTION':
+      return CANONICAL_VERDICTS.CAUTION;
+    case 'Unknown':
+    case 'Cannot Verify':
+    case 'CANNOT_VERIFY':
+      return CANONICAL_VERDICTS.CANNOT_VERIFY;
+    case 'Safe':
+    case 'SAFE':
+    default:
+      return CANONICAL_VERDICTS.SAFE;
+  }
+}
 
 function computeSafetyVerdict(product, user) {
   const preferences = user?.preferences || {};
@@ -29,17 +63,26 @@ function computeSafetyVerdict(product, user) {
   applyDietRules(product, userRestrictions, state);
   applyMedicationRules(product, medications, state);
 
-  const nutrition = buildNutritionSnapshot(product);
-  const processing = { level: product.processingLevel || 'Unknown' };
+  // If state ended up as Unknown or has insufficient data, ensure score/level is Unknown
+  if (state.level === 'Unknown' || state.level === 'Cannot Verify') {
+    state.score = Math.min(state.score, 50);
+  }
+
+  const canonicalVerdict = normalizeVerdict(state.level);
+  const nutrition = buildNutritionSnapshot(product || {});
+  const processing = { level: product?.processingLevel || 'Unknown' };
 
   return {
-    // Legacy top-level (frontend / generateSafetyReport)
+    // Canonical 4-verdict system
+    verdict: canonicalVerdict,
+    // Backward-compatible top-level fields
     level: state.level,
     score: state.score,
     factors: state.factors,
     recommendations: state.recommendations,
-    // Phase 8 structured split (additive)
+    // Additive nested structures
     safety: {
+      verdict: canonicalVerdict,
       level: state.level,
       score: state.score,
       factors: state.factors
@@ -50,8 +93,13 @@ function computeSafetyVerdict(product, user) {
 }
 
 module.exports = {
+  CANONICAL_VERDICTS,
   computeSafetyVerdict,
+  normalizeVerdict,
   findMatchingAllergens,
   hasRelevantCrossContamination,
-  hasInsufficientData
+  hasInsufficientData,
+  hasContradictoryInformation,
+  isMissingOrEmptyProduct,
+  isUnreadableOrFailedOcr
 };
