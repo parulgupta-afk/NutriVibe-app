@@ -62,7 +62,16 @@ docker compose up --build
 ## Project layout
 
 ```
-client/   React + Vite
-server/   Express + Mongoose
-docs/     Architecture, API, deploy notes
+client/     Classic React + Vite UI (:5173)
+client-v2/  NutriVibe 2.0 UI (:5174)
+server/     Express API (:5000)
+docs/       Architecture, API, deploy notes
 ```
+
+## Troubleshooting Local Ports & Dev Servers
+
+- **Port in use**: If port 5173 or 5174 is locked, check running Node processes:
+  - Windows: `netstat -ano | findstr ":5173 :5174"` then `taskkill /PID <pid> /F`
+  - Linux/Mac: `lsof -i :5173` or `lsof -i :5174` then `kill -9 <pid>`
+- **CORS errors**: The server allows both `http://localhost:5173` and `http://localhost:5174` out of the box.
+- **Service Worker Stale Cache**: In development, `client/src/main.jsx` automatically unregisters old service workers to prevent HMR and port conflicts.
