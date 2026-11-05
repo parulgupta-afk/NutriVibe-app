@@ -1,5 +1,7 @@
-/* NutriVibe offline PWA — cache shell + recent API GETs (Phase 7 Option D) */
-const CACHE = 'nutrivibe-v3';
+/* NutriVibe offline PWA — caches the app shell and static assets ONLY.
+ * API responses contain private health data (allergies, medications, history)
+ * and must never be written to Cache Storage. */
+const CACHE = 'nutrivibe-v4';
 const PRECACHE = ['/', '/index.html', '/manifest.json', '/favicon.svg'];
 
 self.addEventListener('install', (e) => {
@@ -22,18 +24,16 @@ self.addEventListener('fetch', (e) => {
 
   const url = new URL(e.request.url);
 
-  // Network-first for API; cache-first for static
+  // API: network only, never cached. Offline -> explicit JSON 503 (never undefined).
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/v1')) {
     e.respondWith(
-      fetch(e.request)
-        .then((res) => {
-          if (e.request.method === 'GET' && res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE).then((c) => c.put(e.request, clone));
-          }
-          return res;
-        })
-        .catch(() => caches.match(e.request))
+      fetch(e.request).catch(
+        () =>
+          new Response(
+            JSON.stringify({ success: false, message: 'You appear to be offline.' }),
+            { status: 503, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } }
+          )
+      )
     );
     return;
   }
@@ -53,9 +53,9 @@ self.addEventListener('fetch', (e) => {
     caches.match(e.request).then((hit) => {
       return (
         hit ||
-        fetch(e.request).catch(() => {
-          return caches.match('/index.html');
-        })
+        fetch(e.request).catch(
+          async () => (await caches.match('/index.html')) || new Response('', { status: 504 })
+        )
       );
     })
   );
