@@ -168,6 +168,15 @@ Designed for third-party integrations, mobile clients, and agents.
 
 ---
 
+## 7. Public API Key Management (`/v1/keys`)
+
+Authenticated users can generate and manage up to 10 active API keys:
+- `POST /v1/keys`: Creates a new API key (body: `{ name, rateLimitPerHour }`). The raw key is returned exactly once.
+- `GET /v1/keys`: Lists all keys owned by the user (returns prefixes and quotas; never raw keys or hashes).
+- `DELETE /v1/keys/:id`: Safely revokes an API key.
+
+---
+
 ## 8. Frontend Integration (Client v1 & Client v2)
 
 Both frontend clients connect to the same Express backend:
