@@ -1,5 +1,14 @@
 # Changelog
 
+## NutriVibe 2.0 (Dual Frontend & Security Hardening)
+
+- Added `client-v2` (NutriVibe 2.0 UI) with Framer Motion, Recharts, and Lucide icons running on port 5174
+- Applied fail-closed security patches for dependent profile resolution (no silent owner fallback)
+- Hardened public API keys with hourly rate limiting and X-API-Key header requirement
+- Enforced Content-Security-Policy (CSP) and scoped request body size limits
+- Hardened PWA service worker to ensure private health data is never stored in browser cache
+- Upgraded Vite to 6.4.5 across both frontends resolving all audit vulnerabilities
+
 ## Phase 16–18 (final polish)
 
 - Demo product auto-seed runs only in development (not production)
