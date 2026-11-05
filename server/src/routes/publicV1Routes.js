@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { authenticateApiKey, checkFood, createKey } = require('../controllers/publicApiController');
+const { authenticateApiKey, checkFood, createKey, listKeys, revokeKey } = require('../controllers/publicApiController');
 const auth = require('../middleware/auth');
 
 const publicLimiter = rateLimit({
@@ -14,6 +14,8 @@ const publicLimiter = rateLimit({
 
 // Authenticated users create keys
 router.post('/keys', auth, createKey);
+router.get('/keys', auth, listKeys);
+router.delete('/keys/:id', auth, revokeKey);
 
 // Public check
 router.post('/check', publicLimiter, authenticateApiKey, checkFood);

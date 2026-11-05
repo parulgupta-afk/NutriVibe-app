@@ -87,3 +87,44 @@ describe('publicApiController unit tests', () => {
   });
 });
 
+
+describe('publicApiController hardening', () => {
+  const mk = () => {
+    const r = { code: null, body: null, headers: {} };
+    r.status = (c) => { r.code = c; return r; };
+    r.json = (b) => { r.body = b; return r; };
+    r.set = (k, v) => { r.headers[k] = v; return r; };
+    return r;
+  };
+
+  it('ignores api_key in the query string', async () => {
+    const res = mk();
+    let nextCalled = false;
+    await authenticateApiKey({ headers: {}, query: { api_key: 'nv_abc' } }, res, () => { nextCalled = true; });
+    assert.equal(res.code, 401);
+    assert.equal(nextCalled, false);
+  });
+
+  it('checkFood rejects oversized or non-string inputs', async () => {
+    for (const body of [
+      { ingredients: Array(201).fill('salt') },
+      { ingredients: [{ $ne: 1 }] },
+      { ingredients: ['salt'], allergies: 'peanut' },
+      { ingredients: ['salt'], medications: Array(51).fill('x') },
+      { ingredients: ['salt'], productName: 'x'.repeat(121) },
+    ]) {
+      const res = mk();
+      await checkFood({ body }, res, () => {});
+      assert.equal(res.code, 400, JSON.stringify(body).slice(0, 60));
+    }
+  });
+
+  it('createKey rejects unbounded rate limits and bad names', async () => {
+    const { createKey } = require('../src/controllers/publicApiController');
+    for (const body of [{ rateLimitPerHour: 1e9 }, { rateLimitPerHour: 0 }, { rateLimitPerHour: '5' }, { name: '' }, { name: 'x'.repeat(61) }, { name: {} }]) {
+      const res = mk();
+      await createKey({ body, user: { _id: 'u1' } }, res, () => {});
+      assert.equal(res.code, 400, JSON.stringify(body));
+    }
+  });
+});
