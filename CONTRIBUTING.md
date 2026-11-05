@@ -17,7 +17,8 @@ Thank you for your interest in improving NutriVibe! This guide outlines how to s
 
 NutriVibe is organized into a modular monorepo:
 
-- **`client/`**: React 18 + Vite SPA styled with Tailwind CSS, utilizing React Router v6 and Axios.
+- **`client/`**: Classic React 18 + Vite SPA styled with Tailwind CSS, utilizing React Router v7 and Axios (Port 5173).
+- **`client-v2/`**: NutriVibe 2.0 UI with Framer Motion, Recharts, and Lucide icons (Port 5174).
 - **`server/`**: Node.js + Express backend with MongoDB (Mongoose), strict rate limiting, and JWT authentication.
 - **`docs/`**: API specifications and developer guides.
 
@@ -53,6 +54,12 @@ cd ../client && npm install
 
   ```bash
   cd client && npm run dev
+  ```
+
+- NutriVibe 2.0 client (runs on `http://localhost:5174`):
+
+  ```bash
+  cd client-v2 && npm run dev
   ```
 
 ---
