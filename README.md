@@ -117,28 +117,21 @@ See [SECURITY.md](SECURITY.md).
 
 ```text
 nutrivibe-app/
-├── client/                        # Classic React frontend (runs on :5173)
+├── client/                        # Unified React frontend (Vite + Tailwind, runs on :5173)
 │   └── src/
-│       ├── api/                   # Axios calls to the backend
-│       ├── components/common/     # Reusable UI (Navbar, ProfileSelector, ProductImage, etc.)
-│       ├── contexts/               # AuthContext, ProfileContext
-│       └── pages/                  # Scanner, Product, Dashboard, Profiles, auth pages, etc.
-├── client-v2/                     # NutriVibe 2.0 UI (React + Vite + Tailwind + Framer Motion, runs on :5174)
+│       ├── api/                   # Axios client layer connected to backend
+│       ├── components/            # Layout (AppShell), common (VerdictRing, Ring, SafetyBadge, etc.)
+│       ├── contexts/              # AuthContext, ProfileContext
+│       └── pages/                 # Scanner, Product, Dashboard, Nutrition, Hydration, Profiles, etc.
+├── server/                        # Express backend (Node.js + MongoDB, runs on :5000)
 │   └── src/
-│       ├── api/                   # API client layer with mock fallback & live proxy
-│       ├── components/            # Layout, VerdictRing, custom UI primitives
-│       ├── context/               # AppContext shared state
-│       ├── data/                  # Mock data for standalone preview
-│       └── pages/                 # Dashboard, Scanner, VibeDiet, Meals, Hydration, Wellness, VibeAI
-├── server/                        # Express backend (runs on :5000)
-│   └── src/
-│       ├── config/                 # Database connection
-│       ├── controllers/            # Route handlers
-│       ├── data/                   # Allergen keyword lists, medication interaction rules
-│       ├── middleware/             # Auth, validation, error handling
-│       ├── models/                 # Mongoose schemas
-│       ├── routes/                 # API route definitions
-│       └── services/               # Open Food Facts, Gemini, email, safety engine, profile resolver
+│       ├── config/                # Database connection
+│       ├── controllers/           # Route handlers
+│       ├── data/                  # Allergen keyword lists, medication interaction rules
+│       ├── middleware/            # Auth, validation, error handling, rate limiting
+│       ├── models/                # Mongoose schemas (User, Product, ScanLog, etc.)
+│       ├── routes/                # API route definitions
+│       └── services/              # Open Food Facts, Gemini, email, safety engine, profile resolver
 └── README.md
 ```
 
@@ -146,10 +139,10 @@ nutrivibe-app/
 
 ### Prerequisites
 
-- Node.js 18+
-- A MongoDB Atlas cluster (or local MongoDB)
+- Node.js 18+ or Node.js 20+
+- A MongoDB Atlas cluster (or local MongoDB via Docker)
 
-### Backend setup
+### Backend Setup
 
 ```bash
 cd server
@@ -171,13 +164,12 @@ GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 > **Note**: `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS` are optional — omit them and password reset emails will use a free Ethereal test inbox automatically, with a preview link logged to your console.
 
+Start the backend:
 ```bash
 npm run dev
 ```
 
 ### Frontend Setup
-
-#### Option A: Client v1 (Classic UI)
 
 ```bash
 cd client
@@ -185,19 +177,7 @@ npm install
 npm run dev
 ```
 
-Visit **[http://localhost:5173](http://localhost:5173)**.
-
-#### Option B: Client v2 (NutriVibe 2.0 UI)
-
-```bash
-cd client-v2
-npm install
-npm run dev
-```
-
-Visit **[http://localhost:5174](http://localhost:5174)**.
-
-> **Tip**: Both frontends can run simultaneously side-by-side alongside the backend!
+Visit **[http://localhost:5173](http://localhost:5173)** to use the unified NutriVibe application.
 
 ## 🧩 Challenges & Fixes
 

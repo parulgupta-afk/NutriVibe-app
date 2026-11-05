@@ -62,16 +62,6 @@ In Google Cloud Console → OAuth client → **Authorized JavaScript origins**:
 - `http://localhost:5173`
 - `https://your-frontend.vercel.app`
 
-### Client v2 (NutriVibe 2.0 UI on Vercel)
-
-1. Create a separate Vercel project connected to the same repository.
-2. **Root Directory**: `client-v2`
-3. Framework: Vite
-4. Build command: `npm run build` · Output directory: `dist`
-5. **Environment**:
-   - `VITE_API_URL`: `https://YOUR-API.onrender.com/api`
-6. Add the new Vercel domain to `server` CORS `CLIENT_URL`.
-
 ---
 
 ## 4. Smoke test
