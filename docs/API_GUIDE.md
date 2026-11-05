@@ -166,3 +166,13 @@ Designed for third-party integrations, mobile clients, and agents.
   }
   ```
 
+---
+
+## 8. Frontend Integration (Client v1 & Client v2)
+
+Both frontend clients connect to the same Express backend:
+- **Client v1 (`/client`)**: Uses Axios with default base path `/api` mapped via Vite proxy on port 5173.
+- **Client v2 (`/client-v2`)**: Includes an API adapter layer in `src/api/index.js` supporting mock fallback and live backend mode via `VITE_API_URL=/api` on port 5174.
+- **Authentication Token Sharing**: Both clients share the standard `localStorage.getItem('token')` convention for JWT bearer authorization.
+
+
