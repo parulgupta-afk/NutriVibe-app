@@ -28,6 +28,10 @@ The NutriVibe team takes the security of our application and users seriously. If
 
 - **Authentication & Sessions**: Passwords hashed using `bcryptjs` with salt rounds. Tokens issued via `jsonwebtoken` with explicit expiration.
 - **Rate Limiting**: Multi-tiered rate limiting via `express-rate-limit` prevents brute-force login attempts, AI quota exhaustion, and denial of service.
-- **Headers & Middleware**: `helmet` is enabled for HTTP header hardening.
+- **Headers & Middleware**: `helmet` is enabled with deny-by-default Content-Security-Policy (CSP) headers. Dedicated relaxed CSP is scoped strictly to `/api/docs`.
+- **Payload Size Limits**: Strict 100kb JSON body limits for standard requests, with isolated 8MB limit reserved exclusively for meal and OCR image endpoints.
+- **Fail-Closed Profile Resolution**: Dependent profile resolution fails closed with 404 on unknown, malformed, or unauthorized profile IDs, preventing safety bypasses.
+- **Service Worker Privacy**: Browser Cache Storage never stores private medical or health API responses.
+- **API Key Quota**: Hourly rate-limiting quotas on public API keys are enforced atomically with header-only authentication (`X-API-Key`).
 - **Data Protection**: CORS is strictly enforced, and secrets are never committed or returned in API responses.
 - **Deterministic Food Safety**: Allergen, medication, and dietary risk assessments are calculated deterministically by rules engines rather than ungrounded generative AI.
