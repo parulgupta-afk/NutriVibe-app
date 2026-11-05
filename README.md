@@ -117,13 +117,20 @@ See [SECURITY.md](SECURITY.md).
 
 ```text
 nutrivibe-app/
-├── client/                        # React frontend
+├── client/                        # Classic React frontend (runs on :5173)
 │   └── src/
 │       ├── api/                   # Axios calls to the backend
 │       ├── components/common/     # Reusable UI (Navbar, ProfileSelector, ProductImage, etc.)
 │       ├── contexts/               # AuthContext, ProfileContext
 │       └── pages/                  # Scanner, Product, Dashboard, Profiles, auth pages, etc.
-├── server/                        # Express backend
+├── client-v2/                     # NutriVibe 2.0 UI (React + Vite + Tailwind + Framer Motion, runs on :5174)
+│   └── src/
+│       ├── api/                   # API client layer with mock fallback & live proxy
+│       ├── components/            # Layout, VerdictRing, custom UI primitives
+│       ├── context/               # AppContext shared state
+│       ├── data/                  # Mock data for standalone preview
+│       └── pages/                 # Dashboard, Scanner, VibeDiet, Meals, Hydration, Wellness, VibeAI
+├── server/                        # Express backend (runs on :5000)
 │   └── src/
 │       ├── config/                 # Database connection
 │       ├── controllers/            # Route handlers
@@ -168,24 +175,29 @@ GOOGLE_CLIENT_ID=your_google_oauth_client_id
 npm run dev
 ```
 
-### Frontend setup
+### Frontend Setup
+
+#### Option A: Client v1 (Classic UI)
 
 ```bash
 cd client
 npm install
-```
-
-Create a `.env` file in `client/` with:
-
-```env
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-```
-
-```bash
 npm run dev
 ```
 
 Visit **[http://localhost:5173](http://localhost:5173)**.
+
+#### Option B: Client v2 (NutriVibe 2.0 UI)
+
+```bash
+cd client-v2
+npm install
+npm run dev
+```
+
+Visit **[http://localhost:5174](http://localhost:5174)**.
+
+> **Tip**: Both frontends can run simultaneously side-by-side alongside the backend!
 
 ## 🧩 Challenges & Fixes
 
