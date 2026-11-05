@@ -186,8 +186,15 @@ async function suggestFromText(req, res, next) {
 async function analyzeMealImage(req, res, next) {
   try {
     const { imageBase64, mimeType = 'image/jpeg' } = req.body;
-    if (!imageBase64) {
+    if (!imageBase64 || typeof imageBase64 !== 'string') {
       return res.status(400).json({ message: 'imageBase64 required' });
+    }
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(mimeType)) {
+      return res.status(400).json({ message: 'mimeType must be image/jpeg, image/png or image/webp' });
+    }
+    // ~6 MB of decoded image at most (base64 is ~4/3 the raw size)
+    if (imageBase64.length > 8_000_000) {
+      return res.status(413).json({ message: 'Image too large' });
     }
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
