@@ -10,7 +10,6 @@ import VerdictRing from "../components/common/VerdictRing";
 import {
   FiArrowLeft,
   FiAlertTriangle,
-  FiCheckCircle,
   FiInfo,
   FiActivity,
   FiStar,
@@ -180,19 +179,6 @@ const Product = () => {
         return "red";
       default:
         return "gray";
-    }
-  };
-
-  const getSafetyIcon = (level) => {
-    switch (level) {
-      case "Safe":
-        return <FiCheckCircle className="text-3xl text-green-500" />;
-      case "Caution":
-        return <FiAlertTriangle className="text-3xl text-yellow-500" />;
-      case "Unsafe":
-        return <FiAlertTriangle className="text-3xl text-red-500" />;
-      default:
-        return <FiInfo className="text-3xl text-gray-500 dark:text-gray-400" />;
     }
   };
 
