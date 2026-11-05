@@ -34,8 +34,10 @@ Check only when verified on your machine / deploy.
 
 ## Quality
 
-- [ ] `cd server && npm test` passes
-- [ ] Client build: `cd client && npm run build`
+- [ ] `cd server && npm test` passes (114+ tests)
+- [ ] Client v1: `cd client && npm run lint && npm test && npm run build`
+- [ ] Client v2: `cd client-v2 && npm test && npm run build`
+- [ ] `npm audit --omit=dev` reports 0 vulnerabilities
 - [ ] CI green on GitHub Actions
 
 ## Docs
