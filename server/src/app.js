@@ -83,8 +83,18 @@ const aiLimiter = rateLimit({
 // Expose AI limiter to routes without circular requires
 app.locals.aiLimiter = aiLimiter;
 
+// This server returns JSON (the SPA is served by Vercel), so a locked-down CSP is
+// safe. /api/docs loads Swagger UI from unpkg and gets its own relaxed policy.
 app.use(helmet({
-  contentSecurityPolicy: false // SPA + camera; tighten later if you add a strict CSP
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives: {
+      defaultSrc: ["'none'"],
+      frameAncestors: ["'none'"],
+      baseUri: ["'none'"],
+      formAction: ["'none'"],
+    },
+  },
 }));
 app.use(compression());
 const allowedOrigins = [
@@ -107,7 +117,9 @@ app.use(cors({
 // Phase 4: production logs stay compact; never log bodies
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(requestLogger);
-app.use(express.json({ limit: '8mb' }));
+// Default JSON limit is small; routes that accept images raise it explicitly.
+const bigJson = express.json({ limit: '8mb' });
+app.use((req, res, next) => (/^\/api\/(ai|meals)\//.test(req.path) ? bigJson(req, res, next) : express.json({ limit: '100kb' })(req, res, next)));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api', limiter);
 
@@ -153,6 +165,10 @@ app.get('/api/openapi.json', (req, res) => {
   res.json(openapi);
 });
 app.get('/api/docs', (req, res) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'none'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'"
+  );
   res.type('html').send(`<!DOCTYPE html>
 <html><head><title>NutriVibe API</title>
 <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
