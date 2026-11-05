@@ -6,6 +6,7 @@ import { useProfile } from "../contexts/ProfileContext";
 import ProductImage from "../components/common/ProductImage";
 import { favoritesApi } from "../api/favorites";
 import SafetyBadge from "../components/common/SafetyBadge";
+import VerdictRing from "../components/common/VerdictRing";
 import {
   FiArrowLeft,
   FiAlertTriangle,
@@ -322,22 +323,26 @@ const Product = () => {
 
       {/* Safety Verdict - Priority 1 */}
       <div className={`card border-l-4 border-${safetyColor}-500 mb-6`}>
-        <div className="flex items-start gap-4">
-          {getSafetyIcon(safetyLevel)}
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+          <VerdictRing
+            verdict={safetyLevel}
+            score={safetyReport?.riskAssessment?.score}
+            size={140}
+          />
+          <div className="flex-1 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 Safety Verdict
               </h2>
               <SafetyBadge
                 level={safetyLevel}
                 score={safetyReport?.riskAssessment?.score}
-                size="lg"
+                size="md"
               />
             </div>
             {safetyReport?.riskAssessment?.factors && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+              <div className="mt-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                   Key factors:
                 </p>
                 <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 mt-1">
@@ -345,13 +350,13 @@ const Product = () => {
                     .slice(0, 3)
                     .map((factor, idx) => (
                       <li key={idx}>
-                        {factor.name} - {factor.impact}
+                        <span className="font-medium">{factor.name}</span>: {factor.impact}
                       </li>
                     ))}
                 </ul>
               </div>
             )}
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
               ⚠️ This is decision-support information, not medical advice.
               Always check physical labels for severe allergies.
             </p>
