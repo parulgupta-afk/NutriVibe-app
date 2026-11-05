@@ -30,6 +30,14 @@ Use this for a Loom / phone screen recording for your portfolio.
 6. **Close (10s)**  
    “Stack is React, Node, MongoDB, Open Food Facts, and a single shared safety engine. Code is on GitHub.”
 
+## NutriVibe 2.0 Client v2 Demo Walkthrough
+
+1. **NutriVibe 2.0 UI (`http://localhost:5174`)**:
+   - Showcase animated calorie progress ring and macro distribution bars on `/`.
+   - Show interactive food scanner `/scan` with animated Verdict Ring sweep.
+   - Open VibeDiet `/diet` to showcase meal swapping and dynamic grocery list generation.
+   - Open VibeAI `/ai` to showcase contextual assistant cards and safety intelligence bounds.
+
 ## Tips
 
 - Speak slowly; zoom browser to 110–125%.  
