@@ -15,13 +15,19 @@ cp .env.example .env   # set MONGO_URI, JWT_SECRET
 npm install
 npm run dev
 
-# client (other terminal)
+# client (Option A: Classic UI)
 cd client
+npm install
+npm run dev
+
+# client-v2 (Option B: NutriVibe 2.0 UI)
+cd client-v2
 npm install
 npm run dev
 ```
 
-- Web: http://localhost:5173  
+- Web (Client v1): http://localhost:5173  
+- Web (Client v2): http://localhost:5174  
 - API: http://localhost:5000/api/health  
 - OpenAPI: http://localhost:5000/api/docs  
 
