@@ -8,12 +8,15 @@ const crypto = require('crypto');
 const apiKeySchema = new mongoose.Schema({
   name: { type: String, required: true },
   keyHash: { type: String, required: true, unique: true },
-  keyPrefix: { type: String, required: true }, // first 8 chars for display
+  keyPrefix: { type: String, required: true }, // first 11 chars (nv_ + 8 hex) for display
   ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   rateLimitPerHour: { type: Number, default: 100 },
   usageCount: { type: Number, default: 0 },
   lastUsedAt: Date,
   active: { type: Boolean, default: true },
+  revokedAt: Date,
+  windowStart: Date,
+  windowCount: { type: Number, default: 0 },
 }, { timestamps: true });
 
 apiKeySchema.statics.hashKey = function (raw) {
@@ -23,5 +26,7 @@ apiKeySchema.statics.hashKey = function (raw) {
 apiKeySchema.statics.generateRawKey = function () {
   return `nv_${crypto.randomBytes(24).toString('hex')}`;
 };
+
+apiKeySchema.index({ ownerId: 1, active: 1 });
 
 module.exports = mongoose.model('ApiKey', apiKeySchema);
