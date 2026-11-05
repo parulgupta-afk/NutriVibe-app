@@ -31,4 +31,10 @@ Fonts: **Fraunces** (titles), **Inter** (UI).
 - Configured to run on port 5174 with mock fallback and live `/api` proxy
 - Motion-reduced accessibility support for animated verdict rings
 
+## Client v2 Component Inventory
+- `VerdictRing`: Animated sweep ring showing score, risk verdict, and primary hazard icon
+- `Ring`: SVG progress ring for calories, hydration, and macro goals
+- `Sidebar` / `MobileNav`: Responsive navigation with raised FAB scan action on mobile
+- `Card`, `Chip`, `Button`, `Bar`, `Segmented`, `Toggle`: Accessible core UI primitives in `ui.jsx`
+
 Backend APIs unchanged; UI is presentation only.
