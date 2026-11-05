@@ -61,3 +61,4 @@ export function getVerdictConfig(verdict = 'Unknown', score) {
   const ariaLabel = `Safety verdict: ${v.label}${score != null ? `, score ${score}` : ''}`;
   return { ...v, pct, ariaLabel };
 }
+
