@@ -6,8 +6,10 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { mealApi } from '../api/meals';
 import { hydrationApi, streakApi } from '../api/hydration';
+import { productApi } from '../api/products';
 import AppShell from '../components/layout/AppShell';
-import { FiCheck, FiPlus, FiDroplet } from 'react-icons/fi';
+import SafetyBadge from '../components/common/SafetyBadge';
+import { FiCheck, FiPlus, FiDroplet, FiShield } from 'react-icons/fi';
 
 function Ring({ value, max, size = 88 }) {
   const pct = Math.min(100, Math.round((value / (max || 1)) * 100));
@@ -43,6 +45,7 @@ export default function HomeDashboard() {
   const [waterGoal, setWaterGoal] = useState(2500);
   const [waterStreak, setWaterStreak] = useState(0);
   const [meals, setMeals] = useState([]);
+  const [safetyStats, setSafetyStats] = useState({ safe: 0, caution: 0, unsafe: 0, total: 0, recentLogs: [] });
   const [loading, setLoading] = useState(true);
 
   const hour = new Date().getHours();
@@ -57,11 +60,13 @@ export default function HomeDashboard() {
     let cancelled = false;
     (async () => {
       try {
-        const [mealRes, hydRes, streakRes, goalRes] = await Promise.all([
+        const todayIso = new Date().toISOString().split('T')[0];
+        const [mealRes, hydRes, streakRes, goalRes, scanRes] = await Promise.all([
           mealApi.getToday().catch(() => null),
           hydrationApi.getToday().catch(() => null),
           streakApi.get().catch(() => null),
           hydrationApi.getGoals().catch(() => null),
+          productApi.getDailyTracking(todayIso).catch(() => null),
         ]);
         if (cancelled) return;
         const totals = mealRes?.data?.dailyTotals || {};
@@ -72,6 +77,15 @@ export default function HomeDashboard() {
         setWaterGoal(hydRes?.data?.goalMl || goalRes?.data?.waterMl || 2500);
         setCalGoal(goalRes?.data?.calories || 2000);
         setWaterStreak(streakRes?.data?.hydration?.current || 0);
+        if (scanRes) {
+          setSafetyStats({
+            safe: scanRes.safeCount || 0,
+            caution: scanRes.cautionCount || 0,
+            unsafe: scanRes.unsafeCount || 0,
+            total: scanRes.totalScans || 0,
+            recentLogs: scanRes.recentLogs || [],
+          });
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -177,6 +191,51 @@ export default function HomeDashboard() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Safety scans summary */}
+        <div className="card-static">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-semibold text-[15px] flex items-center gap-2">
+              <FiShield className="text-nv-teal" /> Today&apos;s Safety Scans
+            </h2>
+            <Link to="/scanner" className="text-xs text-nv-teal hover:underline font-medium">
+              Scan new
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="p-2.5 rounded-xl bg-nv-safe-t text-center">
+              <div className="text-xs text-nv-safe font-medium">Safe</div>
+              <div className="text-lg font-bold text-nv-safe">{safetyStats.safe}</div>
+            </div>
+            <div className="p-2.5 rounded-xl bg-nv-warn-t text-center">
+              <div className="text-xs text-nv-warn font-medium">Caution</div>
+              <div className="text-lg font-bold text-nv-warn">{safetyStats.caution}</div>
+            </div>
+            <div className="p-2.5 rounded-xl bg-nv-bad-t text-center">
+              <div className="text-xs text-nv-bad font-medium">Unsafe</div>
+              <div className="text-lg font-bold text-nv-bad">{safetyStats.unsafe}</div>
+            </div>
+          </div>
+          {safetyStats.recentLogs.length > 0 ? (
+            <ul className="space-y-1">
+              {safetyStats.recentLogs.slice(0, 3).map((log, idx) => (
+                <li key={log._id || idx} className="flex items-center justify-between py-2 border-t border-nv-line text-sm">
+                  <Link
+                    to={log.barcode ? `/product/${log.barcode}` : '/scanner'}
+                    className="truncate max-w-[200px] text-nv-ink font-medium hover:text-nv-teal"
+                  >
+                    {log.productName || 'Scanned product'}
+                  </Link>
+                  <SafetyBadge level={log.riskLevel} size="sm" />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-nv-mute text-center py-2">
+              No products scanned yet today.
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-2">

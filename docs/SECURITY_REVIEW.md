@@ -67,3 +67,4 @@ Audited via `npm audit --omit=dev`:
 - **Server:** 0 vulnerabilities.
 - **Client:** 0 vulnerabilities.
 - **Overrides:** Fixed nested dependencies via explicit npm overrides where needed (`minimatch: ^11.0.1`, `esbuild: ^0.25.0`).
+

@@ -1,0 +1,56 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { VERDICT_STYLES, getVerdictConfig } from '../src/utils/verdictStyles.js';
+
+describe('client VerdictRing logic & styles tests', () => {
+  it('defines valid styling and labels for SAFE', () => {
+    const safeUpper = VERDICT_STYLES.SAFE;
+    const safeCapital = VERDICT_STYLES.Safe;
+    assert.ok(safeUpper, 'SAFE should be defined');
+    assert.equal(safeUpper.label, 'SAFE');
+    assert.equal(safeUpper.pct, 1);
+    assert.equal(safeUpper.stroke, '#10B981');
+    assert.equal(safeCapital.label, 'SAFE');
+  });
+
+  it('defines valid styling and labels for CAUTION', () => {
+    const caution = VERDICT_STYLES.CAUTION;
+    assert.ok(caution, 'CAUTION should be defined');
+    assert.equal(caution.label, 'CAUTION');
+    assert.equal(caution.pct, 0.65);
+    assert.equal(caution.stroke, '#F59E0B');
+  });
+
+  it('defines valid styling and labels for UNSAFE', () => {
+    const unsafe = VERDICT_STYLES.UNSAFE;
+    assert.ok(unsafe, 'UNSAFE should be defined');
+    assert.equal(unsafe.label, 'UNSAFE');
+    assert.equal(unsafe.pct, 0.25);
+    assert.equal(unsafe.stroke, '#EF4444');
+  });
+
+  it('defines valid fallback styling for CANNOT_VERIFY and Unknown', () => {
+    const unknown = VERDICT_STYLES.Unknown;
+    const cannotVerify = VERDICT_STYLES.CANNOT_VERIFY;
+    assert.ok(unknown, 'Unknown should be defined');
+    assert.ok(cannotVerify, 'CANNOT_VERIFY should be defined');
+    assert.equal(unknown.label, 'CANNOT VERIFY');
+    assert.equal(cannotVerify.label, 'CANNOT VERIFY');
+    assert.equal(unknown.pct, 0.5);
+    assert.equal(unknown.stroke, '#6B7280');
+  });
+
+  it('computes correct config and ARIA label with score', () => {
+    const config = getVerdictConfig('SAFE', 88);
+    assert.equal(config.label, 'SAFE');
+    assert.equal(config.pct, 0.88);
+    assert.equal(config.ariaLabel, 'Safety verdict: SAFE, score 88');
+  });
+
+  it('computes correct config without score', () => {
+    const config = getVerdictConfig('CAUTION');
+    assert.equal(config.label, 'CAUTION');
+    assert.equal(config.pct, 0.65);
+    assert.equal(config.ariaLabel, 'Safety verdict: CAUTION');
+  });
+});

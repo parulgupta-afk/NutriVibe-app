@@ -103,3 +103,4 @@ Overly permissive global middleware configuration intended to support OCR image 
 ### Solution
 - Configured Helmet with explicit CSP directives (`script-src 'self'`, `img-src 'self' data: https:`, `frame-ancestors 'none'`).
 - Restructured body parsers: global JSON parser set to 100KB; 10MB limit restricted exclusively to multipart meal photo and OCR routes.
+

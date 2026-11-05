@@ -11,7 +11,7 @@
 | Test Domain | Runner / Tool | Test Suites | Total Tests | Passed | Failed | Duration | Status |
 |---|---|---|---|---|---|---|---|
 | **Backend API & Engine** | Node.js Test Runner | 40 | 114 | 114 | 0 | ~3.1s | **PASS** |
-| **Frontend Utilities & Logic** | Node.js Test Runner | 18 | 73 | 73 | 0 | ~0.6s | **PASS** |
+| **Frontend Utilities & Logic** | Node.js Test Runner | 19 | 79 | 79 | 0 | ~0.7s | **PASS** |
 | **Frontend Code Quality** | ESLint (`--max-warnings 0`) | All client files | - | 0 errors | 0 warnings | ~4.8s | **PASS** |
 | **Frontend Production Build** | Vite 6.4.5 | Production bundle | - | 0 errors | 0 warnings | ~8.4s | **PASS** |
 | **Security Audit (Server)** | `npm audit --omit=dev` | 13 packages audited | - | 0 vulnerabilities | 0 | ~4.2s | **PASS** |
@@ -48,7 +48,9 @@ Total: 114 passing tests across 40 test suites.
 
 ## 3. Frontend Test Suites Breakdown (`client/tests/`)
 
-Total: 73 passing tests across 18 test suites.
+Total: 79 passing tests across 19 test suites.
+
+- `verdictRing.test.js`: Verdict configuration, ARIA labeling, percentage computations, color mappings for SAFE, CAUTION, UNSAFE, and CANNOT_VERIFY fallback.
 
 - `allergenHelper.test.js`: Allergen normalization, color badge styling, custom allergen fallbacks.
 - `barcodeValidator.test.js`: EAN-13 check digit computation, length validation, checksum verification.
@@ -123,3 +125,4 @@ dist/assets/index-uNbyO6ej.css           52.76 kB │ gzip:   8.99 kB
 server: found 0 vulnerabilities
 client: found 0 vulnerabilities
 ```
+
