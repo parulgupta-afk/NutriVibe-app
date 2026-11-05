@@ -20,9 +20,15 @@ Fonts: **Fraunces** (titles), **Inter** (UI).
 - **Mobile:** top bar + bottom nav (Home / Meals / Scan FAB / Water / VibeAI)
 
 ## Key screens
-- `/dashboard` — home nutrition ring, hydration, meals
-- `/vibe-ai` — assistant + “VibeAI can use” rail
+- `/dashboard` (client) / `/` (client-v2) — home nutrition ring, hydration, meals
+- `/vibe-ai` (client) / `/ai` (client-v2) — assistant + “VibeAI can use” rail
+- `/scan` (client-v2) / `/scanner` (client) — food scanner & verdict ring
 - `/scan-result` — CAUTION verdict pattern (demo)
 - `/product/:barcode` — live product (same shell)
+
+## Client v2 Architecture
+- Built with React 18, Vite 6, Tailwind CSS 3, Framer Motion, and Recharts
+- Configured to run on port 5174 with mock fallback and live `/api` proxy
+- Motion-reduced accessibility support for animated verdict rings
 
 Backend APIs unchanged; UI is presentation only.
