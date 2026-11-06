@@ -83,6 +83,11 @@ Updates dietary restrictions, allergies, and health goals.
 Retrieves product details and performs an on-the-fly personalized safety evaluation.
 - **Query Parameters**:
   - `profileId` *(optional)*: Dependent ID to evaluate safety for a family profile.
+- **Canonical Verdicts Returned**:
+  - `SAFE`: Zero allergen/dietary conflicts detected.
+  - `CAUTION`: Minor cross-contamination warnings or dietary flags.
+  - `UNSAFE`: Direct allergen conflict or severe contraindication.
+  - `CANNOT_VERIFY`: Incomplete product data or missing ingredient information.
 
 ### `GET /api/products/search?query=:term`
 Searches product catalogue by keyword, brand, or ingredients.
