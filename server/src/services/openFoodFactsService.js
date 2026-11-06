@@ -3,7 +3,11 @@ const OFF_TIMEOUT_MS = 8000;
 const OFF_MAX_ATTEMPTS = 2; // Phase 14: one retry on timeout/network
 const OFF_RETRY_DELAY_MS = 400;
 
-// Map Open Food Facts category tags to our schema's enum
+/**
+ * Map Open Food Facts category tags to schema enum.
+ * @param {string[]} categoriesTags Array of raw tags from OFF.
+ * @returns {'Food'|'Beverage'|'Supplement'|'Cosmetic'|'Other'}
+ */
 const mapCategory = (categoriesTags = []) => {
   const tags = categoriesTags.join(' ').toLowerCase();
 
