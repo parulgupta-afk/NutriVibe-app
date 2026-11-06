@@ -15,6 +15,9 @@ function isStorageAvailable() {
   }
 }
 
+/**
+ * Safe client-side storage utility with seamless in-memory fallback.
+ */
 export const safeStorage = {
   getItem(key, defaultValue = null) {
     try {
