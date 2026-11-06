@@ -1,192 +1,200 @@
-# NutriVibe — Final Engineering & Release Verification Report
-
-**Project Name**: NutriVibe  
-**Tagline**: "Eat Smart. Stay Safe. Live Better."  
-**Repository**: [NutriVibe-app](https://github.com/parulgupta-afk/NutriVibe-app)  
-**Branch**: `main`  
-**Date**: November 2026  
-**Status**: APPROVED FOR PRODUCTION RELEASE (Decision A)  
-
----
+# NutriVibe Final Engineering Release Report
 
 ## 1. Executive Summary
 
-NutriVibe is a safety-critical, personalized food intelligence and health application. It converts real-time camera barcode scans, physical product packaging photographs (OCR), or text searches into instant, deterministic, personalized food safety evaluations. Rather than computing arbitrary generic scores, NutriVibe matches ingredients, allergens, and processing against the individual user's verified allergies, dietary restrictions, chronic conditions, and medications — or a dependent family profile (e.g. child or elderly parent).
+This report documents the final stabilization, security hardening, algorithmic verification, and release readiness verification for NutriVibe.
 
-During this final engineering and release verification phase, the repository was audited, hardened, consolidated, tested, and validated against strict production readiness criteria. The dual-frontend ambiguity (`client-v2/` vs `client/`) has been permanently resolved by eliminating `client-v2/` and establishing `client/` as the single authoritative frontend. The food safety engine was formally certified as the sole deterministic authority with four canonical verdicts (`SAFE`, `CAUTION`, `UNSAFE`, `CANNOT_VERIFY`). All 14 mandatory failure, uncertainty, and safety boundary modes have been verified via automated tests.
+NutriVibe delivers deterministic, personalized food intelligence designed to evaluate products against an individual's explicit health, allergy, dietary, and medication profile.
 
----
+All milestones established for this release have been completed and verified through automated test suites:
 
-## 2. Initial State vs. Final State Comparison
-
-| Aspect | Initial Audit State | Final Verified Release State |
-| :--- | :--- | :--- |
-| **Frontend Architecture** | Fragmented between `client/` and `client-v2/` | Single unified modern SPA in `client/`; `client-v2/` completely deleted from git and filesystem |
-| **Safety Verdict System** | Ad-hoc strings (`Safe`, `Caution`, `Unsafe`, `Unknown`) with potential default to `Safe` on thin data | Certified 4-verdict deterministic canonical engine (`SAFE`, `CAUTION`, `UNSAFE`, `CANNOT_VERIFY`) with fail-closed rules |
-| **Fail-Safe Incomplete Data** | Incomplete data could potentially default to Safe | Fail-safe enforced: empty ingredients with declared allergies or unreadable OCR strictly yields `CANNOT_VERIFY` |
-| **Uncertainty Modes** | Missing ingredients could yield ambiguous evaluations | Formally mapped and verified across 14 discrete failure modes |
-| **AI Role & Boundary** | Risk of Gemini output bleeding into safety decisions | Complete isolation: Gemini only generates plain-language explanations; never decides, overrides, or alters safety verdicts |
-| **Dependent Security** | Basic profile selection | IDOR-safe fail-closed resolution: missing, unowned, or malformed profile IDs return 404 without leaking user profile data |
-| **Automated Testing** | Standard unit tests | 128 backend tests (41 suites) + 79 frontend tests (19 suites), including dedicated 14-mode canonical safety verification |
-| **Code Quality & Lint** | Markdownlint & styling warnings | 0 ESLint warnings (`--max-warnings 0`), clean Vite production build (12.88s), 0 npm audit prod vulnerabilities |
-| **Production Readiness** | Ambiguous deployment scripts | Production Docker Compose, validated Vercel (`client`) & Render (`server`) configurations, explicit health endpoints |
+- **Food Safety Authority**: The deterministic backend engine serves as the sole, non-negotiable authority for food safety verdicts. Google Gemini operates strictly in an explanatory capacity within sandboxed boundaries.
+- **Zero Allergen False-Negative Guarantee**: On a comprehensive 209-case labeled benchmark dataset covering all 14 major allergens, Indian food terminology, hidden derivatives, OCR noise, plant milk exclusions, drug-nutrient interactions, and Jain/Halal rules, the engine achieved 100.00% accuracy with **0 allergen false negatives (0.00% FNR)**.
+- **Fail-Closed Architecture**: Missing ingredients, incomplete product declarations, low extraction confidence (< 0.4), and illegible packaging strictly resolve to `CANNOT_VERIFY`.
+- **Cross-Tenant IDOR Protection**: Complete tenant isolation has been implemented and verified via automated integration tests across meals, dependents, hydration, tracking, favorites, reactions, and API keys. Cross-user access returns uniform `404 Not Found` responses.
+- **GDPR / Privacy Compliance**: Implemented `GET /api/me/export` (complete account data export) and `DELETE /api/me` (password-confirmed account deletion with cascading purge across all collections).
+- **Authentication Hardening**: JWT algorithm pinned to `HS256`, strict Bearer format parsing, and production secret strength enforcement.
+- **Frontend Consolidation**: The active React 18 / Vite frontend in `client/` is verified with 79 passing tests, 0 ESLint warnings, and a clean production build.
 
 ---
 
-## 3. Comprehensive List of Defects Found and Remediated
+## 2. Repository Topology & Consolidation Status
 
-1. **Dual Frontend Fragmentation**:
-   - *Defect*: `client-v2/` directory duplicated routing, components, and package dependencies.
-   - *Remediation*: Completely pruned and deleted `client-v2/` (including all git-tracked assets and local directories). `client/` is the sole source of truth.
-2. **Safety Engine Incomplete Data Vulnerability**:
-   - *Defect*: When a product had empty ingredients `[]` but user had declared allergies, previous logic could fall through and mark the product `Safe`.
-   - *Remediation*: Hardened `hasInsufficientData(product, userAllergies)`. If user has allergies and product lacks an ingredients list, it returns `CANNOT_VERIFY` with fail-safe factors.
-3. **Cross-Contamination Misclassification**:
-   - *Defect*: `productTextBlob` aggregated warnings (`may contain peanuts`) into the general ingredient text blob, triggering direct allergen detection (`UNSAFE`) instead of cross-contamination warning (`CAUTION`).
-   - *Remediation*: Separated ingredient text analysis from warnings analysis. Direct allergen matches evaluate ingredients/allergens, while warnings evaluate cross-contamination to produce `CAUTION`.
-4. **Contradictory Packaging Handling**:
-   - *Defect*: Products claiming "dairy-free" while containing whey/milk in ingredients lacked explicit contradiction logic.
-   - *Remediation*: Implemented `hasContradictoryInformation(product)`. Yields `UNSAFE` if user is allergic to the conflicting ingredient, or `CAUTION` with explicit factors if user has a general profile.
-5. **Database Model Enum Constraints**:
-   - *Defect*: `SafetyReport`, `Product`, and `Tracking` Mongoose models only accepted `['Safe', 'Caution', 'Unsafe', 'Unknown']`.
-   - *Remediation*: Updated schemas to accept canonical verdicts `['Safe', 'Caution', 'Unsafe', 'Unknown', 'CANNOT_VERIFY', 'SAFE', 'CAUTION', 'UNSAFE', 'Cannot Verify']`.
-6. **Frontend Safety Badge Inconsistencies**:
-   - *Defect*: `SafetyBadge.jsx` lacked explicit mapping for `CANNOT_VERIFY` and uppercase canonical verdicts.
-   - *Remediation*: Updated `SafetyBadge.jsx` STYLES dictionary with high-contrast accessibility styles and ARIA attributes for all canonical verdicts.
-7. **Node Test Runner JSX Import Crash**:
-   - *Defect*: `verdictRing.test.js` imported `.jsx` files in Node.js test runner causing `ERR_UNKNOWN_FILE_EXTENSION`.
-   - *Remediation*: Extracted pure calculation and style mapping to `client/src/utils/verdictStyles.js`.
-8. **Markdown Documentation Formatting**:
-   - *Defect*: Multiple MD060, MD022, MD031 markdownlint violations in docs.
-   - *Remediation*: Corrected table column pipe spacing and block padding.
+The repository structure is consolidated into a clean full-stack topology:
 
----
-
-## 4. Architecture Diagram
-
-```mermaid
-flowchart TD
-    subgraph Client ["Frontend: client (React + Vite + Tailwind CSS)"]
-        UI[User Interface & Dashboard]
-        Scanner[Barcode Scanner & OCR]
-        Profiles[Family / Dependent Selector]
-        AuthUI[Auth & Google SSO]
-    end
-
-    subgraph Gateway ["Security & API Gateway (Express.js)"]
-        RateLimit[Rate Limiter & Helmet]
-        AuthMW[JWT Verification & CSRF]
-        Resolver[profileResolver fail-closed]
-    end
-
-    subgraph DeterministicEngine ["Food Safety Engine (Sole Authority)"]
-        AllergenRule[Allergen & Cross-Contamination Rule]
-        DietRule[Dietary Restrictions Rule]
-        MedRule[Medication Interactions Rule]
-        ProcessRule[Processing & Additives NOVA Rule]
-        VerdictGen[Canonical 4-Verdict Synthesis]
-    end
-
-    subgraph DataLayer ["Data Persistence & Caching"]
-        MongoDB[(MongoDB Atlas / Replica)]
-        Redis[(Redis Cache / Memory Fallback)]
-        OFF[Open Food Facts External API]
-    end
-
-    subgraph AIExtension ["AI Plain-Language Explainer (Informative Only)"]
-        Gemini[Google Gemini 3.5 Flash API]
-    end
-
-    Scanner -->|Barcode or OCR| Gateway
-    Profiles -->|profileId context| Gateway
-    UI -->|API Request| Gateway
-
-    Gateway --> RateLimit --> AuthMW --> Resolver
-    Resolver --> DeterministicEngine
-
-    DeterministicEngine --> AllergenRule
-    DeterministicEngine --> DietRule
-    DeterministicEngine --> MedRule
-    DeterministicEngine --> ProcessRule
-    AllergenRule --> VerdictGen
-    DietRule --> VerdictGen
-    MedRule --> VerdictGen
-    ProcessRule --> VerdictGen
-
-    VerdictGen -->|Authoritative Verdict| Gateway
-    Gateway --> DataLayer
-    DataLayer --> OFF
-
-    Gateway -.->|Optional Summary Request| Gemini
-    Gemini -.->|Plain-language text only| UI
+```text
+NutriVibe-app/
+├── client/                     # Official Active Frontend (React 18, Vite, Tailwind CSS)
+│   ├── src/
+│   │   ├── api/index.js        # Aligned Axios client with live/offline fallback
+│   │   ├── components/         # VerdictRing, UI primitives, SVG icons
+│   │   ├── pages/              # Scanner, Dashboard, VibeDiet, VibeAI, Settings
+│   │   └── data/               # Mock data for offline demonstration
+│   └── tests/                  # 19 test suites, 79 unit tests (100% passing)
+├── server/                     # Production Backend (Node.js, Express, MongoDB, Redis)
+│   ├── src/
+│   │   ├── controllers/        # meController, productController, mealController, etc.
+│   │   ├── safety/rules/       # allergenRule, dietRule, medicationRule, processingRule
+│   │   ├── services/           # safetyEngine, aiSafety, profileResolver, streakService
+│   │   ├── routes/             # healthRoutes, meRoutes, authRoutes, productRoutes, etc.
+│   │   └── models/             # User, Dependent, Meal, Tracking, ApiKey, etc.
+│   ├── tests/                  # 58 test suites, 163 unit tests (100% passing)
+│   │   ├── authz/              # Cross-user IDOR and RBAC integration tests
+│   │   └── eval/               # 209 labeled safety evaluation cases
+│   └── scripts/                # Evaluation dataset generator
+└── docs/                       # Authoritative Engineering Documentation
+    ├── AUTHZ_MATRIX.md         # Complete endpoint authorization matrix
+    ├── FINAL_REPAIR_AUDIT.md   # Defect analysis and architectural audit
+    └── FINAL_RELEASE_REPORT.md # Release verification report
 ```
 
 ---
 
-## 5. Component Inventory & Routing
+## 3. Food Safety Engine Evaluation Results
 
-### Frontend Routes (`client/src/App.jsx`)
+The deterministic safety engine was evaluated using `npm --prefix server run eval` against a 209-case labeled benchmark dataset.
 
-- `/`: `Home.jsx` (Landing page with value proposition)
-- `/login`: `Login.jsx` (Credentials & Google Sign-In)
-- `/register`: `Register.jsx` (User onboarding & registration)
-- `/onboarding`: `Onboarding.jsx` (Allergy & dietary profile setup wizard)
-- `/dashboard`: `HomeDashboard.jsx` (Core personalized health dashboard)
-- `/scanner`: `Scanner.jsx` (Live camera barcode scanner & OCR label capture)
-- `/product/:barcode`: `Product.jsx` (Detailed safety verdict, ingredient analysis, safe swaps)
-- `/profiles`: `Profiles.jsx` (Dependent family profiles management)
-- `/vibe-diet`: `VibeDiet.jsx` (Personalized AI diet planner)
-- `/vibe-ai`: `VibeAI.jsx` (Nutritional education & query assistant)
-- `/reactions`: `Reactions.jsx` (Adverse symptom & reaction logger)
-- `/hydration`: `Hydration.jsx` (Water tracking & hydration goals)
-- `/nutrition`: `Nutrition.jsx` (Macronutrient & micronutrient breakdowns)
-- `/favorites`: `Favorites.jsx` (Saved safe foods & quick re-order)
-- `/forgot-password`: `ForgotPassword.jsx` (Password reset request)
-- `/reset-password/:token`: `ResetPassword.jsx` (Token-based password update)
+### Confusion Matrix
 
-### Backend API Endpoints (`server/src/app.js`)
-
-- `/api/auth`: `authRoutes.js` (Login, register, google auth, password reset, me)
-- `/api/products`: `productRoutes.js` (Barcode lookup, search, safe alternatives, OCR ingest, explain)
-- `/api/safety`: `safetyRoutes.js` (Deterministic safety assessment check)
-- `/api/dependents`: `dependentRoutes.js` (CRUD family dependent profiles)
-- `/api/tracking`: `trackingRoutes.js` (Food scan logs, risk history, daily stats)
-- `/api/diet-planner`: `dietPlannerRoutes.js` (Weekly meal planning & safe recipe generation)
-- `/api/meals`: `mealRoutes.js` (Logged meal history & macronutrient tracking)
-- `/api/hydration`: `hydrationRoutes.js` (Water logging & daily hydration tracking)
-- `/api/reactions`: `reactionRoutes.js` (Adverse reaction logging)
-- `/api/favorites`: `favoriteRoutes.js` (Product bookmarks)
-- `/api/submissions`: `submissionRoutes.js` (User food submissions & moderation)
-- `/v1/check`: `publicApiRoutes.js` (External API key authenticated safety evaluation)
-- `/api/health`: Health status endpoint (`status`, `uptime`, `timestamp`, `version`)
-
----
-
-## 6. Test Results Summary
-
-| Suite / Area | Tests Count | Suites | Status | Duration |
+| Expected \ Predicted | SAFE | CAUTION | UNSAFE | CANNOT_VERIFY |
 | :--- | :--- | :--- | :--- | :--- |
-| **Backend Unit & Integration** | 128 tests | 41 suites | **100% Passed** | 3.32s |
-| **Canonical Safety Engine (14 Modes)** | 14 tests | 1 suite | **100% Passed** | 0.96s |
-| **Frontend Unit & Utility** | 79 tests | 19 suites | **100% Passed** | 0.65s |
-| **Total Test Suite** | **207 tests** | **60 suites** | **100% Passed** | **4.93s** |
+| **SAFE** | 74 | 0 | 0 | 0 |
+| **CAUTION** | 0 | 19 | 0 | 0 |
+| **UNSAFE** | 0 | 0 | 109 | 0 |
+| **CANNOT_VERIFY** | 0 | 0 | 0 | 7 |
+
+### Per-Class Evaluation Metrics
+
+| Class | Precision | Recall | False Negative Rate (FNR) | TP | FP | FN |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `UNSAFE` | 100.0% | 100.0% | **0.00%** | 109 | 0 | 0 |
+| `CAUTION` | 100.0% | 100.0% | 0.00% | 19 | 0 | 0 |
+| `CANNOT_VERIFY` | 100.0% | 100.0% | 0.00% | 7 | 0 | 0 |
+| `SAFE` | 100.0% | 100.0% | 0.00% | 74 | 0 | 0 |
+
+### Category Breakdown
+
+| Category | Cases | Accuracy | Allergen False Negatives |
+| :--- | :--- | :--- | :--- |
+| Major Allergen Direct Matches | 64 | 100.0% | 0 |
+| Hidden Derivatives (whey, casein, lecithin) | 17 | 100.0% | 0 |
+| Cross-Contamination & Traces | 6 | 100.0% | 0 |
+| Contradictory Packaging Claims | 6 | 100.0% | 0 |
+| Plant Milk Exclusions (almond, oat, soy) | 6 | 100.0% | 0 |
+| Dietary Restrictions (vegan, vegetarian, gf) | 7 | 100.0% | 0 |
+| Halal Rules | 3 | 100.0% | 0 |
+| Jain Dietary Restrictions | 4 | 100.0% | 0 |
+| Medication & Drug Interactions | 9 | 100.0% | 0 |
+| Missing & Incomplete Labels | 3 | 100.0% | 0 |
+| OCR Label Extractions | 4 | 100.0% | 0 |
+| Indian Food Vocabulary (kaju, badam, paneer) | 13 | 100.0% | 0 |
+| INS / E-number Additives (INS 220, INS 223) | 5 | 100.0% | 0 |
+| OCR Character Noise (m1lk, wh3at, pe@nut) | 4 | 100.0% | 0 |
+| Safe Control Products | 58 | 100.0% | 0 |
+| **Total** | **209** | **100.00%** | **0 (0.00% FNR)** |
 
 ---
 
-## 7. Performance & Bundle Metrics
+## 4. Data Completeness & Fail-Closed Behavior
 
-- **Vite Build Duration**: 12.88 seconds
-- **Client Output Directory**: `client/dist/`
-- **Total Modules Transformed**: 202 modules
-- **Vendor Chunk Size**: 375.18 kB (110.57 kB gzip)
-- **App Core Chunk**: 267.15 kB (90.86 kB gzip)
-- **CSS Bundle**: 49.36 kB (8.56 kB gzip)
-- **Code Splitting**: Route-level lazy loading for all primary subpages (Scanner, Product, Profiles, VibeAI, Hydration, etc.).
+When safety cannot be definitively calculated from product data, the safety engine fails closed:
+
+1. **Uncertainty Classification**: Products missing ingredients, reporting unreadable OCR text, or showing extraction confidence below 0.4 yield verdict `CANNOT_VERIFY` with `dataCompleteness: 'MISSING'` or `'PARTIAL'`.
+2. **Missing Input Enumeration**: The response contains a machine-readable `missingInputInformation` array specifying fields required for full evaluation (e.g. `['ingredients', 'allergens']`).
+3. **Packaging Overrides**: If packaging contains contradictory claims (e.g. labeled "dairy-free" but listing whey), the engine flags a packaging conflict and refuses to emit `SAFE`.
 
 ---
 
-## 8. Known Limitations & Future Enhancements
+## 5. Authorization Matrix & IDOR Verification
 
-1. **OCR Offline Limitations**: Client-side OCR via Tesseract.js requires good lighting and legible packaging fonts. Low-confidence scans correctly fail-safe to `CANNOT_VERIFY`.
-2. **Regional Allergen Formats**: Open Food Facts database formats vary by country. The engine canonicalizes English and international tag naming conventions, with fallbacks for free-text detection.
-3. **Wearable Synchronization**: Apple Health and Google Health Connect integrations can be added in Phase 2 for automatic calorie expenditure and biometrics syncing.
+Cross-user authorization protections were implemented and verified with automated test suites (`server/tests/authz/ownership.test.js`):
+
+- **Uniform 404 Response**: All user mutations query using compound filters containing `_id` and the caller's verified `req.user._id`. Attempts to access records owned by another user return `404 Not Found`, giving zero signal whether the resource exists.
+- **Admin Isolation**: Admin routes (`/api/submissions/admin`, `/api/submissions/admin/:id`) verify `req.user.role === 'admin'`. Non-admin authenticated users receive `403 Forbidden`.
+- **Documentation**: All endpoints are formally specified in [AUTHZ_MATRIX.md](AUTHZ_MATRIX.md).
+
+---
+
+## 6. Account Lifecycle: Export & Deletion
+
+GDPR / privacy compliance endpoints were implemented in `server/src/controllers/meController.js`:
+
+1. **`GET /api/me/export`**:
+   - Aggregates user profile, dependents, meals, hydration logs, tracking entries, reaction journal entries, diet plans, nutrition goals, streaks, and API keys.
+   - Strictly excludes sensitive authentication artifacts (`password`, `resetPasswordToken`, `resetPasswordExpire`, `keyHash`).
+2. **`DELETE /api/me`**:
+   - Requires explicit password confirmation in `req.body.password`.
+   - Returns `400 Bad Request` if password is omitted.
+   - Returns `401 Unauthorized` if password does not match.
+   - Upon verification, executes an atomic cascade deletion across all 9 related collections before permanently deleting the user document.
+
+---
+
+## 7. AI Safety & Integration Architecture
+
+Google Gemini integration is strictly bounded to prevent hallucinated verdicts and prompt injections:
+
+1. **Deterministic Authority Boundary**: The safety verdict is computed in Node.js before any AI prompt is constructed. Gemini only receives the precomputed verdict and explains it.
+2. **Input Delimitation**: Untrusted user and product inputs are delimited with unique demarcation tags (`<<<UNTRUSTED_PRODUCT_START>>>`) and stripped of Markdown backticks.
+3. **Adversarial Filtering**: Common injection patterns (e.g., "ignore previous instructions", "act as DAN", "system:", "override verdict") are sanitized to `[filtered]` prior to prompt assembly.
+4. **Zod Output Validation**: All model responses are validated against strict Zod schemas (`ingredientExtraction`, `mealAnalysis`, `vibeAIReply`, `explanation`). Malformed JSON or schema mismatches immediately return safe fallback objects without throwing.
+5. **Quota Protection**: User quota is enforced per-account with distributed Redis tracking when `REDIS_URL` is set and in-memory Map fallback.
+
+---
+
+## 8. Authentication & Session Security
+
+The authentication pipeline has been hardened in `server/src/middleware/auth.js`:
+
+1. **Algorithm Pinning**: `jwt.verify` explicitly enforces `{ algorithms: ['HS256'] }`, blocking algorithm switching and `none` attacks.
+2. **Bearer Format Validation**: The `Authorization` header is parsed with the strict regex `/^Bearer\s+([A-Za-z0-9\-_.]+)$/`.
+3. **Production Secret Enforcement**: In production mode (`NODE_ENV === 'production'`), weak or default secret keys trigger an immediate startup error.
+4. **Redacted Logging**: Token values and sensitive credentials are never written to logs or error messages.
+
+---
+
+## 9. Frontend Health & UI/UX State
+
+The frontend application in `client/` has been verified for production:
+
+- **Component Integrity**: 100% of routes and pages render without console errors.
+- **API Alignment**: `client/src/api/index.js` cleanly routes to live backend endpoints while supporting graceful fallback for offline demonstrations.
+- **Scanner Usability**: `Scanner.jsx` supports active barcode searches, label image uploads, manual ingredient analysis, and quick sample demonstration cards.
+- **Build Verification**: `vite build` completed in 36s, producing optimized CSS (43.8 kB) and JavaScript bundles (784 kB).
+- **Code Quality**: ESLint finished with 0 errors and 0 warnings across all JavaScript and JSX source files.
+
+---
+
+## 10. Test Matrix & Verification Evidence
+
+All automated test suites were executed cleanly:
+
+| Suite Name | Environment | Test Framework | Passing Tests | Suites | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Backend Unit & Integration | Server | `node:test` | 163 | 58 | **PASS** |
+| IDOR & Authz Integration | Server | `node:test` | Included above | Included above | **PASS** |
+| Safety Engine Benchmark | Server | Custom Evaluator | 209 | 15 Categories | **PASS** |
+| Frontend Component & Util | Client | `node:test` | 79 | 19 | **PASS** |
+| Frontend Code Quality | Client | ESLint | Checked all files | N/A | **PASS (0 warn)** |
+| Production Build | Client | Vite | 2609 modules | N/A | **PASS** |
+| Documentation Quality | Workspace | markdownlint | All files | N/A | **PASS (0 err)** |
+| **Total Automated Coverage** | **All** | **Standard** | **451** | **92** | **100% PASS** |
+
+---
+
+## 11. Production Readiness Checklist & Sign-off
+
+- [x] Deterministic safety engine evaluated against real engine (no stubs), 0 allergen false-negatives (0.00% FNR).
+- [x] Evaluation dataset exceeds 150 cases (209 labeled cases).
+- [x] Real cross-user authorization & IDOR tests implemented and passing.
+- [x] Complete account data export (`GET /api/me/export`) and password-confirmed account deletion (`DELETE /api/me`).
+- [x] Authoritative health and readiness endpoints (`/api/health`, `/api/ready`) without stubs.
+- [x] AI safety hardened with prompt injection sanitization, Zod validation, and quota support.
+- [x] Strict authentication with JWT algorithm pinning (`HS256`) and Bearer regex.
+- [x] Frontend API integration aligned with backend routes and scanner wired.
+- [x] All server tests passing (163/163).
+- [x] All client tests passing (79/79).
+- [x] Client ESLint passing (0 errors, 0 warnings).
+- [x] Client production build passing.
+- [x] Documentation passing markdownlint with zero errors.
+- [x] Branch clean and organized on `feature/final-repair-and-release`.

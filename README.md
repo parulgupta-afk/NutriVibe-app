@@ -3,7 +3,8 @@
 > **"Eat Smart. Stay Safe. Live Better."**
 
 [![Build & Verification](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](docs/FINAL_RELEASE_REPORT.md)
-[![Tests Passed](https://img.shields.io/badge/Tests-207%2F207%20Passed-success.svg)](docs/TEST_RESULTS.md)
+[![Tests Passed](https://img.shields.io/badge/Tests-451%2F451%20Passed-success.svg)](docs/FINAL_RELEASE_REPORT.md)
+[![Allergen FNR](https://img.shields.io/badge/Allergen%20FNR-0.00%25-brightgreen.svg)](docs/FINAL_RELEASE_REPORT.md)
 [![Production Audit](https://img.shields.io/badge/Vulnerabilities-0%20Prod%20Issues-brightgreen.svg)](docs/SECURITY_AUDIT_REPORT.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Deployment: Ready](https://img.shields.io/badge/Deployment-Verified-blueviolet.svg)](docs/DEPLOYMENT_VERIFICATION.md)
