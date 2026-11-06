@@ -11,6 +11,11 @@ const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/
 const explanationCache = new Map();
 const CACHE_MAX_ENTRIES = 500;
 
+/**
+ * Stores explanation in memory LRU cache with eviction at capacity.
+ * @param {string} key Cache key combining product and user prefs.
+ * @param {string} value Plain-language explanation string.
+ */
 function cacheSet(key, value) {
   if (explanationCache.size >= CACHE_MAX_ENTRIES) {
     // Map preserves insertion order: evict the oldest entry.
