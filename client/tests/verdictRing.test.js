@@ -2,6 +2,9 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { VERDICT_STYLES, getVerdictConfig } from '../src/utils/verdictStyles.js';
 
+/**
+ * Tests for VerdictRing style mappings and stroke calculations across canonical verdicts.
+ */
 describe('client VerdictRing logic & styles tests', () => {
   it('defines valid styling and labels for SAFE', () => {
     const safeUpper = VERDICT_STYLES.SAFE;
