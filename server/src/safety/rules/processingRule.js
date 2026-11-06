@@ -1,6 +1,10 @@
 /**
- * Processing-level rule (Engineering Phase 7).
+ * Processing-level rule (NOVA 1-4 classification).
  * Informational; does not override Unsafe.
+ *
+ * @param {Object} product Product data with processingLevel.
+ * @param {Object} state Mutable safety evaluation state.
+ * @returns {Object} Updated evaluation state.
  */
 function applyProcessingRules(product, state) {
   if (product.processingLevel === 'Ultra-Processed' && state.level !== 'Unsafe') {
