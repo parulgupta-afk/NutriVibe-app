@@ -37,8 +37,12 @@ function delimitUntrusted(label, text) {
 function stripInstructionLike(text) {
   return String(text || '')
     .replace(/ignore (all )?(previous|prior|above) instructions?/gi, '[filtered]')
+    .replace(/disregard (all )?(previous|prior|above) (instructions?|prompts?)/gi, '[filtered]')
     .replace(/you are now/gi, '[filtered]')
-    .replace(/system\s*:/gi, '[filtered]');
+    .replace(/act as an? (unrestricted|jailbroken|dan)/gi, '[filtered]')
+    .replace(/(system|assistant|developer)\s*:/gi, '[filtered]')
+    .replace(/override (safety|verdict|rules)/gi, '[filtered]')
+    .replace(/reveal (system )?prompt/gi, '[filtered]');
 }
 
 // --- Quota / circuit (wire to Redis or in-memory) ---
@@ -56,6 +60,34 @@ function checkUserQuota(userId, limit = 50) {
   entry.count += 1;
   dailyCounts.set(String(userId), entry);
   return { allowed: true, remaining: limit - entry.count };
+}
+
+/**
+ * Distributed quota check using Redis if configured, falling back to in-memory tracking.
+ */
+async function checkUserQuotaAsync(userId, limit = 50) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (process.env.REDIS_URL) {
+    try {
+      const { getRedis } = require('../config/redis');
+      const redis = await getRedis();
+      if (redis) {
+        const key = `quota:ai:${userId}:${today}`;
+        const count = await redis.incr(key);
+        if (count === 1) {
+          await redis.expire(key, 86400); // 24 hours
+        }
+        if (count > limit) {
+          return { allowed: false, remaining: 0 };
+        }
+        return { allowed: true, remaining: limit - count };
+      }
+    } catch {
+      // Fall through to in-memory map
+    }
+  }
+
+  return checkUserQuota(userId, limit);
 }
 
 function recordGeminiFailure() {
@@ -79,6 +111,7 @@ module.exports = {
   delimitUntrusted,
   stripInstructionLike,
   checkUserQuota,
+  checkUserQuotaAsync,
   recordGeminiFailure,
   recordGeminiSuccess,
   isCircuitOpen,
