@@ -9,6 +9,11 @@ const {
   containsKeyword
 } = require('../../data/allergenKeywords');
 
+/**
+ * Builds normalized lowercase text representation of product fields for scanning.
+ * @param {Object} product Product object under evaluation.
+ * @returns {string} Flattened text representation.
+ */
 function productTextBlob(product) {
   if (!product || typeof product !== 'object') return '';
   return [
