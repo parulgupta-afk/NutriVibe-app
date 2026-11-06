@@ -66,10 +66,14 @@ In Google Cloud Console → OAuth client → **Authorized JavaScript origins**:
 
 ## 4. Smoke test
 
-1. Open the live site → Register / Login  
-2. Set allergy “Dairy” → scan barcode `4567890123456`  
-3. Check Safe / Unsafe badge  
-4. Dashboard → log appears  
+1. Check backend health via curl:
+   ```bash
+   curl -i https://YOUR-API.onrender.com/api/health
+   ```
+2. Open the live site → Register / Login  
+3. Set allergy “Dairy” → scan barcode `4567890123456`  
+4. Check Safe / Unsafe badge  
+5. Dashboard → log appears  
 
 ---
 
