@@ -26,6 +26,11 @@ const CANONICAL_VERDICTS = {
   CANNOT_VERIFY: 'CANNOT_VERIFY'
 };
 
+/**
+ * Map raw rule status or legacy level string to canonical verdict.
+ * @param {string} level Legacy or raw level name.
+ * @returns {'SAFE'|'CAUTION'|'UNSAFE'|'CANNOT_VERIFY'}
+ */
 function normalizeVerdict(level) {
   switch (level) {
     case 'Unsafe':
@@ -45,6 +50,12 @@ function normalizeVerdict(level) {
   }
 }
 
+/**
+ * Computes deterministic safety assessment against user preferences.
+ * @param {Object} product Product document or barcode lookup result.
+ * @param {Object} user User profile or effective dependent profile.
+ * @returns {Object} Canonical safety evaluation report.
+ */
 function computeSafetyVerdict(product, user) {
   const preferences = user?.preferences || {};
   const userAllergies = preferences.allergies || [];
