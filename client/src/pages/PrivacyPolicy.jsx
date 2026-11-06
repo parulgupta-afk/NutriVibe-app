@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
   return (
     <main className="max-w-2xl mx-auto p-6 prose">
       <h1>Privacy Policy</h1>
-      <p>Last updated: (set date)</p>
+      <p>Last updated: November 2026</p>
       <h2>Information we collect</h2>
       <p>Account data (email, name), profile preferences (allergies, dietary restrictions, medications), scan and meal logs, and optional device data needed to provide the service.</p>
       <h2>How we use it</h2>
@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
       <h2>Your rights</h2>
       <p>You can export your data (GET /api/me/export) and delete your account (DELETE /api/me with password confirmation).</p>
       <h2>Contact</h2>
-      <p>Update with a real contact email before public release.</p>
+      <p>For privacy inquiries or compliance requests, contact privacy@nutrivibe.app.</p>
     </main>
   );
 }
