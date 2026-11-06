@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
-// A "Dependent" is a person the account owner scans/tracks food for —
-// e.g. a parent managing a child's allergies, or someone managing a
-// family member's diet. It reuses the exact same preferences shape as
-// User so it can be dropped straight into computeSafetyVerdict.
+/**
+ * Dependent family member profile schema for managing family-specific allergies and diets.
+ */
 const dependentSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
