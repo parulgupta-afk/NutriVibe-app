@@ -55,6 +55,12 @@ export const VERDICT_STYLES = {
   }
 };
 
+/**
+ * Resolves visual configuration (colors, percentage, aria label) for safety verdicts.
+ * @param {string} verdict Canonical or title-case verdict string.
+ * @param {number} [score] Optional risk or safety score (0-100).
+ * @returns {Object} Verdict display configuration.
+ */
 export function getVerdictConfig(verdict = 'Unknown', score) {
   const v = VERDICT_STYLES[verdict] || VERDICT_STYLES.Unknown;
   const pct = score != null ? Math.max(0, Math.min(100, score)) / 100 : v.pct;
