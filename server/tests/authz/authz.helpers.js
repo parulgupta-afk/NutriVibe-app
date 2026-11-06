@@ -1,31 +1,64 @@
 /**
- * Shared helpers for IDOR / ownership tests.
- * Requires a test app bootstrap that creates two users and returns
- * authenticated request agents (or tokens).
- *
- * Adapt to your existing test setup (supertest + mongoose memory server, etc.).
+ * Shared helpers for IDOR / authorization tests.
  */
+const mongoose = require('mongoose');
 
-async function createUser(app, { email, password = 'TestPass1234!', name = 'Test' }) {
-  // POST /api/auth/register then return { user, token } or agent
-  throw new Error('Wire to your test register helper');
+function generateObjectId() {
+  return new mongoose.Types.ObjectId().toString();
 }
 
-async function createOwnedResource(agent, path, body) {
-  // e.g. agent.post('/api/meals').send(body)
-  throw new Error('Wire to create resource');
+function createMockUser({ id = generateObjectId(), email = 'user@example.com', role = 'user', name = 'Test User' } = {}) {
+  return {
+    _id: id,
+    id: id,
+    email,
+    role,
+    name,
+  };
 }
 
-/**
- * Assert user B cannot read/update/delete user A's resource.
- * Expect 404 (preferred) or 403 consistently.
- */
-async function assertNoCrossUserAccess({ agentB, method, path }) {
-  const res = await agentB[method.toLowerCase()](path);
-  if (![403, 404].includes(res.status)) {
-    throw new Error(`Expected 403/404 for ${method} ${path}, got ${res.status}`);
-  }
-  return res;
+function createMockReqRes({ user, params = {}, body = {}, query = {}, headers = {}, method = 'GET' } = {}) {
+  let statusCode = 200;
+  let responseBody = null;
+
+  const req = {
+    method,
+    user,
+    params,
+    body,
+    query,
+    headers,
+  };
+
+  const res = {
+    status(code) {
+      statusCode = code;
+      return res;
+    },
+    json(data) {
+      responseBody = data;
+      return res;
+    },
+    send(data) {
+      responseBody = data;
+      return res;
+    },
+    setHeader() {
+      return res;
+    },
+  };
+
+  return {
+    req,
+    res,
+    getResponse() {
+      return { status: statusCode, body: responseBody };
+    },
+  };
 }
 
-module.exports = { createUser, createOwnedResource, assertNoCrossUserAccess };
+module.exports = {
+  generateObjectId,
+  createMockUser,
+  createMockReqRes,
+};
