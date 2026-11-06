@@ -24,6 +24,8 @@ const indianRoutes = require('./routes/indianRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
 const recallRoutes = require('./routes/recallRoutes');
 const publicV1Routes = require('./routes/publicV1Routes');
+const meRoutes = require('./routes/meRoutes');
+const healthRoutes = require('./routes/healthRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
 const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
@@ -140,34 +142,9 @@ app.use('/api/reactions', reactionRoutes);
 app.use('/api/indian', indianRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/recalls', recallRoutes);
+app.use('/api/me', meRoutes);
+app.use('/api', healthRoutes);
 app.use('/v1', publicV1Routes);
-
-app.get('/api/health', (req, res) => {
-  const mongoState = mongoose.connection.readyState;
-  const mongoOk = mongoState === 1;
-  const status = mongoOk ? 'OK' : 'DEGRADED';
-
-  res.status(mongoOk ? 200 : 503).json({
-    status,
-    message: mongoOk ? 'NutriVibe API is running' : 'API up but database not connected',
-    timestamp: new Date().toISOString(),
-    mongo: {
-      connected: mongoOk,
-      readyState: mongoState
-    }
-  });
-});
-
-app.get('/api/ready', (req, res) => {
-  const mongoState = mongoose.connection.readyState;
-  const mongoOk = mongoState === 1;
-  const checks = { mongo: mongoOk, redis: Boolean(process.env.REDIS_URL) };
-  res.status(mongoOk ? 200 : 503).json({
-    status: mongoOk ? 'ready' : 'not_ready',
-    checks,
-  });
-});
-
 
 // Phase 22: machine-readable API docs (matches real routes)
 const openapi = require('./docs/openapi.json');
