@@ -2,6 +2,11 @@
  * Standard barcode validation & checksum calculators for scanner inputs.
  */
 
+/**
+ * Computes standard modulo-10 EAN/UPC checksum digit.
+ * @param {string} barcodeWithoutCheckDigit Digits excluding check digit.
+ * @returns {number|null} Expected check digit.
+ */
 export function calculateEanChecksum(barcodeWithoutCheckDigit) {
   if (!barcodeWithoutCheckDigit || typeof barcodeWithoutCheckDigit !== 'string') {
     return null;
