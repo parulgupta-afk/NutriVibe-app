@@ -13,6 +13,9 @@ const { AppError, Codes } = require('../errors/AppError');
  *
  * Returns an object shaped like a User (has ._id and .preferences) so it can be
  * passed directly into computeSafetyVerdict.
+ *
+ * @param {Object} req Express request object containing user, query, and body.
+ * @returns {Promise<{ effectiveUser: Object, profileId: any, profileName: string|null }>}
  */
 async function resolveEffectiveUser(req) {
   const rawId = req.query?.profileId ?? req.body?.profileId;
