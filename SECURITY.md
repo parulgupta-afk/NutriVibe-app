@@ -34,4 +34,5 @@ The NutriVibe team takes the security of our application and users seriously. If
 - **Service Worker Privacy**: Browser Cache Storage never stores private medical or health API responses.
 - **API Key Quota**: Hourly rate-limiting quotas on public API keys are enforced atomically with header-only authentication (`X-API-Key`).
 - **Data Protection**: CORS is strictly enforced, and secrets are never committed or returned in API responses.
+- **Environment Variable Security**: All API keys and JWT secrets must be injected securely via platform secrets management (e.g. Render/Vercel environment variables) and rotated periodically.
 - **Deterministic Food Safety**: Allergen, medication, and dietary risk assessments are calculated deterministically by rules engines rather than ungrounded generative AI.
