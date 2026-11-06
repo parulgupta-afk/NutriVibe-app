@@ -130,7 +130,16 @@ Executed via `cd client; npm test`:
 
 ---
 
-## 5. Verification Commands
+## 5. Performance Benchmarks
+
+- **Backend Test Runner**: ~3.3s total wall-clock time for 128 tests across 41 suites.
+- **Canonical Safety Modes**: ~0.96s for all 14 boundary and uncertainty test modes.
+- **Frontend Test Runner**: ~0.65s for 79 tests across 19 suites.
+- **Total Test Execution**: < 5 seconds total runtime across all test domains.
+
+---
+
+## 6. Verification Commands
 
 To reproduce the complete test runs:
 
