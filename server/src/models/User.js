@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+/**
+ * Primary user account schema for authentication, preferences, and account linking.
+ */
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
