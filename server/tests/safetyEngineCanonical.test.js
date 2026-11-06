@@ -41,6 +41,7 @@ const baseProduct = (overrides = {}) => ({
 });
 
 describe('Phase 2 — Canonical Food Safety Engine Verification (14 Mandatory Modes)', () => {
+  // Verification test matrix covering complete data, missing data, OCR failure, and IDOR boundary checks.
   // Mode 1: Complete product with no detected allergens -> SAFE
   it('Mode 1: Complete product with no detected allergens returns SAFE', () => {
     const product = baseProduct({
