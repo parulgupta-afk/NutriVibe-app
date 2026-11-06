@@ -1,121 +1,154 @@
 /**
  * NutriVibe safety-engine evaluation runner
  * Usage: node tests/eval/evaluate.js
- * Requires: safety engine to be importable and cases.json present.
  *
- * Metrics: precision, recall, false-negative rate for UNSAFE & CAUTION,
- * confusion matrix, category breakdown.
- * CI should fail if allergen false-negative rate > 0 on this labeled set.
+ * Evaluates the real production deterministic safety engine against
+ * labeled real-world test cases covering allergens, derivatives,
+ * cross-contamination, dietary rules, drug interactions, Indian foods,
+ * INS additives, OCR noise, and fail-closed uncertainty modes.
+ *
+ * Metrics:
+ * - Accuracy, Precision, Recall, False-Negative Rate (FNR) for UNSAFE & CAUTION
+ * - Complete 4x4 Confusion Matrix (SAFE, CAUTION, UNSAFE, CANNOT_VERIFY)
+ * - Category-by-category breakdown
+ * - Fails with exit code 1 if allergen FNR > 0 on labeled dataset.
  */
 
 const fs = require('fs');
 const path = require('path');
+const { computeSafetyVerdict } = require('../../src/services/safetyEngine');
 
 const CASES_PATH = path.join(__dirname, 'cases.json');
-
-// Placeholder – wire to real safety engine when integrated:
-// const { computeSafetyVerdict } = require('../../src/services/safetyEngine');
 
 function loadCases() {
   const raw = fs.readFileSync(CASES_PATH, 'utf8');
   return JSON.parse(raw);
 }
 
-/** Stub: replace with real engine call */
-function runVerdict(product, profile) {
-  // Conservative stub for scaffolding – real integration replaces this.
-  if (!product || !product.ingredients) return { verdict: 'CANNOT_VERIFY', reasons: ['missing product data'] };
-  const text = (product.ingredients + ' ' + (product.allergens || []).join(' ') + ' ' + (product.mayContain || '') + ' ' + (product.warnings || '')).toLowerCase();
-  const allergies = (profile.allergies || []).map((a) => a.toLowerCase());
-  const hidden = { milk: ['casein', 'whey', 'lactoglobulin', 'milk solids'], egg: ['albumin'], peanut: ['peanut'] };
-
-  for (const a of allergies) {
-    if (text.includes(a)) return { verdict: 'UNSAFE', reasons: [`Contains ${a}`] };
-    for (const h of hidden[a] || []) {
-      if (text.includes(h)) return { verdict: 'UNSAFE', reasons: [`Contains hidden form of ${a}: ${h}`] };
+function runEngineVerdict(product, profile) {
+  // Execute through the real production safety engine
+  const user = {
+    preferences: {
+      allergies: profile.allergies || [],
+      dietaryRestrictions: profile.dietaryRestrictions || [],
+      medications: profile.medications || []
     }
-  }
-  if (text.includes('may contain') || text.includes('facility that processes') || text.includes('shared equipment')) {
-    return { verdict: 'CAUTION', reasons: ['Possible cross-contamination'] };
-  }
-  if (text.includes('m1lk') && allergies.includes('milk')) {
-    return { verdict: 'UNSAFE', reasons: ['OCR-noisy milk match'] };
-  }
-  return { verdict: 'SAFE', reasons: [] };
+  };
+  return computeSafetyVerdict(product, user);
 }
 
 function main() {
   const cases = loadCases();
   const labels = ['SAFE', 'CAUTION', 'UNSAFE', 'CANNOT_VERIFY'];
-  const matrix = Object.fromEntries(labels.map((a) => [a, Object.fromEntries(labels.map((p) => [p, 0]))]));
+  const matrix = Object.fromEntries(labels.map((e) => [e, Object.fromEntries(labels.map((p) => [p, 0]))]));
 
-  let allergenFN = 0;
-  let allergenTotal = 0;
+  let totalCases = cases.length;
+  let correctPredictions = 0;
+  let allergenUnsafeTotal = 0;
+  let allergenUnsafeFalseNegatives = 0; // UNSAFE predicted as SAFE
   const byCategory = {};
 
   for (const c of cases) {
-    const actual = runVerdict(c.product, c.profile || {}).verdict;
+    const result = runEngineVerdict(c.product, c.profile || {});
+    const actual = result.verdict;
     const expected = c.expected;
+
     matrix[expected][actual] = (matrix[expected][actual] || 0) + 1;
+    if (actual === expected) {
+      correctPredictions += 1;
+    }
 
     const cat = c.category || 'other';
-    if (!byCategory[cat]) byCategory[cat] = { total: 0, correct: 0, fn: 0 };
+    if (!byCategory[cat]) {
+      byCategory[cat] = { total: 0, correct: 0, fn: 0 };
+    }
     byCategory[cat].total += 1;
-    if (actual === expected) byCategory[cat].correct += 1;
-    if ((expected === 'UNSAFE' || expected === 'CAUTION') && actual === 'SAFE') {
+    if (actual === expected) {
+      byCategory[cat].correct += 1;
+    }
+
+    // False negatives: expected UNSAFE or CAUTION, but predicted SAFE
+    const isFalseNegative = (expected === 'UNSAFE' || expected === 'CAUTION') && actual === 'SAFE';
+    if (isFalseNegative) {
       byCategory[cat].fn += 1;
-      if (c.category === 'allergen' || c.category === 'hidden') {
-        allergenFN += 1;
-        allergenTotal += 1;
+    }
+
+    // Safety-critical allergen tracking
+    if (expected === 'UNSAFE' && (cat === 'allergen' || cat === 'hidden' || cat === 'indian' || cat === 'ocr-noise')) {
+      allergenUnsafeTotal += 1;
+      if (actual === 'SAFE') {
+        allergenUnsafeFalseNegatives += 1;
+        console.error(`CRITICAL ALLERGEN FALSE NEGATIVE: Case ${c.id} expected UNSAFE but predicted SAFE!`);
       }
-    } else if (c.category === 'allergen' || c.category === 'hidden') {
-      allergenTotal += 1;
     }
   }
 
-  function pr(expectedClass) {
-    let tp = 0, fp = 0, fn = 0;
+  function classMetrics(targetClass) {
+    let tp = 0;
+    let fp = 0;
+    let fn = 0;
+    let tn = 0;
+
     for (const e of labels) {
       for (const a of labels) {
-        const n = matrix[e][a];
-        if (e === expectedClass && a === expectedClass) tp += n;
-        else if (e !== expectedClass && a === expectedClass) fp += n;
-        else if (e === expectedClass && a !== expectedClass) fn += n;
+        const count = matrix[e][a] || 0;
+        if (e === targetClass && a === targetClass) tp += count;
+        else if (e !== targetClass && a === targetClass) fp += count;
+        else if (e === targetClass && a !== targetClass) fn += count;
+        else tn += count;
       }
     }
+
     const precision = tp + fp === 0 ? 0 : tp / (tp + fp);
     const recall = tp + fn === 0 ? 0 : tp / (tp + fn);
     const fnr = tp + fn === 0 ? 0 : fn / (tp + fn);
-    return { precision, recall, fnr, tp, fp, fn };
+    return { tp, fp, fn, tn, precision, recall, fnr };
   }
 
-  console.log('=== NutriVibe Safety Evaluation ===');
-  console.log(`Cases: ${cases.length}`);
-  console.log('\nConfusion matrix (rows=expected, cols=predicted):');
-  console.log('           ' + labels.map((l) => l.padEnd(14)).join(''));
+  const overallAccuracy = totalCases === 0 ? 0 : correctPredictions / totalCases;
+
+  console.log('=== NutriVibe Production Safety Evaluation ===');
+  console.log(`Evaluated ${totalCases} test cases using production safety engine (computeSafetyVerdict).\n`);
+  console.log(`Overall Accuracy: ${(overallAccuracy * 100).toFixed(2)}% (${correctPredictions}/${totalCases})\n`);
+
+  console.log('Confusion Matrix (Rows = Expected, Columns = Predicted):');
+  console.log('             ' + labels.map((l) => l.padEnd(15)).join(''));
   for (const e of labels) {
-    console.log(e.padEnd(12) + labels.map((a) => String(matrix[e][a] || 0).padEnd(14)).join(''));
+    console.log(e.padEnd(13) + labels.map((a) => String(matrix[e][a] || 0).padEnd(15)).join(''));
   }
+  console.log('');
 
-  for (const cls of ['UNSAFE', 'CAUTION']) {
-    const m = pr(cls);
-    console.log(`\n${cls}: precision=${m.precision.toFixed(3)} recall=${m.recall.toFixed(3)} FNR=${m.fnr.toFixed(3)}`);
+  console.log('Per-Class Metrics:');
+  for (const cls of ['UNSAFE', 'CAUTION', 'CANNOT_VERIFY', 'SAFE']) {
+    const m = classMetrics(cls);
+    console.log(
+      `  ${cls.padEnd(14)}: Precision=${(m.precision * 100).toFixed(1)}% | Recall=${(m.recall * 100).toFixed(1)}% | FNR=${(m.fnr * 100).toFixed(1)}% | TP=${m.tp} FP=${m.fp} FN=${m.fn}`
+    );
   }
+  console.log('');
 
-  console.log('\nBy category:');
-  for (const [cat, s] of Object.entries(byCategory)) {
-    console.log(`  ${cat}: ${s.correct}/${s.total} correct, FN=${s.fn}`);
+  console.log('Category Breakdown:');
+  for (const [cat, data] of Object.entries(byCategory)) {
+    const pct = data.total === 0 ? 0 : (data.correct / data.total) * 100;
+    console.log(`  ${cat.padEnd(20)}: ${data.correct}/${data.total} correct (${pct.toFixed(1)}%), FN=${data.fn}`);
   }
+  console.log('');
 
-  const allergenFNR = allergenTotal === 0 ? 0 : allergenFN / allergenTotal;
-  console.log(`\nAllergen false-negative rate: ${allergenFNR.toFixed(3)} (${allergenFN}/${allergenTotal})`);
+  const allergenFNR = allergenUnsafeTotal === 0 ? 0 : allergenUnsafeFalseNegatives / allergenUnsafeTotal;
+  console.log(`Allergen UNSAFE Cases: ${allergenUnsafeTotal}`);
+  console.log(`Allergen False-Negative Count: ${allergenUnsafeFalseNegatives}`);
+  console.log(`Allergen False-Negative Rate: ${allergenFNR.toFixed(4)} (${(allergenFNR * 100).toFixed(2)}%)`);
 
-  if (allergenFNR > 0) {
-    console.error('\nCI FAIL: allergen false-negative rate > 0 on labeled set');
+  if (allergenUnsafeFalseNegatives > 0) {
+    console.error('\n❌ CI FAIL: Known allergen cases were incorrectly classified as SAFE!');
     process.exit(1);
   }
-  console.log('\nCI PASS: allergen FNR = 0 on labeled set');
-  process.exit(0);
+
+  console.log('\n✅ CI PASS: Zero allergen false negatives on labeled evaluation dataset.');
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { runEngineVerdict, main };

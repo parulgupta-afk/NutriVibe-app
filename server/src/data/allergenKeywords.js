@@ -16,7 +16,7 @@ const ALLERGEN_KEYWORDS = [
   {
     name: 'Peanuts',
     keywords: [
-      'peanut', 'peanuts', 'groundnut', 'moongphali', 'mungfali', 'arachis', 'arachis hypogaea'
+      'peanut', 'peanuts', 'groundnut', 'moongphali', 'mungfali', 'arachis', 'arachis hypogaea', 'arachis oil'
     ]
   },
   {
@@ -24,7 +24,10 @@ const ALLERGEN_KEYWORDS = [
     keywords: [
       'almond', 'cashew', 'walnut', 'pecan', 'pistachio', 'hazelnut',
       'macadamia', 'brazil nut', 'brazilnut', 'chestnut', 'pine nut',
-      'pinenut', 'tree nut', 'tree nuts'
+      'pinenut', 'tree nut', 'tree nuts', 'kaju', 'badam', 'pista', 'akhrot'
+    ],
+    excludePhrases: [
+      'water chestnut', 'water chestnuts', 'nutmeg', 'butternut squash'
     ]
   },
   {
@@ -32,14 +35,16 @@ const ALLERGEN_KEYWORDS = [
     keywords: [
       'milk', 'cream', 'butter', 'cheese', 'whey', 'casein', 'caseinate',
       'lactose', 'yogurt', 'yoghurt', 'ghee', 'curd', 'dahi', 'doodh', 'makhan', 'buttermilk',
-      'milk solids', 'milk powder', 'skim milk', 'whole milk',
-      'lactoglobulin', 'lactalbumin'
+      'milk solids', 'milk powder', 'skim milk', 'whole milk', 'nonfat milk', 'non-fat milk',
+      'lowfat milk', 'low-fat milk', 'cow milk', 'cows milk', 'dairy milk', 'dry milk',
+      'lactoglobulin', 'lactalbumin', 'paneer', 'khoa', 'khoya', 'malai'
     ],
-    // Phrases that look like dairy but are plant-based — do not treat as Dairy
+    // Phrases that look like dairy but are plant-based or dairy-free fats
     excludePhrases: [
       'coconut milk', 'almond milk', 'soy milk', 'oat milk', 'rice milk',
       'cashew milk', 'hemp milk', 'pea milk', 'plant milk', 'non-dairy',
-      'dairy-free', 'dairy free'
+      'dairy-free', 'dairy free', 'cocoa butter', 'cacao butter', 'shea butter',
+      'peanut butter', 'apple butter'
     ]
   },
   {
@@ -53,7 +58,10 @@ const ALLERGEN_KEYWORDS = [
     name: 'Soy',
     keywords: [
       'soy', 'soya', 'soybean', 'soybeans', 'edamame', 'tofu', 'tempeh',
-      'miso', 'soy lecithin', 'soya lecithin', 'soy protein', 'textured vegetable protein'
+      'miso', 'soy lecithin', 'soya lecithin', 'soy protein', 'textured vegetable protein', 'tvp'
+    ],
+    excludePhrases: [
+      'sunflower lecithin', 'soy-free', 'soy free'
     ]
   },
   {
@@ -61,7 +69,7 @@ const ALLERGEN_KEYWORDS = [
     keywords: [
       'wheat', 'gehun', 'atta', 'maida', 'barley', 'rye', 'gluten', 'malt', 'semolina', 'spelt',
       'kamut', 'triticale', 'farina', 'durum', 'bulgur', 'couscous',
-      'seitan', 'graham flour'
+      'seitan', 'graham flour', 'suji', 'sooji'
     ]
   },
   {
@@ -69,7 +77,7 @@ const ALLERGEN_KEYWORDS = [
     keywords: [
       'fish', 'anchovy', 'anchovies', 'salmon', 'tuna', 'cod', 'sardine',
       'sardines', 'mackerel', 'haddock', 'trout', 'bass', 'halibut',
-      'fish oil', 'fish sauce'
+      'fish oil', 'fish sauce', 'isinglass'
     ]
   },
   {
@@ -77,14 +85,15 @@ const ALLERGEN_KEYWORDS = [
     keywords: [
       'shrimp', 'crab', 'lobster', 'shellfish', 'prawn', 'prawns',
       'clam', 'clams', 'mussel', 'mussels', 'oyster', 'oysters',
-      'scallop', 'scallops', 'crayfish', 'crawfish', 'langoustine'
+      'scallop', 'scallops', 'crayfish', 'crawfish', 'langoustine', 'krill',
+      'crustacean', 'crustaceans'
     ]
   },
   {
     name: 'Sesame',
     keywords: [
       'sesame', 'tahini', 'sesame oil', 'sesame seed', 'sesame seeds',
-      'benne', 'gingelly'
+      'benne', 'gingelly', 'til'
     ]
   },
   {
@@ -96,7 +105,7 @@ const ALLERGEN_KEYWORDS = [
   },
   {
     name: 'Mustard',
-    keywords: ['mustard', 'mustard seed', 'mustard seeds', 'mustard flour']
+    keywords: ['mustard', 'mustard seed', 'mustard seeds', 'mustard flour', 'sarson', 'rai']
   },
   {
     name: 'Celery',
@@ -108,13 +117,19 @@ const ALLERGEN_KEYWORDS = [
   },
   {
     name: 'Molluscs',
-    keywords: ['mollusc', 'mollusk', 'snail', 'squid', 'octopus', 'cuttlefish']
+    keywords: [
+      'mollusc', 'mollusk', 'molluscs', 'mollusks', 'snail', 'squid', 'octopus', 'cuttlefish',
+      'clam', 'clams', 'mussel', 'mussels', 'oyster', 'oysters', 'scallop', 'scallops'
+    ]
   },
   {
     name: 'Sulphites',
     keywords: [
       'sulphite', 'sulfite', 'sulphites', 'sulfites', 'sulphur dioxide',
-      'sulfur dioxide', 'e220', 'e221', 'e222', 'e223', 'e224', 'e225', 'e226', 'e227', 'e228'
+      'sulfur dioxide', 'e220', 'e221', 'e222', 'e223', 'e224', 'e225', 'e226', 'e227', 'e228',
+      'ins 220', 'ins220', 'ins 221', 'ins221', 'ins 222', 'ins222', 'ins 223', 'ins223',
+      'ins 224', 'ins224', 'ins 225', 'ins225', 'ins 226', 'ins226', 'ins 227', 'ins227', 'ins 228', 'ins228',
+      'metabisulphite', 'metabisulfite', 'sodium metabisulphite', 'sodium metabisulfite'
     ]
   }
 ];
@@ -122,12 +137,14 @@ const ALLERGEN_KEYWORDS = [
 /**
  * Escape special regex chars, then match as whole word / phrase.
  * "nut" alone won't match inside "nutrition"; "peanut" will match "peanuts".
+ * Does NOT match when immediately followed by "-free" or " free" (e.g. "soy-free").
  */
 function containsKeyword(text, keyword) {
   if (!text || !keyword) return false;
   const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   // Allow plural/suffix loosely after the keyword (peanut / peanuts)
-  const re = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:s|es)?(?:[^a-z0-9]|$)`, 'i');
+  // Ensure it's not followed by -free or free
+  const re = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:s|es)?(?!(?:-free|\\s+free))(?:[^a-z0-9]|$)`, 'i');
   return re.test(text);
 }
 
@@ -183,7 +200,7 @@ function expandAllergiesForMatching(userAllergies = []) {
 
 /**
  * Detect allergens present in a blob of product text (ingredients + warnings + allergens list).
- * Respects Dairy excludePhrases so plant milks don't false-positive.
+ * Respects excludePhrases across rules (e.g. Dairy plant milks, water chestnuts, sunflower lecithin).
  */
 function detectAllergensInText(text) {
   if (!text || typeof text !== 'string') return [];
@@ -191,18 +208,17 @@ function detectAllergensInText(text) {
   const detected = [];
 
   for (const rule of ALLERGEN_KEYWORDS) {
-    // Skip if an exclude phrase is present (mainly Dairy plant milks)
-    if (rule.excludePhrases && rule.excludePhrases.some((p) => textLower.includes(p))) {
-      // Still allow if a clear animal-dairy keyword exists alongside
-      const hasRealDairy = rule.keywords.some(
-        (kw) =>
-          !['milk'].includes(kw) && // "milk" alone is ambiguous when plant milk present
-          containsKeyword(textLower, kw)
-      );
-      if (!hasRealDairy) continue;
+    let targetText = textLower;
+    if (rule.excludePhrases) {
+      for (const phrase of rule.excludePhrases) {
+        if (targetText.includes(phrase)) {
+          // Replace the exclude phrase with space so it cannot trigger false matches
+          targetText = targetText.split(phrase).join(' ');
+        }
+      }
     }
 
-    const matched = rule.keywords.some((kw) => containsKeyword(textLower, kw));
+    const matched = rule.keywords.some((kw) => containsKeyword(targetText, kw));
     if (matched) {
       detected.push(rule.name);
     }

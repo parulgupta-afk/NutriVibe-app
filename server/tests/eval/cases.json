@@ -3,157 +3,4152 @@
     "id": "allergen-milk-01",
     "category": "allergen",
     "allergen": "milk",
-    "product": { "ingredients": "milk, sugar, cocoa", "allergens": ["milk"] },
-    "profile": { "allergies": ["milk"] },
+    "product": {
+      "name": "Milk Chocolate",
+      "ingredients": [
+        "whole milk",
+        "sugar",
+        "cocoa butter"
+      ],
+      "safetyInfo": {
+        "allergens": [
+          "Milk"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
     "expected": "UNSAFE",
     "notes": "Direct milk allergen match"
   },
   {
-    "id": "allergen-milk-hidden-casein",
-    "category": "hidden",
-    "allergen": "milk",
-    "product": { "ingredients": "casein, whey protein, water", "allergens": [] },
-    "profile": { "allergies": ["milk"] },
-    "expected": "UNSAFE",
-    "notes": "Hidden milk derivative: casein"
-  },
-  {
-    "id": "allergen-milk-hidden-whey",
-    "category": "hidden",
-    "allergen": "milk",
-    "product": { "ingredients": "whey, natural flavors", "allergens": [] },
-    "profile": { "allergies": ["milk"] },
-    "expected": "UNSAFE",
-    "notes": "Hidden milk derivative: whey"
-  },
-  {
-    "id": "allergen-egg-01",
+    "id": "allergen-milk-02",
     "category": "allergen",
-    "allergen": "egg",
-    "product": { "ingredients": "wheat flour, eggs, salt", "allergens": ["egg"] },
-    "profile": { "allergies": ["egg"] },
+    "allergen": "milk",
+    "product": {
+      "name": "Cheddar Cheese",
+      "ingredients": [
+        "pasteurized milk",
+        "cheese cultures",
+        "salt",
+        "enzymes"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
     "expected": "UNSAFE",
-    "notes": "Direct egg match"
+    "notes": "Direct dairy/cheese match"
   },
   {
-    "id": "allergen-egg-hidden-albumin",
-    "category": "hidden",
-    "allergen": "egg",
-    "product": { "ingredients": "albumin, sugar", "allergens": [] },
-    "profile": { "allergies": ["egg"] },
+    "id": "allergen-milk-03",
+    "category": "allergen",
+    "allergen": "milk",
+    "product": {
+      "name": "Dairy Yogurt",
+      "ingredients": [
+        "cultured grade A milk",
+        "sugar",
+        "strawberries"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
     "expected": "UNSAFE",
-    "notes": "Hidden egg: albumin"
+    "notes": "Direct yogurt milk match"
   },
   {
     "id": "allergen-peanut-01",
     "category": "allergen",
     "allergen": "peanut",
-    "product": { "ingredients": "peanuts, salt", "allergens": ["peanut"] },
-    "profile": { "allergies": ["peanut"] },
+    "product": {
+      "name": "Peanut Butter Cups",
+      "ingredients": [
+        "roasted peanuts",
+        "sugar",
+        "cocoa",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanut"
+      ]
+    },
     "expected": "UNSAFE",
-    "notes": "Direct peanut"
+    "notes": "Direct roasted peanuts"
   },
   {
-    "id": "cross-contam-may-contain",
+    "id": "allergen-peanut-02",
+    "category": "allergen",
+    "allergen": "peanut",
+    "product": {
+      "name": "Snack Mix",
+      "ingredients": [
+        "peanuts",
+        "raisins",
+        "sunflower oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Plural peanuts match"
+  },
+  {
+    "id": "allergen-peanut-03",
+    "category": "allergen",
+    "allergen": "peanut",
+    "product": {
+      "name": "Arachis Oil Dressing",
+      "ingredients": [
+        "arachis hypogaea oil",
+        "vinegar",
+        "herbs"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Scientific arachis hypogaea match"
+  },
+  {
+    "id": "allergen-tree-nuts-almond",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Almond Granola",
+      "ingredients": [
+        "rolled oats",
+        "sliced almonds",
+        "honey"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Almonds in granola"
+  },
+  {
+    "id": "allergen-tree-nuts-cashew",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Cashew Butter",
+      "ingredients": [
+        "roasted cashews",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "cashews"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Cashew butter match"
+  },
+  {
+    "id": "allergen-tree-nuts-walnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Walnut Brownie",
+      "ingredients": [
+        "flour",
+        "sugar",
+        "walnuts",
+        "cocoa"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Walnuts match"
+  },
+  {
+    "id": "allergen-tree-nuts-pecan",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pecan Pie",
+      "ingredients": [
+        "pecans",
+        "corn syrup",
+        "eggs",
+        "flour"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Pecans match"
+  },
+  {
+    "id": "allergen-tree-nuts-pistachio",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pistachio Gelato",
+      "ingredients": [
+        "cream",
+        "sugar",
+        "pistachios"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "pistachio"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Pistachios match"
+  },
+  {
+    "id": "allergen-tree-nuts-hazelnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Hazelnut Spread",
+      "ingredients": [
+        "sugar",
+        "hazelnuts",
+        "cocoa",
+        "palm oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "hazelnut"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Hazelnut match"
+  },
+  {
+    "id": "allergen-tree-nuts-brazilnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Mixed Nuts",
+      "ingredients": [
+        "brazil nuts",
+        "cashews",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Brazil nuts match"
+  },
+  {
+    "id": "allergen-tree-nuts-macadamia",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Macadamia Cookies",
+      "ingredients": [
+        "flour",
+        "sugar",
+        "macadamia nuts",
+        "butter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Macadamia nuts match"
+  },
+  {
+    "id": "allergen-egg-01",
+    "category": "allergen",
+    "allergen": "egg",
+    "product": {
+      "name": "Egg Noodles",
+      "ingredients": [
+        "semolina",
+        "whole eggs",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Direct whole eggs"
+  },
+  {
+    "id": "allergen-egg-02",
+    "category": "allergen",
+    "allergen": "egg",
+    "product": {
+      "name": "Mayonnaise",
+      "ingredients": [
+        "soybean oil",
+        "egg yolks",
+        "vinegar",
+        "mustard"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "eggs"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Egg yolks in mayonnaise"
+  },
+  {
+    "id": "allergen-egg-03",
+    "category": "allergen",
+    "allergen": "egg",
+    "product": {
+      "name": "Meringue Cookies",
+      "ingredients": [
+        "egg whites",
+        "sugar",
+        "vanilla"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Egg whites match"
+  },
+  {
+    "id": "allergen-soy-01",
+    "category": "allergen",
+    "allergen": "soy",
+    "product": {
+      "name": "Organic Tofu",
+      "ingredients": [
+        "water",
+        "organic soybeans",
+        "calcium sulfate"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Soybeans in tofu"
+  },
+  {
+    "id": "allergen-soy-02",
+    "category": "allergen",
+    "allergen": "soy",
+    "product": {
+      "name": "Edamame Snack",
+      "ingredients": [
+        "shelled edamame",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soya"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Edamame match for soya"
+  },
+  {
+    "id": "allergen-soy-03",
+    "category": "allergen",
+    "allergen": "soy",
+    "product": {
+      "name": "Soy Milk Drink",
+      "ingredients": [
+        "filtered water",
+        "organic soy base",
+        "cane sugar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Soy base in soy drink"
+  },
+  {
+    "id": "allergen-gluten-wheat",
+    "category": "allergen",
+    "allergen": "gluten",
+    "product": {
+      "name": "Sourdough Bread",
+      "ingredients": [
+        "wheat flour",
+        "water",
+        "salt",
+        "sourdough starter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "wheat"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Wheat flour direct match"
+  },
+  {
+    "id": "allergen-gluten-barley",
+    "category": "allergen",
+    "allergen": "gluten",
+    "product": {
+      "name": "Malt Beverage",
+      "ingredients": [
+        "carbonated water",
+        "barley malt extract",
+        "sugar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Barley malt extract"
+  },
+  {
+    "id": "allergen-gluten-rye",
+    "category": "allergen",
+    "allergen": "gluten",
+    "product": {
+      "name": "Rye Crispbread",
+      "ingredients": [
+        "whole grain rye flour",
+        "water",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Rye flour"
+  },
+  {
+    "id": "allergen-fish-01",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Canned Tuna",
+      "ingredients": [
+        "chunk light tuna",
+        "water",
+        "vegetable broth",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Tuna fish direct match"
+  },
+  {
+    "id": "allergen-fish-02",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Caesar Dressing",
+      "ingredients": [
+        "canola oil",
+        "egg yolks",
+        "anchovy paste",
+        "garlic"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Anchovy in dressing"
+  },
+  {
+    "id": "allergen-fish-03",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Asian Dipping Sauce",
+      "ingredients": [
+        "water",
+        "fish sauce",
+        "sugar",
+        "lime juice"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish sauce match"
+  },
+  {
+    "id": "allergen-shellfish-shrimp",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Shrimp Dumplings",
+      "ingredients": [
+        "shrimp",
+        "wheat starch",
+        "tapioca starch",
+        "sesame oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shrimp match for shellfish"
+  },
+  {
+    "id": "allergen-shellfish-prawn",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Prawn Crackers",
+      "ingredients": [
+        "tapioca flour",
+        "fresh prawn",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Prawn match"
+  },
+  {
+    "id": "allergen-shellfish-crab",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Crab Cakes",
+      "ingredients": [
+        "crab meat",
+        "breadcrumbs",
+        "mayonnaise",
+        "mustard"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "crustaceans"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Crab meat for crustaceans"
+  },
+  {
+    "id": "allergen-shellfish-lobster",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Lobster Bisque",
+      "ingredients": [
+        "lobster stock",
+        "cream",
+        "lobster meat",
+        "white wine"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Lobster meat"
+  },
+  {
+    "id": "allergen-molluscs-clam",
+    "category": "allergen",
+    "allergen": "molluscs",
+    "product": {
+      "name": "Clam Chowder",
+      "ingredients": [
+        "potatoes",
+        "clam broth",
+        "clams",
+        "cream"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "molluscs"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Clams match for molluscs"
+  },
+  {
+    "id": "allergen-molluscs-squid",
+    "category": "allergen",
+    "allergen": "molluscs",
+    "product": {
+      "name": "Calamari Rings",
+      "ingredients": [
+        "squid rings",
+        "wheat flour",
+        "cornstarch",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "molluscs"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Squid for molluscs"
+  },
+  {
+    "id": "allergen-molluscs-mussel",
+    "category": "allergen",
+    "allergen": "molluscs",
+    "product": {
+      "name": "Smoked Mussels",
+      "ingredients": [
+        "mussels",
+        "olive oil",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "molluscs"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Mussels match"
+  },
+  {
+    "id": "allergen-sesame-01",
+    "category": "allergen",
+    "allergen": "sesame",
+    "product": {
+      "name": "Sesame Bagels",
+      "ingredients": [
+        "flour",
+        "water",
+        "sesame seeds",
+        "yeast"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sesame"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Sesame seeds on bagel"
+  },
+  {
+    "id": "allergen-sesame-tahini",
+    "category": "allergen",
+    "allergen": "sesame",
+    "product": {
+      "name": "Classic Hummus",
+      "ingredients": [
+        "chickpeas",
+        "water",
+        "tahini",
+        "garlic",
+        "lemon juice"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sesame"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Tahini is 100% sesame"
+  },
+  {
+    "id": "allergen-mustard-01",
+    "category": "allergen",
+    "allergen": "mustard",
+    "product": {
+      "name": "Dijon Mustard",
+      "ingredients": [
+        "water",
+        "mustard seed",
+        "distilled vinegar",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "mustard"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Mustard seed match"
+  },
+  {
+    "id": "allergen-celery-01",
+    "category": "allergen",
+    "allergen": "celery",
+    "product": {
+      "name": "Vegetable Broth",
+      "ingredients": [
+        "water",
+        "carrots",
+        "celery",
+        "onions",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "celery"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Celery in vegetable broth"
+  },
+  {
+    "id": "allergen-lupin-01",
+    "category": "allergen",
+    "allergen": "lupin",
+    "product": {
+      "name": "High Protein Pasta",
+      "ingredients": [
+        "lupin flour",
+        "durum wheat semolina"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "lupin"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Lupin flour match"
+  },
+  {
+    "id": "allergen-sulphites-01",
+    "category": "allergen",
+    "allergen": "sulphites",
+    "product": {
+      "name": "Dried Apricots",
+      "ingredients": [
+        "apricots",
+        "sulphur dioxide"
+      ],
+      "safetyInfo": {
+        "allergens": [
+          "sulphites"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "sulphites"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Sulphur dioxide preservative"
+  },
+  {
+    "id": "allergen-sulphites-e220",
+    "category": "allergen",
+    "allergen": "sulphites",
+    "product": {
+      "name": "White Wine Vinegar",
+      "ingredients": [
+        "wine vinegar",
+        "preservative e220"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sulphites"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "E220 is sulfur dioxide"
+  },
+  {
+    "id": "allergen-corn-01",
+    "category": "allergen",
+    "allergen": "corn",
+    "product": {
+      "name": "Tortilla Chips",
+      "ingredients": [
+        "whole grain corn",
+        "sunflower oil",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "corn"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Corn tortilla chips"
+  },
+  {
+    "id": "hidden-dairy-casein",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": {
+      "name": "Energy Bar",
+      "ingredients": [
+        "isolated soy protein",
+        "sodium caseinate",
+        "dates",
+        "oats"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Caseinate is a milk protein"
+  },
+  {
+    "id": "hidden-dairy-whey",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": {
+      "name": "Protein Shake",
+      "ingredients": [
+        "water",
+        "whey protein concentrate",
+        "cocoa",
+        "sucralose"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Whey protein is dairy"
+  },
+  {
+    "id": "hidden-dairy-solids",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": {
+      "name": "Dark Chocolate Cookie",
+      "ingredients": [
+        "flour",
+        "sugar",
+        "cocoa",
+        "milk solids"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Milk solids in chocolate cookie"
+  },
+  {
+    "id": "hidden-dairy-lactalbumin",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": {
+      "name": "Nutritional Shake",
+      "ingredients": [
+        "water",
+        "lactalbumin",
+        "maltodextrin",
+        "vanilla"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Lactalbumin is milk albumin"
+  },
+  {
+    "id": "hidden-dairy-ghee",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": {
+      "name": "Indian Sweets",
+      "ingredients": [
+        "chickpea flour",
+        "sugar",
+        "pure desi ghee",
+        "cardamom"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Ghee is clarified butter / dairy"
+  },
+  {
+    "id": "hidden-egg-albumin",
+    "category": "hidden",
+    "allergen": "egg",
+    "product": {
+      "name": "Glaze Pastry",
+      "ingredients": [
+        "flour",
+        "sugar",
+        "albumin",
+        "butter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Albumin is egg protein"
+  },
+  {
+    "id": "hidden-egg-lysozyme",
+    "category": "hidden",
+    "allergen": "egg",
+    "product": {
+      "name": "Artisan Hard Cheese",
+      "ingredients": [
+        "milk",
+        "salt",
+        "rennet",
+        "preservative lysozyme"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Lysozyme derived from egg whites"
+  },
+  {
+    "id": "hidden-egg-ovalbumin",
+    "category": "hidden",
+    "allergen": "egg",
+    "product": {
+      "name": "Protein Bar",
+      "ingredients": [
+        "dates",
+        "almonds",
+        "ovalbumin",
+        "cacao"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Ovalbumin is main egg white protein"
+  },
+  {
+    "id": "hidden-soy-lecithin",
+    "category": "hidden",
+    "allergen": "soy",
+    "product": {
+      "name": "Premium Chocolate",
+      "ingredients": [
+        "cocoa mass",
+        "sugar",
+        "cocoa butter",
+        "soy lecithin"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Soy lecithin is a soy derivative"
+  },
+  {
+    "id": "hidden-sunflower-lecithin-safe-soy",
+    "category": "hidden",
+    "allergen": "soy",
+    "product": {
+      "name": "Soy-Free Chocolate",
+      "ingredients": [
+        "cocoa mass",
+        "cane sugar",
+        "cocoa butter",
+        "sunflower lecithin"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Sunflower lecithin does NOT contain soy"
+  },
+  {
+    "id": "hidden-gluten-semolina",
+    "category": "hidden",
+    "allergen": "gluten",
+    "product": {
+      "name": "Italian Pasta",
+      "ingredients": [
+        "durum wheat semolina",
+        "water"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Semolina is wheat gluten"
+  },
+  {
+    "id": "hidden-gluten-spelt",
+    "category": "hidden",
+    "allergen": "gluten",
+    "product": {
+      "name": "Spelt Crackers",
+      "ingredients": [
+        "organic spelt flour",
+        "olive oil",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Spelt is an ancient wheat with gluten"
+  },
+  {
+    "id": "hidden-gluten-seitan",
+    "category": "hidden",
+    "allergen": "gluten",
+    "product": {
+      "name": "Vegan Roast",
+      "ingredients": [
+        "vital wheat gluten",
+        "seitan",
+        "soy sauce",
+        "garlic"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Seitan is pure wheat gluten"
+  },
+  {
+    "id": "hidden-gluten-farina",
+    "category": "hidden",
+    "allergen": "gluten",
+    "product": {
+      "name": "Hot Breakfast Cereal",
+      "ingredients": [
+        "wheat farina",
+        "calcium carbonate",
+        "iron"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Farina is milled wheat"
+  },
+  {
+    "id": "hidden-fish-isinglass",
+    "category": "hidden",
+    "allergen": "fish",
+    "product": {
+      "name": "Fined Cask Ale",
+      "ingredients": [
+        "water",
+        "malted barley",
+        "hops",
+        "yeast",
+        "isinglass"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Isinglass is fish bladder fining agent"
+  },
+  {
+    "id": "hidden-sesame-benne",
+    "category": "hidden",
+    "allergen": "sesame",
+    "product": {
+      "name": "Southern Benne Wafers",
+      "ingredients": [
+        "brown sugar",
+        "flour",
+        "benne seeds",
+        "butter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sesame"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Benne is heirloom sesame"
+  },
+  {
+    "id": "hidden-mustard-rai",
+    "category": "hidden",
+    "allergen": "mustard",
+    "product": {
+      "name": "Mango Pickle",
+      "ingredients": [
+        "raw mango",
+        "mustard oil",
+        "rai",
+        "chili",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "mustard"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Rai is small brown mustard seeds"
+  },
+  {
+    "id": "cross-contam-may-contain-peanut",
     "category": "cross-contamination",
     "allergen": "peanut",
-    "product": { "ingredients": "wheat, sugar", "allergens": [], "mayContain": "peanuts" },
-    "profile": { "allergies": ["peanut"] },
+    "product": {
+      "name": "Plain Oat Granola",
+      "ingredients": [
+        "whole grain oats",
+        "brown sugar",
+        "canola oil"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "May contain peanuts and tree nuts"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "peanut"
+      ]
+    },
     "expected": "CAUTION",
-    "notes": "May contain traces"
+    "notes": "May contain peanuts warning flags CAUTION"
   },
   {
-    "id": "cross-contam-facility",
+    "id": "cross-contam-facility-milk",
     "category": "cross-contamination",
     "allergen": "milk",
-    "product": { "ingredients": "oats, water", "allergens": [], "warnings": "Manufactured in a facility that processes milk" },
-    "profile": { "allergies": ["milk"] },
+    "product": {
+      "name": "Dark Chocolate Chips",
+      "ingredients": [
+        "cocoa mass",
+        "sugar",
+        "cocoa butter"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "Manufactured in a shared facility that processes milk"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
     "expected": "CAUTION",
-    "notes": "Shared facility"
+    "notes": "Shared facility with milk"
+  },
+  {
+    "id": "cross-contam-shared-equipment-tree-nuts",
+    "category": "cross-contamination",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Sunflower Seed Butter",
+      "ingredients": [
+        "roasted sunflower seeds",
+        "sugar",
+        "salt"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "Made on shared equipment with almond and cashews"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Shared equipment with tree nuts"
+  },
+  {
+    "id": "cross-contam-traces-egg",
+    "category": "cross-contamination",
+    "allergen": "egg",
+    "product": {
+      "name": "Durum Wheat Pasta",
+      "ingredients": [
+        "durum wheat semolina",
+        "water"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "May contain traces of egg"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Traces of egg warning"
+  },
+  {
+    "id": "cross-contam-traces-shellfish",
+    "category": "cross-contamination",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Seaweed Snack",
+      "ingredients": [
+        "roasted seaweed",
+        "sesame oil",
+        "salt"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "Harvested in waters that may contain traces of crustacean shellfish"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Harvested with potential crustacean traces"
+  },
+  {
+    "id": "cross-contam-unrelated-warning-safe",
+    "category": "cross-contamination",
+    "allergen": "none",
+    "product": {
+      "name": "Rice Cakes",
+      "ingredients": [
+        "brown rice",
+        "sea salt"
+      ],
+      "safetyInfo": {
+        "warnings": [
+          "May contain traces of peanuts"
+        ]
+      }
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "User has milk allergy; peanut warning is not their allergen"
+  },
+  {
+    "id": "contradictory-dairy-free-has-whey",
+    "category": "contradictory",
+    "allergen": "milk",
+    "product": {
+      "name": "Dairy-Free Energy Bar",
+      "description": "Certified dairy-free",
+      "ingredients": [
+        "oats",
+        "whey protein",
+        "honey",
+        "cocoa"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Claims dairy-free but lists whey"
+  },
+  {
+    "id": "contradictory-gluten-free-has-wheat",
+    "category": "contradictory",
+    "allergen": "gluten",
+    "product": {
+      "name": "Gluten-Free Cracker",
+      "description": "Crispy gluten-free snacks",
+      "ingredients": [
+        "wheat flour",
+        "rice flour",
+        "salt",
+        "oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Claims gluten-free but lists wheat flour"
+  },
+  {
+    "id": "contradictory-peanut-free-has-peanuts",
+    "category": "contradictory",
+    "allergen": "peanut",
+    "product": {
+      "name": "Peanut-Free Trail Bar",
+      "description": "100% peanut-free facility",
+      "ingredients": [
+        "oats",
+        "peanuts",
+        "cranberries",
+        "sugar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanut"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Claims peanut-free but contains peanuts"
+  },
+  {
+    "id": "contradictory-egg-free-has-albumin",
+    "category": "contradictory",
+    "allergen": "egg",
+    "product": {
+      "name": "Egg-Free Cookies",
+      "description": "Pure egg-free recipe",
+      "ingredients": [
+        "flour",
+        "sugar",
+        "albumin",
+        "butter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Claims egg-free but lists albumin"
+  },
+  {
+    "id": "contradictory-vegan-has-gelatin",
+    "category": "contradictory",
+    "allergen": "animal products",
+    "product": {
+      "name": "Vegan Gummies",
+      "description": "Plant-based fruit snacks",
+      "ingredients": [
+        "glucose syrup",
+        "sugar",
+        "gelatin",
+        "citric acid"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegan"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Claims vegan but contains gelatin"
+  },
+  {
+    "id": "contradictory-vegan-has-milk",
+    "category": "contradictory",
+    "allergen": "dairy",
+    "product": {
+      "name": "Vegan Truffles",
+      "description": "Artisan vegan treat",
+      "ingredients": [
+        "cocoa",
+        "cane sugar",
+        "whole milk",
+        "vanilla"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Claims vegan but lists milk for dairy allergic user"
+  },
+  {
+    "id": "plant-milk-almond",
+    "category": "plant-milk",
+    "allergen": "milk",
+    "product": {
+      "name": "Pure Almond Milk",
+      "ingredients": [
+        "filtered water",
+        "almond milk",
+        "calcium carbonate",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Almond milk is plant-based, safe for dairy allergic user"
+  },
+  {
+    "id": "plant-milk-oat",
+    "category": "plant-milk",
+    "allergen": "milk",
+    "product": {
+      "name": "Barista Oat Milk",
+      "ingredients": [
+        "oat milk base",
+        "water",
+        "rapeseed oil",
+        "dipotassium phosphate"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Oat milk is plant-based, safe for dairy"
+  },
+  {
+    "id": "plant-milk-coconut",
+    "category": "plant-milk",
+    "allergen": "milk",
+    "product": {
+      "name": "Organic Coconut Milk",
+      "ingredients": [
+        "coconut milk",
+        "water",
+        "guar gum"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Coconut milk is plant-based, safe for dairy"
   },
   {
     "id": "plant-milk-soy",
     "category": "plant-milk",
-    "allergen": "soy",
-    "product": { "ingredients": "soy milk, sugar", "allergens": ["soy"] },
-    "profile": { "allergies": ["soy"] },
-    "expected": "UNSAFE",
-    "notes": "Soy milk for soy-allergic user"
+    "allergen": "milk",
+    "product": {
+      "name": "Soy Milk Original",
+      "ingredients": [
+        "filtered water",
+        "organic whole soybeans",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Soy milk does not contain cow dairy"
   },
   {
-    "id": "plant-milk-almond-ok",
+    "id": "plant-milk-cashew",
     "category": "plant-milk",
-    "allergen": null,
-    "product": { "ingredients": "almond milk, water", "allergens": ["tree nuts"] },
-    "profile": { "allergies": ["milk"] },
+    "allergen": "milk",
+    "product": {
+      "name": "Creamy Cashew Milk",
+      "ingredients": [
+        "cashew milk",
+        "sea salt",
+        "sunflower lecithin"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
     "expected": "SAFE",
-    "notes": "Almond milk is safe for milk-allergic user"
+    "notes": "Cashew milk is dairy-free"
   },
   {
-    "id": "diet-vegan-gelatin",
-    "category": "diet",
-    "diet": "vegan",
-    "product": { "ingredients": "gelatin, sugar", "allergens": [] },
-    "profile": { "dietaryRestrictions": ["vegan"] },
+    "id": "plant-milk-mixed-with-real-dairy",
+    "category": "plant-milk",
+    "allergen": "milk",
+    "product": {
+      "name": "Almond Milk Latte Blend",
+      "ingredients": [
+        "almond milk",
+        "nonfat milk",
+        "sugar",
+        "coffee"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
     "expected": "UNSAFE",
-    "notes": "Gelatin not vegan"
+    "notes": "Contains almond milk AND real nonfat milk"
   },
   {
-    "id": "diet-vegetarian-ok",
+    "id": "diet-vegetarian-meat-pork",
     "category": "diet",
-    "diet": "vegetarian",
-    "product": { "ingredients": "milk, cheese, wheat", "allergens": ["milk", "wheat"] },
-    "profile": { "dietaryRestrictions": ["vegetarian"] },
-    "expected": "SAFE",
-    "notes": "Dairy is vegetarian"
+    "product": {
+      "name": "Pork Sausage Roll",
+      "ingredients": [
+        "pork",
+        "wheat flour",
+        "water",
+        "salt",
+        "pepper"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegetarian"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Pork violates vegetarian diet"
   },
   {
-    "id": "med-warfarin-vitk",
+    "id": "diet-vegetarian-gelatin",
+    "category": "diet",
+    "product": {
+      "name": "Fruit Jelly Candy",
+      "ingredients": [
+        "sugar",
+        "water",
+        "gelatin",
+        "natural flavours"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegetarian"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Animal gelatin violates vegetarian"
+  },
+  {
+    "id": "diet-vegetarian-rennet",
+    "category": "diet",
+    "product": {
+      "name": "Parmigiano Reggiano",
+      "ingredients": [
+        "cow milk",
+        "salt",
+        "animal rennet"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegetarian"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Animal rennet conflicts with vegetarian"
+  },
+  {
+    "id": "diet-vegetarian-microbial-rennet-safe",
+    "category": "diet",
+    "product": {
+      "name": "Vegetarian Cheddar",
+      "ingredients": [
+        "pasteurized milk",
+        "salt",
+        "microbial rennet",
+        "cultures"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegetarian"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Microbial rennet is vegetarian safe"
+  },
+  {
+    "id": "diet-vegan-dairy-cream",
+    "category": "diet",
+    "product": {
+      "name": "Cream of Mushroom Soup",
+      "ingredients": [
+        "water",
+        "mushrooms",
+        "heavy cream",
+        "butter",
+        "salt"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegan"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Heavy cream and butter violate vegan diet"
+  },
+  {
+    "id": "diet-vegan-honey",
+    "category": "diet",
+    "product": {
+      "name": "Honey Roasted Nuts",
+      "ingredients": [
+        "almonds",
+        "pure honey",
+        "sugar",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegan"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Honey conflicts with strict vegan diet"
+  },
+  {
+    "id": "diet-vegan-tofu-stir-fry-safe",
+    "category": "diet",
+    "product": {
+      "name": "Tofu Veggie Bowl",
+      "ingredients": [
+        "brown rice",
+        "organic tofu",
+        "broccoli",
+        "tamari",
+        "sesame oil"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "vegan"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure plant ingredients fit vegan diet"
+  },
+  {
+    "id": "diet-halal-pork",
+    "category": "halal",
+    "product": {
+      "name": "Bacon Wrapped Dates",
+      "ingredients": [
+        "dates",
+        "pork bacon",
+        "brown sugar"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "halal"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Pork conflicts with halal diet"
+  },
+  {
+    "id": "diet-halal-alcohol",
+    "category": "halal",
+    "product": {
+      "name": "White Wine Marinade",
+      "ingredients": [
+        "white wine",
+        "olive oil",
+        "garlic",
+        "oregano"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "halal"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Alcohol conflicts with halal diet"
+  },
+  {
+    "id": "diet-halal-chicken-safe",
+    "category": "halal",
+    "product": {
+      "name": "Halal Certified Grilled Chicken",
+      "ingredients": [
+        "chicken breast",
+        "water",
+        "salt",
+        "spices"
+      ],
+      "safetyInfo": {
+        "certifications": [
+          "Halal"
+        ]
+      }
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "halal"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Halal certified chicken"
+  },
+  {
+    "id": "diet-jain-root-onion",
+    "category": "jain",
+    "product": {
+      "name": "Tomato Onion Curry",
+      "ingredients": [
+        "tomatoes",
+        "diced onion",
+        "cumin",
+        "turmeric",
+        "salt"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "jain"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Onion is a root vegetable, strictly prohibited in Jain diet"
+  },
+  {
+    "id": "diet-jain-root-garlic",
+    "category": "jain",
+    "product": {
+      "name": "Garlic Bread Spread",
+      "ingredients": [
+        "butter",
+        "crushed garlic",
+        "parsley",
+        "salt"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "jain"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Garlic is prohibited in Jain diet"
+  },
+  {
+    "id": "diet-jain-root-potato",
+    "category": "jain",
+    "product": {
+      "name": "Aloo Bhujia Snack",
+      "ingredients": [
+        "gram flour",
+        "potatoes",
+        "spices",
+        "peanut oil"
+      ]
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "jain"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Potatoes (aloo) violate Jain diet"
+  },
+  {
+    "id": "diet-jain-safe-paneer-curry",
+    "category": "jain",
+    "product": {
+      "name": "Jain Paneer Curry",
+      "ingredients": [
+        "paneer",
+        "tomato puree",
+        "spices",
+        "coriander",
+        "cream"
+      ],
+      "safetyInfo": {
+        "certifications": [
+          "Jain"
+        ]
+      }
+    },
+    "profile": {
+      "dietaryRestrictions": [
+        "jain"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "No root vegetables; certified Jain"
+  },
+  {
+    "id": "med-warfarin-vitamin-k-spinach",
     "category": "medication",
-    "medication": "warfarin",
-    "product": { "ingredients": "spinach extract, kale", "allergens": [] },
-    "profile": { "medications": ["warfarin"] },
+    "product": {
+      "name": "Spinach Pasta Salad",
+      "ingredients": [
+        "pasta",
+        "fresh spinach",
+        "olive oil",
+        "cherry tomatoes"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "warfarin"
+      ]
+    },
     "expected": "CAUTION",
-    "notes": "High vitamin K interaction"
+    "notes": "Spinach is high in vitamin K, interacting with blood-thinners"
   },
   {
-    "id": "missing-ingredients",
-    "category": "missing",
-    "product": { "ingredients": "", "allergens": [] },
-    "profile": { "allergies": ["milk"] },
-    "expected": "CANNOT_VERIFY",
-    "notes": "Empty ingredient list must never be SAFE"
-  },
-  {
-    "id": "missing-product",
-    "category": "missing",
-    "product": null,
-    "profile": { "allergies": ["peanut"] },
-    "expected": "CANNOT_VERIFY",
-    "notes": "Unknown product"
-  },
-  {
-    "id": "indian-ins-320",
-    "category": "indian",
-    "product": { "ingredients": "INS 320, wheat flour", "allergens": [] },
-    "profile": { "allergies": [] },
+    "id": "med-warfarin-vitamin-k-kale",
+    "category": "medication",
+    "product": {
+      "name": "Green Smoothie",
+      "ingredients": [
+        "apple juice",
+        "kale",
+        "banana",
+        "chia seeds"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "coumadin"
+      ]
+    },
     "expected": "CAUTION",
-    "notes": "INS 320 (BHA) – additive awareness"
+    "notes": "Kale is high vitamin K for Coumadin user"
   },
   {
-    "id": "ocr-noisy-milk",
-    "category": "ocr",
-    "product": { "ingredients": "m1lk, sugar, cocoa", "allergens": [] },
-    "profile": { "allergies": ["milk"] },
+    "id": "med-warfarin-broccoli",
+    "category": "medication",
+    "product": {
+      "name": "Steamed Broccoli Bowl",
+      "ingredients": [
+        "broccoli",
+        "olive oil",
+        "garlic",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "warfarin"
+      ]
+    },
+    "expected": "CAUTION",
+    "notes": "Broccoli contains significant vitamin K"
+  },
+  {
+    "id": "med-maoi-aged-cheese",
+    "category": "medication",
+    "product": {
+      "name": "Aged Gouda Board",
+      "ingredients": [
+        "aged cheese",
+        "salt",
+        "cultures"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "selegiline"
+      ]
+    },
     "expected": "UNSAFE",
-    "notes": "OCR noise: m1lk → milk"
+    "notes": "Aged cheese contains high tyramine, hypertensive crisis risk with MAOIs"
   },
   {
-    "id": "safe-plain-rice",
-    "category": "safe",
-    "product": { "ingredients": "rice, water, salt", "allergens": [] },
-    "profile": { "allergies": ["milk", "peanut", "egg"] },
+    "id": "med-maoi-salami",
+    "category": "medication",
+    "product": {
+      "name": "Cured Italian Salami",
+      "ingredients": [
+        "pork",
+        "salt",
+        "cured meat cultures",
+        "spices"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "phenelzine"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Cured meat high in tyramine with MAOI"
+  },
+  {
+    "id": "med-maoi-tyramine",
+    "category": "medication",
+    "product": {
+      "name": "Traditional Kimchi",
+      "ingredients": [
+        "cabbage",
+        "radish",
+        "fermented seasoning",
+        "tyramine",
+        "chili"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "isocarboxazid"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fermented foods and tyramine with MAOI"
+  },
+  {
+    "id": "med-statin-grapefruit",
+    "category": "medication",
+    "product": {
+      "name": "Ruby Red Grapefruit Juice",
+      "ingredients": [
+        "100% pure grapefruit juice"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "atorvastatin"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Grapefruit dangerously elevates statin blood levels"
+  },
+  {
+    "id": "med-statin-pomelo",
+    "category": "medication",
+    "product": {
+      "name": "Citrus Medley Salad",
+      "ingredients": [
+        "pomelo segments",
+        "lettuce",
+        "lime dressing"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "lipitor"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Pomelo contains furanocoumarins like grapefruit"
+  },
+  {
+    "id": "med-statin-orange-juice-safe",
+    "category": "medication",
+    "product": {
+      "name": "Pure Orange Juice",
+      "ingredients": [
+        "100% pasteurized orange juice"
+      ]
+    },
+    "profile": {
+      "medications": [
+        "atorvastatin"
+      ]
+    },
     "expected": "SAFE",
-    "notes": "No allergen match, complete data"
+    "notes": "Orange juice does not inhibit CYP3A4 like grapefruit"
+  },
+  {
+    "id": "missing-data-empty-object",
+    "category": "missing",
+    "product": {},
+    "profile": {
+      "allergies": [
+        "peanut"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Empty product record must fail-closed"
+  },
+  {
+    "id": "missing-data-no-ingredients-with-allergy",
+    "category": "missing",
+    "product": {
+      "name": "Mystery Baked Good",
+      "barcode": "8901234567890",
+      "ingredients": []
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "No ingredient list present when user has declared allergy"
+  },
+  {
+    "id": "missing-data-unavailable-phrase",
+    "category": "missing",
+    "product": {
+      "name": "Imported Snack Box",
+      "ingredients": [
+        "ingredients unavailable at this time"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Explicit ingredients unavailable phrase"
+  },
+  {
+    "id": "ocr-failed-status-flag",
+    "category": "ocr",
+    "product": {
+      "name": "Cereal Package",
+      "ocrStatus": "failed",
+      "ingredients": []
+    },
+    "profile": {
+      "allergies": [
+        "wheat"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "ocrStatus failed must yield CANNOT_VERIFY"
+  },
+  {
+    "id": "ocr-low-confidence",
+    "category": "ocr",
+    "product": {
+      "name": "Faded Label Sauce",
+      "extractionConfidence": 0.25,
+      "ingredients": [
+        "w?ter",
+        "s?lt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Extraction confidence below 0.4 threshold"
+  },
+  {
+    "id": "ocr-blurry-image-tag",
+    "category": "ocr",
+    "product": {
+      "name": "Photo Scan",
+      "description": "blurry label image captured in low light",
+      "ingredients": []
+    },
+    "profile": {
+      "allergies": [
+        "egg"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Blurry label text tag"
+  },
+  {
+    "id": "ocr-unreadable-pattern",
+    "category": "ocr",
+    "product": {
+      "name": "Damaged Packaging",
+      "ingredients": [
+        "*** unreadable ***"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanut"
+      ]
+    },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Unreadable ingredient token"
+  },
+  {
+    "id": "indian-dairy-paneer",
+    "category": "indian",
+    "allergen": "dairy",
+    "product": {
+      "name": "Matar Paneer",
+      "ingredients": [
+        "green peas",
+        "fresh paneer",
+        "tomatoes",
+        "spices"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Paneer is Indian cottage cheese (dairy)"
+  },
+  {
+    "id": "indian-dairy-dahi",
+    "category": "indian",
+    "allergen": "dairy",
+    "product": {
+      "name": "Boondi Raita",
+      "ingredients": [
+        "dahi",
+        "chickpea pearls",
+        "cumin",
+        "black salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Dahi is Indian curd/yogurt (dairy)"
+  },
+  {
+    "id": "indian-dairy-khoa",
+    "category": "indian",
+    "allergen": "dairy",
+    "product": {
+      "name": "Gulab Jamun",
+      "ingredients": [
+        "khoa",
+        "maida",
+        "sugar syrup",
+        "rose water",
+        "ghee"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Khoa/khoya is dried evaporated milk solids"
+  },
+  {
+    "id": "indian-dairy-malai",
+    "category": "indian",
+    "allergen": "dairy",
+    "product": {
+      "name": "Malai Kofta",
+      "ingredients": [
+        "potatoes",
+        "paneer",
+        "cashews",
+        "malai",
+        "gravy"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Malai is clotted milk cream"
+  },
+  {
+    "id": "indian-peanuts-moongphali",
+    "category": "indian",
+    "allergen": "peanut",
+    "product": {
+      "name": "Chana Moongphali Chikki",
+      "ingredients": [
+        "jaggery",
+        "roasted moongphali",
+        "cardamom"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Moongphali is Hindi for peanuts"
+  },
+  {
+    "id": "indian-tree-nut-kaju",
+    "category": "indian",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Kaju Katli Sweet",
+      "ingredients": [
+        "kaju",
+        "sugar",
+        "silver leaf",
+        "water"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "cashews"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Kaju is Hindi for cashew nuts"
+  },
+  {
+    "id": "indian-tree-nut-badam",
+    "category": "indian",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Badam Milk Beverage",
+      "ingredients": [
+        "water",
+        "badam",
+        "sugar",
+        "saffron"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Badam is Hindi for almond"
+  },
+  {
+    "id": "indian-tree-nut-pista",
+    "category": "indian",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pista Kulfi",
+      "ingredients": [
+        "milk",
+        "sugar",
+        "pista",
+        "cardamom"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Pista is Hindi for pistachio"
+  },
+  {
+    "id": "indian-gluten-atta",
+    "category": "indian",
+    "allergen": "gluten",
+    "product": {
+      "name": "Chakki Fresh Atta",
+      "ingredients": [
+        "whole wheat atta"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "wheat"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Atta is stone-ground whole wheat flour"
+  },
+  {
+    "id": "indian-gluten-maida",
+    "category": "indian",
+    "allergen": "gluten",
+    "product": {
+      "name": "Naan Bread",
+      "ingredients": [
+        "refined maida",
+        "yeast",
+        "yogurt",
+        "butter"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Maida is refined wheat flour"
+  },
+  {
+    "id": "indian-gluten-suji",
+    "category": "indian",
+    "allergen": "gluten",
+    "product": {
+      "name": "Rava Upma Mix",
+      "ingredients": [
+        "wheat suji",
+        "oil",
+        "mustard seeds",
+        "curry leaves"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Suji / rava is granulated wheat semolina"
+  },
+  {
+    "id": "indian-mustard-sarson",
+    "category": "indian",
+    "allergen": "mustard",
+    "product": {
+      "name": "Sarson ka Saag",
+      "ingredients": [
+        "sarson leaves",
+        "spinach",
+        "cornmeal",
+        "ginger",
+        "ghee"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "mustard"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Sarson is mustard greens / mustard plant"
+  },
+  {
+    "id": "indian-sesame-til",
+    "category": "indian",
+    "allergen": "sesame",
+    "product": {
+      "name": "Til Gud Ladoo",
+      "ingredients": [
+        "white til",
+        "jaggery",
+        "ghee"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sesame"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Til is Hindi for sesame seeds"
+  },
+  {
+    "id": "ins-220-sulphites",
+    "category": "ins",
+    "allergen": "sulphites",
+    "product": {
+      "name": "Canned Fruit Cocktail",
+      "ingredients": [
+        "peaches",
+        "pears",
+        "water",
+        "sugar",
+        "preservative (ins 220)"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sulphites"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "INS 220 is sulfur dioxide / sulphites"
+  },
+  {
+    "id": "ins-223-metabisulphite",
+    "category": "ins",
+    "allergen": "sulphites",
+    "product": {
+      "name": "Potato Crisps",
+      "ingredients": [
+        "potatoes",
+        "palm oil",
+        "preservative (ins 223)",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "sulphites"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "INS 223 is sodium metabisulphite"
+  },
+  {
+    "id": "ins-102-tartrazine-clean",
+    "category": "ins",
+    "product": {
+      "name": "Carbonated Lemon Soda",
+      "ingredients": [
+        "carbonated water",
+        "sugar",
+        "citric acid",
+        "colour (ins 102)"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Tartrazine colour does not trigger peanut allergy"
+  },
+  {
+    "id": "ins-330-citric-acid-clean",
+    "category": "ins",
+    "product": {
+      "name": "Sparkling Water",
+      "ingredients": [
+        "purified water",
+        "citric acid (ins 330)",
+        "natural lemon flavor"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "INS 330 is standard citric acid"
+  },
+  {
+    "id": "ins-300-ascorbic-acid-clean",
+    "category": "ins",
+    "product": {
+      "name": "Apple Juice Blend",
+      "ingredients": [
+        "apple juice concentrate",
+        "water",
+        "antioxidant (ins 300)"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "INS 300 is vitamin C"
+  },
+  {
+    "id": "ocr-noise-milk-m1lk",
+    "category": "ocr-noise",
+    "allergen": "milk",
+    "product": {
+      "name": "Noisy Label Cookie",
+      "ingredients": [
+        "wh3at flour",
+        "m1lk solids",
+        "sugar",
+        "canola oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "m1lk OCR noise normalized to milk"
+  },
+  {
+    "id": "ocr-noise-whey-wh3y",
+    "category": "ocr-noise",
+    "allergen": "milk",
+    "product": {
+      "name": "OCR Workout Protein",
+      "ingredients": [
+        "wh3y isolate",
+        "natural cocoa",
+        "stevia"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "wh3y OCR noise normalized to whey"
+  },
+  {
+    "id": "ocr-noise-peanut-pe@nut",
+    "category": "ocr-noise",
+    "allergen": "peanut",
+    "product": {
+      "name": "Roasted Nut Bar",
+      "ingredients": [
+        "pe@nuts",
+        "honey",
+        "oats",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "pe@nuts normalized to peanuts"
+  },
+  {
+    "id": "ocr-noise-soy-$oy",
+    "category": "ocr-noise",
+    "allergen": "soy",
+    "product": {
+      "name": "Vegetable Dumpling",
+      "ingredients": [
+        "$oybean oil",
+        "cabbage",
+        "flour",
+        "ginger"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "$oybean normalized to soybean"
+  },
+  {
+    "id": "safe-benchmark-jasmine-rice",
+    "category": "safe-control",
+    "product": {
+      "name": "Organic Jasmine Rice",
+      "ingredients": [
+        "100% whole grain jasmine brown rice"
+      ],
+      "safetyInfo": {
+        "allergens": []
+      }
+    },
+    "profile": {
+      "allergies": [
+        "peanut",
+        "tree nuts",
+        "dairy",
+        "egg"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Plain jasmine rice has zero allergens"
+  },
+  {
+    "id": "safe-benchmark-rolled-oats",
+    "category": "safe-control",
+    "product": {
+      "name": "Pure Rolled Oats",
+      "ingredients": [
+        "100% whole grain rolled oats"
+      ],
+      "safetyInfo": {
+        "allergens": []
+      }
+    },
+    "profile": {
+      "allergies": [
+        "dairy",
+        "peanuts",
+        "shellfish"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure rolled oats for non-gluten allergic user"
+  },
+  {
+    "id": "safe-benchmark-olive-oil",
+    "category": "safe-control",
+    "product": {
+      "name": "Extra Virgin Olive Oil",
+      "ingredients": [
+        "cold pressed extra virgin olive oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk",
+        "egg",
+        "soy",
+        "peanut"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure olive oil is allergen free"
+  },
+  {
+    "id": "safe-benchmark-bottled-water",
+    "category": "safe-control",
+    "product": {
+      "name": "Natural Spring Water",
+      "ingredients": [
+        "natural spring water"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanut",
+        "tree nuts",
+        "dairy",
+        "egg",
+        "fish",
+        "shellfish",
+        "gluten",
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure spring water"
+  },
+  {
+    "id": "safe-benchmark-fresh-apple",
+    "category": "safe-control",
+    "product": {
+      "name": "Crisp Red Apples",
+      "ingredients": [
+        "fresh apples"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy",
+        "peanut"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Fresh fruit"
+  },
+  {
+    "id": "safe-benchmark-sea-salt",
+    "category": "safe-control",
+    "product": {
+      "name": "Pure Sea Salt",
+      "ingredients": [
+        "coarse sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy",
+        "peanut",
+        "gluten"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure sea salt"
+  },
+  {
+    "id": "safe-benchmark-black-pepper",
+    "category": "safe-control",
+    "product": {
+      "name": "Ground Black Pepper",
+      "ingredients": [
+        "pure ground black peppercorns"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts",
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure black pepper"
+  },
+  {
+    "id": "safe-benchmark-green-tea",
+    "category": "safe-control",
+    "product": {
+      "name": "Organic Green Tea",
+      "ingredients": [
+        "organic green tea leaves"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy",
+        "eggs",
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pure green tea"
+  },
+  {
+    "id": "allergen-tree-nut-variant-walnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Walnut Snack Bar",
+      "ingredients": [
+        "oats",
+        "walnuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Walnut"
+  },
+  {
+    "id": "allergen-tree-nut-variant-pecan",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pecan Snack Bar",
+      "ingredients": [
+        "oats",
+        "pecans",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Pecan"
+  },
+  {
+    "id": "allergen-tree-nut-variant-cashew",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Cashew Snack Bar",
+      "ingredients": [
+        "oats",
+        "cashew nuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Cashew"
+  },
+  {
+    "id": "allergen-tree-nut-variant-pistachio",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pistachio Snack Bar",
+      "ingredients": [
+        "oats",
+        "pistachios",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Pistachio"
+  },
+  {
+    "id": "allergen-tree-nut-variant-hazelnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Hazelnut Snack Bar",
+      "ingredients": [
+        "oats",
+        "roasted hazelnuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Hazelnut"
+  },
+  {
+    "id": "allergen-tree-nut-variant-macadamia",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Macadamia Snack Bar",
+      "ingredients": [
+        "oats",
+        "macadamia nuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Macadamia"
+  },
+  {
+    "id": "allergen-tree-nut-variant-brazilnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Brazil Nut Snack Bar",
+      "ingredients": [
+        "oats",
+        "brazil nuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Brazil Nut"
+  },
+  {
+    "id": "allergen-tree-nut-variant-pinenut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Pine Nut Snack Bar",
+      "ingredients": [
+        "oats",
+        "pine nuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Variant test for Pine Nut"
+  },
+  {
+    "id": "allergen-tree-nut-variant-chestnut",
+    "category": "allergen",
+    "allergen": "tree nuts",
+    "product": {
+      "name": "Water Chestnut Snack Bar",
+      "ingredients": [
+        "oats",
+        "water chestnuts",
+        "brown rice syrup",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Variant test for Chestnut"
+  },
+  {
+    "id": "allergen-fish-species-salmon",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Salmon",
+      "ingredients": [
+        "wild salmon",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Salmon"
+  },
+  {
+    "id": "allergen-fish-species-cod",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Cod",
+      "ingredients": [
+        "wild cod",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Cod"
+  },
+  {
+    "id": "allergen-fish-species-halibut",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Halibut",
+      "ingredients": [
+        "wild halibut",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Halibut"
+  },
+  {
+    "id": "allergen-fish-species-trout",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Trout",
+      "ingredients": [
+        "wild trout",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Trout"
+  },
+  {
+    "id": "allergen-fish-species-mackerel",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Mackerel",
+      "ingredients": [
+        "wild mackerel",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Mackerel"
+  },
+  {
+    "id": "allergen-fish-species-sardines",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Sardines",
+      "ingredients": [
+        "wild sardines",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Sardines"
+  },
+  {
+    "id": "allergen-fish-species-haddock",
+    "category": "allergen",
+    "allergen": "fish",
+    "product": {
+      "name": "Pan-Seared Haddock",
+      "ingredients": [
+        "wild haddock",
+        "olive oil",
+        "lemon",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "fish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Fish species match: Haddock"
+  },
+  {
+    "id": "allergen-shellfish-species-lobster",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Lobster Stew",
+      "ingredients": [
+        "lobster",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Lobster"
+  },
+  {
+    "id": "allergen-shellfish-species-prawn",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Prawn Stew",
+      "ingredients": [
+        "prawn",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Prawn"
+  },
+  {
+    "id": "allergen-shellfish-species-king-crab",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet King Crab Stew",
+      "ingredients": [
+        "king crab",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: King Crab"
+  },
+  {
+    "id": "allergen-shellfish-species-crawfish",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Crawfish Stew",
+      "ingredients": [
+        "crawfish",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Crawfish"
+  },
+  {
+    "id": "allergen-shellfish-species-scallops",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Scallops Stew",
+      "ingredients": [
+        "scallops",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Scallops"
+  },
+  {
+    "id": "allergen-shellfish-species-oysters",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Oysters Stew",
+      "ingredients": [
+        "oysters",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Oysters"
+  },
+  {
+    "id": "allergen-shellfish-species-mussels",
+    "category": "allergen",
+    "allergen": "shellfish",
+    "product": {
+      "name": "Gourmet Mussels Stew",
+      "ingredients": [
+        "mussels",
+        "fish broth",
+        "onions",
+        "garlic",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "shellfish"
+      ]
+    },
+    "expected": "UNSAFE",
+    "notes": "Shellfish species match: Mussels"
+  },
+  {
+    "id": "safe-pantry-benchmark-1",
+    "category": "safe-control",
+    "product": {
+      "name": "Basmati Rice",
+      "ingredients": [
+        "aged basmati rice"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts",
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Basmati Rice"
+  },
+  {
+    "id": "safe-pantry-benchmark-2",
+    "category": "safe-control",
+    "product": {
+      "name": "Brown Lentils",
+      "ingredients": [
+        "whole brown lentils"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts",
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Brown Lentils"
+  },
+  {
+    "id": "safe-pantry-benchmark-3",
+    "category": "safe-control",
+    "product": {
+      "name": "Chickpeas",
+      "ingredients": [
+        "chickpeas",
+        "water",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Chickpeas"
+  },
+  {
+    "id": "safe-pantry-benchmark-4",
+    "category": "safe-control",
+    "product": {
+      "name": "Kidney Beans",
+      "ingredients": [
+        "red kidney beans",
+        "water",
+        "salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "eggs"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Kidney Beans"
+  },
+  {
+    "id": "safe-pantry-benchmark-5",
+    "category": "safe-control",
+    "product": {
+      "name": "Black Beans",
+      "ingredients": [
+        "black beans",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Black Beans"
+  },
+  {
+    "id": "safe-pantry-benchmark-6",
+    "category": "safe-control",
+    "product": {
+      "name": "Quinoa",
+      "ingredients": [
+        "organic white quinoa"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "gluten"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Quinoa"
+  },
+  {
+    "id": "safe-pantry-benchmark-7",
+    "category": "safe-control",
+    "product": {
+      "name": "Chia Seeds",
+      "ingredients": [
+        "raw chia seeds"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Chia Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-8",
+    "category": "safe-control",
+    "product": {
+      "name": "Flax Seeds",
+      "ingredients": [
+        "ground golden flaxseed"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Flax Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-9",
+    "category": "safe-control",
+    "product": {
+      "name": "Pumpkin Seeds",
+      "ingredients": [
+        "pepitas pumpkin seeds",
+        "sea salt"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Pumpkin Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-10",
+    "category": "safe-control",
+    "product": {
+      "name": "Sunflower Seeds",
+      "ingredients": [
+        "roasted sunflower seeds"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Sunflower Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-11",
+    "category": "safe-control",
+    "product": {
+      "name": "Canola Oil",
+      "ingredients": [
+        "expeller pressed canola oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Canola Oil"
+  },
+  {
+    "id": "safe-pantry-benchmark-12",
+    "category": "safe-control",
+    "product": {
+      "name": "Coconut Oil",
+      "ingredients": [
+        "virgin coconut oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Coconut Oil"
+  },
+  {
+    "id": "safe-pantry-benchmark-13",
+    "category": "safe-control",
+    "product": {
+      "name": "Avocado Oil",
+      "ingredients": [
+        "pure avocado oil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Avocado Oil"
+  },
+  {
+    "id": "safe-pantry-benchmark-14",
+    "category": "safe-control",
+    "product": {
+      "name": "Balsamic Vinegar",
+      "ingredients": [
+        "grape must",
+        "wine vinegar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Balsamic Vinegar"
+  },
+  {
+    "id": "safe-pantry-benchmark-15",
+    "category": "safe-control",
+    "product": {
+      "name": "Apple Cider Vinegar",
+      "ingredients": [
+        "raw unfiltered apple cider vinegar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Apple Cider Vinegar"
+  },
+  {
+    "id": "safe-pantry-benchmark-16",
+    "category": "safe-control",
+    "product": {
+      "name": "Maple Syrup",
+      "ingredients": [
+        "100% pure grade A maple syrup"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Maple Syrup"
+  },
+  {
+    "id": "safe-pantry-benchmark-17",
+    "category": "safe-control",
+    "product": {
+      "name": "Cane Sugar",
+      "ingredients": [
+        "pure cane sugar"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cane Sugar"
+  },
+  {
+    "id": "safe-pantry-benchmark-18",
+    "category": "safe-control",
+    "product": {
+      "name": "Cocoa Powder",
+      "ingredients": [
+        "unsweetened 100% cocoa powder"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cocoa Powder"
+  },
+  {
+    "id": "safe-pantry-benchmark-19",
+    "category": "safe-control",
+    "product": {
+      "name": "Ground Cinnamon",
+      "ingredients": [
+        "pure ceylon cinnamon"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Ground Cinnamon"
+  },
+  {
+    "id": "safe-pantry-benchmark-20",
+    "category": "safe-control",
+    "product": {
+      "name": "Turmeric Powder",
+      "ingredients": [
+        "ground turmeric root"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "eggs"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Turmeric Powder"
+  },
+  {
+    "id": "safe-pantry-benchmark-21",
+    "category": "safe-control",
+    "product": {
+      "name": "Cumin Seeds",
+      "ingredients": [
+        "whole cumin seeds"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cumin Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-22",
+    "category": "safe-control",
+    "product": {
+      "name": "Coriander Seeds",
+      "ingredients": [
+        "whole coriander seeds"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Coriander Seeds"
+  },
+  {
+    "id": "safe-pantry-benchmark-23",
+    "category": "safe-control",
+    "product": {
+      "name": "Cardamom Pods",
+      "ingredients": [
+        "green cardamom pods"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cardamom Pods"
+  },
+  {
+    "id": "safe-pantry-benchmark-24",
+    "category": "safe-control",
+    "product": {
+      "name": "Cloves",
+      "ingredients": [
+        "whole cloves"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cloves"
+  },
+  {
+    "id": "safe-pantry-benchmark-25",
+    "category": "safe-control",
+    "product": {
+      "name": "Nutmeg",
+      "ingredients": [
+        "ground nutmeg"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Nutmeg"
+  },
+  {
+    "id": "safe-pantry-benchmark-26",
+    "category": "safe-control",
+    "product": {
+      "name": "Bay Leaves",
+      "ingredients": [
+        "dried bay leaves"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Bay Leaves"
+  },
+  {
+    "id": "safe-pantry-benchmark-27",
+    "category": "safe-control",
+    "product": {
+      "name": "Rosemary",
+      "ingredients": [
+        "dried rosemary leaves"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Rosemary"
+  },
+  {
+    "id": "safe-pantry-benchmark-28",
+    "category": "safe-control",
+    "product": {
+      "name": "Thyme",
+      "ingredients": [
+        "dried thyme"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Thyme"
+  },
+  {
+    "id": "safe-pantry-benchmark-29",
+    "category": "safe-control",
+    "product": {
+      "name": "Oregano",
+      "ingredients": [
+        "dried oregano"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "eggs"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Oregano"
+  },
+  {
+    "id": "safe-pantry-benchmark-30",
+    "category": "safe-control",
+    "product": {
+      "name": "Basil",
+      "ingredients": [
+        "dried sweet basil"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Basil"
+  },
+  {
+    "id": "safe-pantry-benchmark-31",
+    "category": "safe-control",
+    "product": {
+      "name": "Ginger Root",
+      "ingredients": [
+        "fresh ginger root"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Ginger Root"
+  },
+  {
+    "id": "safe-pantry-benchmark-32",
+    "category": "safe-control",
+    "product": {
+      "name": "Garlic Cloves",
+      "ingredients": [
+        "fresh peeled garlic"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Garlic Cloves"
+  },
+  {
+    "id": "safe-pantry-benchmark-33",
+    "category": "safe-control",
+    "product": {
+      "name": "Yellow Onion",
+      "ingredients": [
+        "fresh yellow onions"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Yellow Onion"
+  },
+  {
+    "id": "safe-pantry-benchmark-34",
+    "category": "safe-control",
+    "product": {
+      "name": "Red Tomatoes",
+      "ingredients": [
+        "fresh vine ripened tomatoes"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Red Tomatoes"
+  },
+  {
+    "id": "safe-pantry-benchmark-35",
+    "category": "safe-control",
+    "product": {
+      "name": "Carrots",
+      "ingredients": [
+        "organic baby carrots"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Carrots"
+  },
+  {
+    "id": "safe-pantry-benchmark-36",
+    "category": "safe-control",
+    "product": {
+      "name": "Cucumbers",
+      "ingredients": [
+        "english cucumbers"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cucumbers"
+  },
+  {
+    "id": "safe-pantry-benchmark-37",
+    "category": "safe-control",
+    "product": {
+      "name": "Zucchini",
+      "ingredients": [
+        "fresh green zucchini"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Zucchini"
+  },
+  {
+    "id": "safe-pantry-benchmark-38",
+    "category": "safe-control",
+    "product": {
+      "name": "Bell Peppers",
+      "ingredients": [
+        "sweet red bell peppers"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "eggs"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Bell Peppers"
+  },
+  {
+    "id": "safe-pantry-benchmark-39",
+    "category": "safe-control",
+    "product": {
+      "name": "Cauliflower",
+      "ingredients": [
+        "fresh cauliflower florets"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Cauliflower"
+  },
+  {
+    "id": "safe-pantry-benchmark-40",
+    "category": "safe-control",
+    "product": {
+      "name": "Green Beans",
+      "ingredients": [
+        "fresh stringless green beans"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Green Beans"
+  },
+  {
+    "id": "safe-pantry-benchmark-41",
+    "category": "safe-control",
+    "product": {
+      "name": "Sweet Potatoes",
+      "ingredients": [
+        "fresh sweet potatoes"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Sweet Potatoes"
+  },
+  {
+    "id": "safe-pantry-benchmark-42",
+    "category": "safe-control",
+    "product": {
+      "name": "Russet Potatoes",
+      "ingredients": [
+        "fresh russet potatoes"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Russet Potatoes"
+  },
+  {
+    "id": "safe-pantry-benchmark-43",
+    "category": "safe-control",
+    "product": {
+      "name": "Bananas",
+      "ingredients": [
+        "fresh yellow bananas"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "milk"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Bananas"
+  },
+  {
+    "id": "safe-pantry-benchmark-44",
+    "category": "safe-control",
+    "product": {
+      "name": "Strawberries",
+      "ingredients": [
+        "fresh organic strawberries"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Strawberries"
+  },
+  {
+    "id": "safe-pantry-benchmark-45",
+    "category": "safe-control",
+    "product": {
+      "name": "Blueberries",
+      "ingredients": [
+        "fresh wild blueberries"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Blueberries"
+  },
+  {
+    "id": "safe-pantry-benchmark-46",
+    "category": "safe-control",
+    "product": {
+      "name": "Raspberries",
+      "ingredients": [
+        "fresh red raspberries"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Raspberries"
+  },
+  {
+    "id": "safe-pantry-benchmark-47",
+    "category": "safe-control",
+    "product": {
+      "name": "Oranges",
+      "ingredients": [
+        "fresh valencia oranges"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "soy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Oranges"
+  },
+  {
+    "id": "safe-pantry-benchmark-48",
+    "category": "safe-control",
+    "product": {
+      "name": "Lemons",
+      "ingredients": [
+        "fresh yellow lemons"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "peanuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Lemons"
+  },
+  {
+    "id": "safe-pantry-benchmark-49",
+    "category": "safe-control",
+    "product": {
+      "name": "Limes",
+      "ingredients": [
+        "fresh green limes"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "dairy"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Limes"
+  },
+  {
+    "id": "safe-pantry-benchmark-50",
+    "category": "safe-control",
+    "product": {
+      "name": "Pineapple",
+      "ingredients": [
+        "fresh golden pineapple"
+      ]
+    },
+    "profile": {
+      "allergies": [
+        "tree nuts"
+      ]
+    },
+    "expected": "SAFE",
+    "notes": "Pantry benchmark item Pineapple"
   }
 ]

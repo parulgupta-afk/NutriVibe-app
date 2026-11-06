@@ -57,10 +57,10 @@ function normalizeVerdict(level) {
  * @returns {Object} Canonical safety evaluation report.
  */
 function computeSafetyVerdict(product, user) {
-  const preferences = user?.preferences || {};
-  const userAllergies = preferences.allergies || [];
-  const userRestrictions = preferences.dietaryRestrictions || [];
-  const medications = preferences.medications || [];
+  const preferences = user?.preferences || user || {};
+  const userAllergies = preferences.allergies || user?.allergies || [];
+  const userRestrictions = preferences.dietaryRestrictions || user?.dietaryRestrictions || [];
+  const medications = preferences.medications || user?.medications || [];
 
   const state = {
     level: 'Safe',
@@ -83,9 +83,38 @@ function computeSafetyVerdict(product, user) {
   const nutrition = buildNutritionSnapshot(product || {});
   const processing = { level: product?.processingLevel || 'Unknown' };
 
+  const reasons = state.factors.map((f) => f.impact || f.name);
+  const ruleVersion = '2.2.0';
+
+  const missingInputInformation = [];
+  const hasIngredients = Boolean(
+    product &&
+    ((Array.isArray(product.ingredients) && product.ingredients.length > 0) ||
+      (typeof product.ingredients === 'string' && product.ingredients.trim().length > 0))
+  );
+  const hasAllergens = Boolean(
+    product &&
+    ((Array.isArray(product.safetyInfo?.allergens) && product.safetyInfo.allergens.length > 0) ||
+      (Array.isArray(product.allergens) && product.allergens.length > 0))
+  );
+
+  if (!hasIngredients) missingInputInformation.push('ingredients');
+  if (!hasAllergens) missingInputInformation.push('allergens');
+
+  const insufficient = hasInsufficientData(product, userAllergies);
+  const dataCompleteness = insufficient
+    ? 'INSUFFICIENT'
+    : missingInputInformation.length > 0
+      ? 'PARTIAL'
+      : 'COMPLETE';
+
   return {
     // Canonical 4-verdict system
     verdict: canonicalVerdict,
+    reasons,
+    ruleVersion,
+    dataCompleteness,
+    missingInputInformation,
     // Backward-compatible top-level fields
     level: state.level,
     score: state.score,

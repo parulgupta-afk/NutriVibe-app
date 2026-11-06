@@ -3,6 +3,7 @@
  * Deterministic — never uses AI.
  */
 const {
+  ALLERGEN_KEYWORDS,
   normalizeAllergy,
   expandAllergiesForMatching,
   detectAllergensInText,
@@ -10,21 +11,103 @@ const {
 } = require('../../data/allergenKeywords');
 
 /**
- * Builds normalized lowercase text representation of product fields for scanning.
- * @param {Object} product Product object under evaluation.
- * @returns {string} Flattened text representation.
+ * Safely extracts ingredient array from string, array, or nested fields.
  */
-function productTextBlob(product) {
+function extractIngredientList(product) {
+  if (!product) return [];
+  if (Array.isArray(product.ingredients)) {
+    return product.ingredients.flatMap((i) =>
+      typeof i === 'string' ? i.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean) : []
+    );
+  }
+  if (typeof product.ingredients === 'string') {
+    return product.ingredients.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+/**
+ * Safely extracts allergens list from structured safetyInfo or top-level allergens.
+ */
+function extractAllergenList(product) {
+  if (!product) return [];
+  const raw = [
+    ...(Array.isArray(product.safetyInfo?.allergens) ? product.safetyInfo.allergens : []),
+    ...(Array.isArray(product.allergens) ? product.allergens : typeof product.allergens === 'string' ? [product.allergens] : [])
+  ];
+  return raw.flatMap((a) =>
+    typeof a === 'string' ? a.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean) : []
+  );
+}
+
+/**
+ * Safely extracts warnings / may-contain declarations.
+ */
+function extractWarningList(product) {
+  if (!product) return [];
+  const raw = [
+    ...(Array.isArray(product.safetyInfo?.warnings) ? product.safetyInfo.warnings : typeof product.safetyInfo?.warnings === 'string' ? [product.safetyInfo.warnings] : []),
+    ...(Array.isArray(product.warnings) ? product.warnings : typeof product.warnings === 'string' ? [product.warnings] : []),
+    ...(product.mayContain ? (Array.isArray(product.mayContain) ? product.mayContain : [product.mayContain]) : [])
+  ];
+  return raw.flatMap((w) =>
+    typeof w === 'string' ? [w.trim()] : []
+  ).filter(Boolean);
+}
+
+/**
+ * Normalizes common OCR digit/symbol substitutions into characters.
+ * Emits original text along with candidate digit substitutions (e.g. 1 -> i, 1 -> l).
+ */
+function normalizeOcrSubstitutions(text) {
+  if (!text) return '';
+  const s = text.toLowerCase();
+  const common = s
+    .replace(/0/g, 'o')
+    .replace(/3/g, 'e')
+    .replace(/@/g, 'a')
+    .replace(/\$/g, 's');
+  const withI = common.replace(/[1!]/g, 'i').replace(/\|/g, 'l');
+  const withL = common.replace(/[1!|]/g, 'l');
+  return `${s} ${withI} ${withL}`;
+}
+
+/**
+ * Builds normalized lowercase text representation of ingredients & allergens for direct presence checks.
+ * Does NOT include facility/cross-contamination warnings so warnings don't falsely trigger direct UNSAFE.
+ */
+function ingredientTextBlob(product) {
   if (!product || typeof product !== 'object') return '';
+  const ingredients = extractIngredientList(product);
+  const allergens = extractAllergenList(product);
+
   return [
-    ...(product.ingredients || []),
-    ...(product.safetyInfo?.allergens || []),
+    ...ingredients,
+    ...allergens,
     product.name || '',
     product.description || '',
-    product.brand || ''
+    product.brand || '',
+    typeof product.ingredients === 'string' ? product.ingredients : ''
   ]
     .join(' ')
     .toLowerCase();
+}
+
+/**
+ * Builds normalized lowercase text representation of warnings/may-contain lines.
+ */
+function warningsTextBlob(product) {
+  if (!product || typeof product !== 'object') return '';
+  const warnings = extractWarningList(product);
+  return warnings.join(' ').toLowerCase();
+}
+
+/**
+ * Combined product text blob for generic search & OCR checks.
+ */
+function productTextBlob(product) {
+  if (!product || typeof product !== 'object') return '';
+  return [ingredientTextBlob(product), warningsTextBlob(product)].join(' ').trim();
 }
 
 /**
@@ -36,8 +119,10 @@ function isMissingOrEmptyProduct(product) {
   if (keys.length === 0) return true;
   const hasName = Boolean(product.name && String(product.name).trim());
   const hasBarcode = Boolean(product.barcode && String(product.barcode).trim());
-  const hasIngredients = Array.isArray(product.ingredients) && product.ingredients.length > 0;
-  const hasAllergens = Array.isArray(product.safetyInfo?.allergens) && product.safetyInfo.allergens.length > 0;
+  const ingredients = extractIngredientList(product);
+  const allergens = extractAllergenList(product);
+  const hasIngredients = ingredients.length > 0;
+  const hasAllergens = allergens.length > 0;
   return !hasName && !hasBarcode && !hasIngredients && !hasAllergens;
 }
 
@@ -58,7 +143,11 @@ function isUnreadableOrFailedOcr(product) {
     '*** unreadable ***',
     'cannot read',
     'blurry image',
-    'blurry label'
+    'blurry label',
+    'blurry photo',
+    'illegible',
+    'unreadable ocr',
+    'ocr failed'
   ];
 
   const blob = productTextBlob(product);
@@ -71,7 +160,7 @@ function isUnreadableOrFailedOcr(product) {
 function hasContradictoryInformation(product) {
   if (!product) return null;
   const blob = productTextBlob(product);
-  const rawIngredients = (product.ingredients || []).map((i) => String(i).toLowerCase());
+  const rawIngredients = extractIngredientList(product).map((i) => String(i).toLowerCase());
 
   const freeClaims = [
     { claim: 'dairy-free', conflictTerms: ['milk', 'whey', 'casein', 'cheese', 'butter', 'cream', 'dairy'], allergy: 'Dairy' },
@@ -120,13 +209,17 @@ function findMatchingAllergens(product, userAllergies = []) {
   }
   const uniqueUser = [...new Set(canonicalUser.map((x) => x.trim()).filter(Boolean))];
 
-  const productAllergens = (product.safetyInfo?.allergens || []).map((a) =>
+  const productAllergens = extractAllergenList(product).map((a) =>
     String(a).toLowerCase()
   );
-  const blob = productTextBlob(product);
+  const blob = ingredientTextBlob(product);
+  const ocrNormalizedBlob = normalizeOcrSubstitutions(blob);
 
   // Detect from free text with exclude-phrase awareness (e.g. plant milks).
-  const detectedFromText = detectAllergensInText(blob).map((a) => a.toLowerCase());
+  const detectedFromText = [
+    ...detectAllergensInText(blob),
+    ...detectAllergensInText(ocrNormalizedBlob)
+  ].map((a) => a.toLowerCase());
 
   const found = [];
 
@@ -149,7 +242,28 @@ function findMatchingAllergens(product, userAllergies = []) {
       (d) => d === aLower || d.includes(aLower) || aLower.includes(d)
     );
 
-    if (structuredHit || textHit) {
+    // 3) Hidden allergen keywords directly in blob or OCR-normalized blob
+    const matchingRule = ALLERGEN_KEYWORDS.find(
+      (r) =>
+        r.name.toLowerCase() === aLower ||
+        normalizeAllergy(r.name)
+          .map((x) => x.toLowerCase())
+          .includes(aLower)
+    );
+    let targetBlob = blob;
+    let targetOcrBlob = ocrNormalizedBlob;
+    if (matchingRule && matchingRule.excludePhrases) {
+      for (const phrase of matchingRule.excludePhrases) {
+        if (targetBlob.includes(phrase)) targetBlob = targetBlob.split(phrase).join(' ');
+        if (targetOcrBlob.includes(phrase)) targetOcrBlob = targetOcrBlob.split(phrase).join(' ');
+      }
+    }
+
+    const hiddenHit = expanded.some((kw) => {
+      return containsKeyword(targetBlob, kw) || containsKeyword(targetOcrBlob, kw);
+    });
+
+    if (structuredHit || textHit || hiddenHit) {
       found.push(allergy);
     }
   }
@@ -163,26 +277,29 @@ function findMatchingAllergens(product, userAllergies = []) {
  */
 function hasRelevantCrossContamination(product, userAllergies = []) {
   if (!product) return false;
-  const warnings = product.safetyInfo?.warnings || [];
-  const crossWarnings = warnings.filter((w) => {
-    const wl = String(w).toLowerCase();
-    return (
-      wl.includes('may contain') ||
-      wl.includes('traces') ||
-      wl.includes('shared facility') ||
-      wl.includes('produced in a facility')
-    );
-  });
+  const warnBlob = warningsTextBlob(product);
 
-  if (crossWarnings.length === 0) return false;
+  const crossPhrases = [
+    'may contain',
+    'traces of',
+    'traces',
+    'shared facility',
+    'produced in a facility',
+    'manufactured in a facility',
+    'shared equipment',
+    'processed on equipment',
+    'facility that processes'
+  ];
+
+  const hasCrossText = crossPhrases.some((cp) => warnBlob.includes(cp));
+
+  if (!hasCrossText) return false;
   if (!userAllergies.length) {
     return true;
   }
 
   const expanded = expandAllergiesForMatching(userAllergies);
-  const warningText = crossWarnings.join(' ').toLowerCase();
-
-  return expanded.some((term) => warningText.includes(term));
+  return expanded.some((term) => warnBlob.includes(term));
 }
 
 /**
@@ -193,9 +310,8 @@ function hasInsufficientData(product, userAllergies = []) {
   if (isMissingOrEmptyProduct(product)) return true;
   if (isUnreadableOrFailedOcr(product)) return true;
 
-  const allergens = product.safetyInfo?.allergens || [];
-  const ingredients = product.ingredients || [];
-  const risk = product.safetyInfo?.riskLevel || 'Unknown';
+  const allergens = extractAllergenList(product);
+  const ingredients = extractIngredientList(product);
 
   const emptyIngredients = !ingredients || ingredients.length === 0;
   const emptyAllergens =
@@ -210,6 +326,15 @@ function hasInsufficientData(product, userAllergies = []) {
     if (userAllergies && userAllergies.length > 0) return true;
     // If both ingredients and allergens are empty -> cannot verify
     if (emptyAllergens) return true;
+  }
+
+  const blob = productTextBlob(product);
+  if (
+    blob.includes('ingredients unavailable') ||
+    blob.includes('missing ingredient information') ||
+    blob.includes('no ingredient list available')
+  ) {
+    return true;
   }
 
   return false;

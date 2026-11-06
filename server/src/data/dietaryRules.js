@@ -87,6 +87,18 @@ const DIETARY_RULES = [
     message: 'May contain ingredients that conflict with a halal diet'
   },
   {
+    matchNames: ['jain', 'jain vegetarian'],
+    preferredCerts: ['jain', 'jain vegetarian'],
+    forbiddenKeywords: [
+      'onion', 'garlic', 'potato', 'potatoes', 'carrot', 'carrots', 'radish',
+      'ginger', 'beetroot', 'turnip', 'meat', 'chicken', 'beef', 'pork',
+      'fish', 'egg', 'eggs', 'gelatin', 'honey', 'pyaz', 'lehsun', 'aloo'
+    ],
+    allowPhrases: ['jain'],
+    severity: 45,
+    message: 'May contain root vegetables or non-vegetarian ingredients that conflict with a Jain diet (e.g. onion, garlic, potato, meat)'
+  },
+  {
     matchNames: ['kosher'],
     preferredCerts: ['kosher'],
     forbiddenKeywords: [],
@@ -175,7 +187,9 @@ function checkDietaryRestrictions(userRestrictions = [], product) {
       if (rule.allowPhrases && rule.allowPhrases.some((p) => p.includes(kw) && productText.includes(p))) {
         return false;
       }
-      return productText.includes(kw);
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:s|es)?(?:[^a-z0-9]|$)`, 'i');
+      return re.test(productText);
     });
 
     if (hits.length > 0) {
