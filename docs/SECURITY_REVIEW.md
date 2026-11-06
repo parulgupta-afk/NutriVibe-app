@@ -40,7 +40,7 @@ NutriVibe processes personal health, dietary, and allergy data. The security pos
 - **Password Reset:** Generates cryptographically secure random tokens (`crypto.randomBytes(32)`), hashes them with SHA-256 before persisting to MongoDB, and sets a 1-hour expiration timestamp.
 
 ### 2.4 Authorization & Fail-Closed Access Control
-- **Profile Resolution:** `resolveEffectiveUser()` validates dependent profile access against `user.dependents`. If `profileId` is invalid, not an ObjectId, or belongs to another user account, the system throws an HTTP 404/403. Silent fallback to the account owner is blocked.
+- **Profile Resolution:** `resolveEffectiveUser()` validates dependent profile access against `user.dependents`. If `profileId` is invalid, not an ObjectId, or belongs to another user account, the system throws an HTTP 404/403. Silent fallback to the account owner is blocked to prevent false "Safe" verdicts when a dependent has critical allergies.
 - **Resource Ownership:** Meal logs, hydration logs, favorites, and reaction records enforce user ownership filters on every database query (`{ _id: req.params.id, userId: req.user._id }`).
 
 ### 2.5 Input Validation & Injection Defense
