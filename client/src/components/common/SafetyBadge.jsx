@@ -57,6 +57,14 @@ const STYLES = {
   }
 };
 
+/**
+ * Accessible safety badge displaying status icon, verdict label, and optional score.
+ * @param {Object} props
+ * @param {string} [props.level='Unknown'] Safety verdict level.
+ * @param {number} [props.score] Numerical score 0-100.
+ * @param {'sm'|'md'|'lg'} [props.size='md'] Badge sizing.
+ * @param {string} [props.className] Additional CSS classes.
+ */
 const SafetyBadge = ({ level = 'Unknown', score, size = 'md', className = '' }) => {
   const key = STYLES[level] ? level : 'Unknown';
   const style = STYLES[key];
