@@ -26,10 +26,10 @@ npm install
 npm run dev
 ```
 
-- Web (Client v1): http://localhost:5173  
-- Web (Client v2): http://localhost:5174  
-- API: http://localhost:5000/api/health  
-- OpenAPI: http://localhost:5000/api/docs  
+- Web (Client v1): <http://localhost:5173>  
+- Web (Client v2): <http://localhost:5174>  
+- API: <http://localhost:5000/api/health>  
+- OpenAPI: <http://localhost:5000/api/docs>  
 
 ## Tests
 
@@ -49,7 +49,7 @@ docker compose up --build
 ## Env cheat sheet
 
 | Variable | Where | Required |
-|----------|--------|----------|
+| ---------- | -------- | ---------- |
 | MONGO_URI | server | Yes |
 | JWT_SECRET | server | Yes |
 | CLIENT_URL | server (prod) | Yes in prod |
@@ -61,9 +61,8 @@ docker compose up --build
 
 ## Project layout
 
-```
-client/     Classic React + Vite UI (:5173)
-client-v2/  NutriVibe 2.0 UI (:5174)
+```text
+client/     Unified React + Vite UI (:5173)
 server/     Express API (:5000)
 docs/       Architecture, API, deploy notes
 ```

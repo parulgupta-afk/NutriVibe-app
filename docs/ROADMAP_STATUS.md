@@ -1,7 +1,7 @@
 # NutriVibe 2.0 — Roadmap status (complete core)
 
 | Phase | Status |
-|-------|--------|
+| ------- | -------- |
 | 0 Foundation | Done |
 | 1 Safety engine | Done (existing + Hindi synonyms) |
 | 2 Meal tracker | Done |
@@ -14,6 +14,7 @@
 | 9 Client v2 | Done (NutriVibe 2.0 UI side-by-side with Framer Motion, Recharts, mock fallback) |
 
 ## New endpoints this completion pass
+
 - POST `/api/ai/meals/analyze-image`
 - POST `/api/submissions` · GET `/api/submissions/mine` · admin review
 - GET `/api/recalls/matches`
@@ -21,4 +22,5 @@
 - PWA: `manifest.json` + `sw.js`
 
 ## Invariant
+
 Gemini never decides safety or invents authoritative nutrition numbers.

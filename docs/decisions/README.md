@@ -3,7 +3,7 @@
 Short records of important choices.
 
 | ID | Decision |
-|----|----------|
+| ---- | ---------- |
 | 001 | Deterministic safety engine; Gemini only explains |
 | 002 | Redis optional — app must run without it |
 | 003 | No BullMQ until real async load justifies workers |

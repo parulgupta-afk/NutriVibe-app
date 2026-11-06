@@ -5,7 +5,7 @@
 ## Collections (models)
 
 | Model | Role |
-|-------|------|
+| ------- | ------ |
 | User | Auth, preferences, savedProducts |
 | Dependent | Family profiles under a user |
 | Product | Barcode-unique catalog + OFF/OCR cache |
@@ -27,7 +27,7 @@
 
 ## Relationships
 
-```
+```text
 User 1──* Dependent
 User 1──* Tracking
 Product 1──* Tracking

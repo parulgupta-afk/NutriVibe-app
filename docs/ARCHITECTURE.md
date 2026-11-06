@@ -65,6 +65,7 @@
 ## 2. Component Architecture
 
 ### 2.1 Single Unified Frontend (`client/`)
+
 - **Framework & Tooling:** React 18, Vite 6.4.5, Tailwind CSS, React Router v7.
 - **Entry Point:** [client/src/main.jsx](file:///c:/Users/parul/NutriVibe-app/client/src/main.jsx) mounts `AuthProvider` and `ProfileProvider` wrapping [client/src/App.jsx](file:///c:/Users/parul/NutriVibe-app/client/src/App.jsx).
 - **Layout:** [client/src/components/layout/AppShell.jsx](file:///c:/Users/parul/NutriVibe-app/client/src/components/layout/AppShell.jsx) provides a unified desktop sidebar navigation rail and mobile bottom bar navigation.
@@ -86,6 +87,7 @@
   - `Favorites`: Saved verified food products.
 
 ### 2.2 Backend API Services (`server/`)
+
 - **Runtime:** Node.js 20+ with Express 5.
 - **Data Persistence:** MongoDB via Mongoose 9 schemas with compound indexes.
 - **Fail-Closed Profile Resolver:**
@@ -127,7 +129,7 @@
 ## 4. Key Module Directory
 
 | Purpose | Source File |
-|---|---|
+| --- | --- |
 | Safety Engine Orchestrator | `server/src/services/safetyEngine.js` |
 | Allergen Matching Rules | `server/src/safety/rules/allergenRule.js` |
 | Dietary Restriction Rules | `server/src/safety/rules/dietRule.js` |
