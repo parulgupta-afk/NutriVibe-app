@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Safety report schema capturing historical product risk assessments and health factors.
+ */
 const safetyReportSchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
