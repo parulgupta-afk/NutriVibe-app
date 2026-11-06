@@ -4,7 +4,7 @@ Place the contents of this zip in the root of the NutriVibe-app repository befor
 
 ## Structure
 
-```
+```text
 ui-prototype/          ← NutriVibe 2.0 UI (React + Vite + Tailwind)
                         Use this for Task 11: merge into real client/ one screen at a time.
 
@@ -15,6 +15,7 @@ nutrivibe-patches/     ← 6 sequential security patches (already applied upstre
 ## How the agent should use these
 
 ### Task 11 (Frontend)
+
 - Source of the new UI is `ui-prototype/`
 - Merge screens one at a time into the existing `client/`
 - Do **not** wholesale replace working pages
@@ -22,7 +23,9 @@ nutrivibe-patches/     ← 6 sequential security patches (already applied upstre
 - Keep parity tests
 
 ### Patches
+
 These patches were previously generated. Before applying any:
+
 1. Check whether the change already exists on `origin/main`
 2. Only apply what is still missing
 3. Re-run the relevant tests after each one

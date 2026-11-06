@@ -1,7 +1,8 @@
 # Exact terminal + git commands for Phases 0–3
 
 ## Prerequisites
-- Local clone of https://github.com/parulgupta-afk/NutriVibe-app
+
+- Local clone of [NutriVibe-app repository](https://github.com/parulgupta-afk/NutriVibe-app)
 - Node 18+
 - This zip extracted (or its folders copied into the repo root)
 

@@ -58,7 +58,7 @@ Then replace the mock imports in a page with calls to `api.*` (for example with
 
 ## Structure
 
-```
+```text
 src/
   api/          Axios client and endpoint helpers
   components/   ui.jsx (Card, Chip, Button, Bar, Segmented, Toggle), Ring, VerdictRing, Layout
