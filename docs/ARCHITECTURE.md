@@ -96,6 +96,7 @@
     - `dietRule.js`: Validates restrictions (vegan, vegetarian, gluten-free, halal, kosher, etc.).
     - `medicationRule.js`: Evaluates known food-drug contraindications (grapefruit, MAOIs, potassium-sparing diuretics, vitamin K).
     - `processingRule.js`: Evaluates NOVA processing grades and additive thresholds.
+    - `verdictSynthesis`: Synthesizes findings into canonical `SAFE`, `CAUTION`, `UNSAFE`, or `CANNOT_VERIFY`.
 - **External API Clients:**
   - `openFoodFactsService.js`: Queries Open Food Facts with local caching and self-healing image recovery.
   - `geminiService.js`: Delivers plain-language ingredient explanations using prompt guardrails.
