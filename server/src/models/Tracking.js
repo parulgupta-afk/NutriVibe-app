@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * User scan activity and interaction tracking schema for audit logs and daily summaries.
+ */
 const trackingSchema = new mongoose.Schema(
   {
     user: {
