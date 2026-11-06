@@ -24,6 +24,7 @@ During this final engineering and release verification phase, the repository was
 | **Frontend Architecture** | Fragmented between `client/` and `client-v2/` | Single unified modern SPA in `client/`; `client-v2/` completely deleted from git and filesystem |
 | **Safety Verdict System** | Ad-hoc strings (`Safe`, `Caution`, `Unsafe`, `Unknown`) with potential default to `Safe` on thin data | Certified 4-verdict deterministic canonical engine (`SAFE`, `CAUTION`, `UNSAFE`, `CANNOT_VERIFY`) with fail-closed rules |
 | **Fail-Safe Incomplete Data** | Incomplete data could potentially default to Safe | Fail-safe enforced: empty ingredients with declared allergies or unreadable OCR strictly yields `CANNOT_VERIFY` |
+| **Uncertainty Modes** | Missing ingredients could yield ambiguous evaluations | Formally mapped and verified across 14 discrete failure modes |
 | **AI Role & Boundary** | Risk of Gemini output bleeding into safety decisions | Complete isolation: Gemini only generates plain-language explanations; never decides, overrides, or alters safety verdicts |
 | **Dependent Security** | Basic profile selection | IDOR-safe fail-closed resolution: missing, unowned, or malformed profile IDs return 404 without leaking user profile data |
 | **Automated Testing** | Standard unit tests | 128 backend tests (41 suites) + 79 frontend tests (19 suites), including dedicated 14-mode canonical safety verification |
