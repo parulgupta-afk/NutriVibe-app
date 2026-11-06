@@ -37,6 +37,7 @@ Total: 114 passing tests across 40 test suites.
 - `profileResolver.test.js`: Fail-closed dependent validation, ownership checks, 404/403 rejection.
 - `rateLimiter.test.js`: IP window counters, burst mitigation.
 - `safetyEngine.test.js`: Orchestrator determinism, multi-factor safety scoring, fail-closed handling.
+- `safetyEngineCanonical.test.js`: Verification of all 14 mandatory canonical safety and uncertainty modes.
 - `securityHeaders.test.js`: Helmet CSP directives, nosniff, frame-ancestors.
 - `serviceWorkerPrivacy.test.js`: Exclusion of `/api/*` endpoints from offline cache.
 - `streakService.test.js`: Day calculations, milestone achievements.
