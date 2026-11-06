@@ -4,6 +4,15 @@
  */
 const { checkDietaryRestrictions } = require('../../data/dietaryRules');
 
+/**
+ * Applies dietary restriction rules against product ingredients.
+ * Soft-escalates to Caution only — never forces Unsafe alone.
+ *
+ * @param {Object} product Product data object.
+ * @param {string[]} userRestrictions Array of declared user dietary restrictions.
+ * @param {Object} state Mutable safety evaluation state.
+ * @returns {Object} Updated evaluation state.
+ */
 function applyDietRules(product, userRestrictions, state) {
   const dietConflicts = checkDietaryRestrictions(userRestrictions || [], product);
   for (const conflict of dietConflicts) {
