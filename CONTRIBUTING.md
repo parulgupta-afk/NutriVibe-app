@@ -6,9 +6,10 @@ Thank you for your interest in improving NutriVibe! This guide outlines how to s
 
 ## 1. Prerequisites
 
-- **Node.js**: `v18.0.0` or higher (Node 20+ recommended)
+- **Node.js**: `v18.0.0` or higher (Node 20+ LTS recommended)
 - **npm**: `v9.0.0` or higher
 - **MongoDB**: MongoDB Atlas cluster or a local instance (`mongodb://localhost:27017/nutrivibe`)
+- **Docker** (optional): For running MongoDB, Redis, and full-stack services via docker-compose
 - **Git**
 
 ---
