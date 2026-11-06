@@ -1,221 +1,131 @@
-/**
- * VibeDiet — personalized plan (Phase 4 scaffold)
- * Meals are always safety-checked server-side before display.
- */
-import AppShell from '../components/layout/AppShell';
-import React, { useState, useEffect } from 'react';
-import { dietApi } from '../api/diet';
-// regenerate + grocery via dietApi
-import { foodApi } from '../api/foods';
-import { FiRefreshCw, FiShield, FiCheck, FiAlertTriangle } from 'react-icons/fi';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Page, Card, CardTitle, Chip, Button, Kv, Row, cx } from '../components/ui.jsx';
+import { Icons } from '../components/icons.js';
+import { days, initialPlan, initialGrocery } from '../data/mock.js';
 
-const VERDICT_STYLE = {
-  SAFE: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
-  CAUTION: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  UNSAFE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  UNKNOWN: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
-};
+const slots = ['Breakfast', 'Lunch', 'Dinner'];
 
 export default function VibeDiet() {
-  const [plan, setPlan] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState('');
-  const [days, setDays] = useState(1);
-  const [dietType, setDietType] = useState('vegetarian');
-  const [goal, setGoal] = useState('balanced nutrition');
+  const [plan, setPlan] = useState(initialPlan);
+  const [grocery, setGrocery] = useState(initialGrocery);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        // Ensure sample foods exist for fallback planner
-        await foodApi.seed().catch(() => {});
-        const res = await dietApi.getCurrent();
-        setPlan(res.data);
-      } catch {
-        setPlan(null);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  const handleGenerate = async () => {
-    setGenerating(true);
-    setError('');
-    try {
-      await foodApi.seed().catch(() => {});
-      const res = await dietApi.generate({
-        days,
-        dietType,
-        goal,
-      });
-      setPlan(res.data);
-    } catch (e) {
-      setError(e.response?.data?.message || e.message || 'Generation failed');
-    } finally {
-      setGenerating(false);
-    }
+  // Swap a meal with the same slot on the next day.
+  const swap = (i, k) => {
+    const next = plan.map((r) => r.slice());
+    const j = (i + 1) % 7;
+    [next[i][k], next[j][k]] = [next[j][k], next[i][k]];
+    setPlan(next);
   };
+  const toggle = (i) => setGrocery((g) => g.map((x, j) => (j === i ? { ...x, on: !x.on } : x)));
+  const bought = grocery.filter((g) => g.on).length;
 
   return (
-    <AppShell title="VibeDiet" subtitle="Personalized meal plans">
-
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">VibeDiet</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            AI-assisted plans · nutrition from verified foods · safety always deterministic
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={handleGenerate}
-          disabled={generating}
-          className="btn-primary flex items-center gap-2 disabled:opacity-50"
-        >
-          <FiRefreshCw className={generating ? 'animate-spin' : ''} />
-          {generating ? 'Generating…' : plan ? 'Regenerate' : 'Generate plan'}
-        </button>
-      </div>
-
-      {/* Options */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4 mb-6 flex flex-wrap gap-4">
-        <label className="text-sm">
-          <span className="text-gray-600 dark:text-gray-300 block mb-1">Days</span>
-          <select
-            value={days}
-            onChange={(e) => setDays(Number(e.target.value))}
-            className="input-field"
-          >
-            <option value={1}>1 day</option>
-            <option value={7}>7 days</option>
-          </select>
-        </label>
-        <label className="text-sm">
-          <span className="text-gray-600 dark:text-gray-300 block mb-1">Diet</span>
-          <select
-            value={dietType}
-            onChange={(e) => setDietType(e.target.value)}
-            className="input-field"
-          >
-            <option value="vegetarian">Vegetarian</option>
-            <option value="vegan">Vegan</option>
-            <option value="eggetarian">Eggetarian</option>
-            <option value="non-vegetarian">Non-vegetarian</option>
-          </select>
-        </label>
-        <label className="text-sm flex-1 min-w-[140px]">
-          <span className="text-gray-600 dark:text-gray-300 block mb-1">Goal</span>
-          <input
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            className="input-field w-full"
-            placeholder="e.g. high protein"
-          />
-        </label>
-      </div>
-
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 text-sm">
-          {error}
-        </div>
-      )}
-
-      {loading ? (
-        <div className="animate-pulse h-40 bg-gray-100 dark:bg-gray-700 rounded-xl" />
-      ) : !plan ? (
-        <div className="text-center py-16 text-gray-500 dark:text-gray-400">
-          <FiShield className="mx-auto text-4xl mb-3 text-primary-500" />
-          <p>No active plan yet. Generate one to get started.</p>
-          <p className="text-xs mt-2">Every meal is checked against your allergies before it appears.</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {plan.days?.map((day) => (
-            <section
-              key={day.dayIndex}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden"
-            >
-              <header className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                <h2 className="font-semibold text-gray-900 dark:text-white">
-                  Day {day.dayIndex + 1}
-                </h2>
-              </header>
-              <ul className="divide-y divide-gray-100 dark:divide-gray-700">
-                {(day.meals || []).map((meal) => (
-                  <li key={meal._id || meal.mealName + meal.mealType} className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs uppercase tracking-wide text-gray-400">{meal.mealType}</span>
-                        <span
-                          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${
-                            VERDICT_STYLE[meal.safety?.verdict] || VERDICT_STYLE.UNKNOWN
-                          }`}
-                        >
-                          {meal.safety?.verdict === 'SAFE' ? <FiCheck /> : <FiAlertTriangle />}
-                          {meal.safety?.verdict || 'UNKNOWN'}
-                        </span>
-                      </div>
-                      <p className="font-medium text-gray-900 dark:text-white mt-0.5">{meal.mealName}</p>
-                      <p className="text-xs text-gray-500">
-                        {meal.servingSize} · {Math.round(meal.nutrition?.calories || 0)} kcal · P{' '}
-                        {meal.nutrition?.protein || 0}g · C {meal.nutrition?.carbs || 0}g · F{' '}
-                        {meal.nutrition?.fat || 0}g
-                      </p>
-                      {meal.safety?.reasons?.length > 0 && (
-                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
-                          {meal.safety.reasons.slice(0, 2).join(' · ')}
-                        </p>
-                      )}
-                    </div>
-                  </li>
+    <Page>
+      <Row className="items-start">
+        <Card className="flex-[2.2_1_620px] overflow-x-auto" delay={0.05}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CardTitle>Weekly plan</CardTitle>
+            <Chip variant="ok" icon="check">Every meal safety-checked</Chip>
+          </div>
+          <div className="grid min-w-[560px] grid-cols-[64px_repeat(3,minmax(0,1fr))] gap-2">
+            <span />
+            {slots.map((s) => (
+              <span key={s} className="kl px-1 pb-1">{s}</span>
+            ))}
+            {plan.map((row, i) => (
+              <div key={days[i]} className="contents">
+                <span className={cx('flex items-center pl-1 text-[13px] font-semibold', i === 2 ? 'text-teal-d' : 'text-mute')}>{days[i]}</span>
+                {row.map((meal, k) => (
+                  <motion.button
+                    key={`${i}-${k}-${meal}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => swap(i, k)}
+                    aria-label={`Swap ${meal} with the next day`}
+                    className="flex min-h-[52px] items-center justify-between gap-2 rounded-xl border border-line bg-panel2 px-3 py-2 text-left text-sm font-medium transition-colors hover:border-teal hover:bg-teal-t"
+                  >
+                    <span>{meal}</span>
+                    <Icons.swap size={16} className="text-teal opacity-75" aria-hidden />
+                  </motion.button>
                 ))}
-              </ul>
-            </section>
-          ))}
-          <p className="text-xs text-gray-400 text-center">
-            Rules version: {plan.rulesVersion || 'n/a'} · Nutrition from verified FoodItem database
+              </div>
+            ))}
+          </div>
+          <p className="text-[13px] leading-snug text-mute">
+            Select a meal to swap it with the same meal on the next day. Nutrition is calculated from a food table, not by the AI.
           </p>
+        </Card>
 
-      {plan && (
-        <div className="flex flex-wrap gap-2 justify-center mt-4">
-          <button
-            type="button"
-            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
-            onClick={async () => {
-              try {
-                const res = await dietApi.groceryList(plan._id);
-                const lines = (res.data?.items || []).map((i) => `• ${i.name} (${i.quantity} ${i.unit})`).join('\n');
-                alert(lines || 'No items');
-              } catch (e) {
-                setError(e.message);
-              }
-            }}
-          >
-            Grocery list
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
-            onClick={async () => {
-              try {
-                const res = await dietApi.regenerateMeal(plan._id, { dayIndex: 0, mealType: 'lunch' });
-                setPlan(res.data);
-              } catch (e) {
-                setError(e.message);
-              }
-            }}
-          >
-            Swap lunch (day 1)
-          </button>
-        </div>
-      )}
+        <div className="flex flex-[1_1_300px] flex-col gap-5">
+          <Card delay={0.1}>
+            <CardTitle>Your plan</CardTitle>
+            <div className="flex flex-col">
+              {[
+                ['Goal', 'Weight maintenance'],
+                ['Diet', 'Vegetarian, Indian'],
+                ['Budget', '₹200 per day', true],
+                ['Daily target', '2,000 kcal', true],
+                ['Protein target', '80 g', true],
+              ].map(([k, v, mono], i) => (
+                <div key={k} className={cx('flex items-center gap-3 py-3.5', i > 0 && 'border-t border-line', i === 0 && 'pt-0', i === 4 && 'pb-0')}>
+                  <span className="flex-1 text-[13px] text-mute">{k}</span>
+                  <b className={cx('text-sm', mono && 'font-mono')}>{v}</b>
+                </div>
+              ))}
+            </div>
+            <p className="text-[13px] text-mute">Targets are estimates, not a prescription.</p>
+          </Card>
 
+          <Card delay={0.15}>
+            <CardTitle>This week</CardTitle>
+            <div className="flex flex-wrap gap-3">
+              <Kv label="Planned" className="min-w-[80px]"><span className="font-mono text-[26px] font-medium leading-none">21</span></Kv>
+              <Kv label="Logged" className="min-w-[80px]"><span className="font-mono text-[26px] font-medium leading-none">18</span></Kv>
+              <Kv label="Followed" className="min-w-[80px]"><span className="font-mono text-[26px] font-medium leading-none">15</span></Kv>
+            </div>
+            <Button variant="primary" onClick={() => setOpen((o) => !o)}>
+              <Icons.cart size={20} aria-hidden />
+              {open ? 'Hide grocery list' : 'Generate grocery list'}
+            </Button>
+          </Card>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.94, height: 0 }}
+                animate={{ opacity: 1, scale: 1, height: 'auto' }}
+                exit={{ opacity: 0, scale: 0.94, height: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+              >
+                <Card className="gap-2" hover={false}>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Grocery list</CardTitle>
+                    <Chip>{bought} of {grocery.length} bought</Chip>
+                  </div>
+                  {grocery.map((g, i) => (
+                    <button
+                      key={g.n}
+                      aria-pressed={g.on}
+                      onClick={() => toggle(i)}
+                      className={cx('flex min-h-12 w-full items-center gap-3 border-t border-line px-1 py-1.5 text-left text-sm font-medium', g.on && 'text-mute')}
+                    >
+                      <span className={cx('grid h-6 w-6 shrink-0 place-items-center rounded-lg border-[1.5px] border-teal text-white transition-colors', g.on && 'bg-teal')}>
+                        <Icons.check size={14} strokeWidth={2.6} className={cx('transition-opacity', g.on ? 'opacity-100' : 'opacity-0')} aria-hidden />
+                      </span>
+                      <span className={cx('flex-1', g.on && 'line-through')}>{g.n}</span>
+                      <span className="font-mono text-[13px] text-mute">{g.q}</span>
+                    </button>
+                  ))}
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      )}
-    </div>
-      </AppShell>
+      </Row>
+    </Page>
   );
 }

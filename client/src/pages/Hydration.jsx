@@ -1,168 +1,103 @@
-/**
- * Hydration Tracker (Phase 3)
- */
-import AppShell from '../components/layout/AppShell';
-import React, { useState, useEffect, useCallback } from 'react';
-import { hydrationApi, streakApi } from '../api/hydration';
-import { FiDroplet, FiPlus } from 'react-icons/fi';
+import { useState } from 'react';
+import { Bar as RBar, BarChart, Cell, ReferenceLine, ResponsiveContainer, XAxis, YAxis, LabelList } from 'recharts';
+import { Page, Card, CardTitle, Chip, Button, Kv, Toggle, Row } from '../components/ui.jsx';
+import Ring from '../components/Ring.jsx';
+import { Icons } from '../components/icons.js';
+import { useApp } from '../context/AppContext.jsx';
+import { hydrationWeek, reminders as initialReminders } from '../data/mock.js';
 
-const QUICK_AMOUNTS = [150, 250, 500];
+const fmt = (n) => n.toLocaleString('en-IN');
 
 export default function Hydration() {
-  const [totalMl, setTotalMl] = useState(0);
-  const [goalMl, setGoalMl] = useState(2000);
-  const [logs, setLogs] = useState([]);
-  const [streak, setStreak] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [custom, setCustom] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const { water, goal, addWater, goalUp, goalDown } = useApp();
+  const [rem, setRem] = useState(initialReminders);
+  const [paused, setPaused] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [todayRes, streakRes] = await Promise.all([
-        hydrationApi.getToday(),
-        streakApi.get().catch(() => null),
-      ]);
-      setTotalMl(todayRes.data?.totalMl || 0);
-      setGoalMl(todayRes.data?.goalMl || 2000);
-      setLogs(todayRes.data?.logs || []);
-      if (streakRes?.data) setStreak(streakRes.data);
-    } catch (e) {
-      setError(e.message || 'Failed to load');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  const addWater = async (amountMl, source = 'quick') => {
-    if (!amountMl || amountMl < 1) return;
-    setSubmitting(true);
-    setError('');
-    try {
-      const res = await hydrationApi.log(amountMl, source);
-      setTotalMl(res.todayTotalMl ?? totalMl + amountMl);
-      setGoalMl(res.goalMl || goalMl);
-      await load();
-    } catch (e) {
-      setError(e.message || 'Failed to log');
-    } finally {
-      setSubmitting(false);
-      setCustom('');
-    }
-  };
-
-  const progress = Math.min(100, Math.round((totalMl / (goalMl || 1)) * 100));
+  const data = [...hydrationWeek, { d: 'Wed', v: water, today: true }];
+  const completed = hydrationWeek;
+  const met = completed.filter((x) => x.v >= goal).length;
+  const avg = Math.round(completed.reduce((a, x) => a + x.v, 0) / completed.length);
+  const note = water >= goal ? 'Goal reached' : `${fmt(goal - water)} ml to go`;
 
   return (
-    <AppShell title="Hydration" subtitle="Water tracking and streaks">
-
-    <div className="max-w-lg mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Hydration</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Stay consistent — no guilt, just progress</p>
-
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 text-sm">
-          {error}
-        </div>
-      )}
-
-      {/* Progress ring-ish card */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6 text-center">
-        <div className="relative w-36 h-36 mx-auto mb-4">
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="8" className="text-gray-200 dark:text-gray-700" />
-            <circle
-              cx="50"
-              cy="50"
-              r="42"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="8"
-              strokeDasharray={`${progress * 2.64} 264`}
-              strokeLinecap="round"
-              className="text-sky-500 transition-all duration-700"
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <FiDroplet className="text-sky-500 text-xl mb-0.5" />
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">{progress}%</span>
+    <Page>
+      <Row className="items-start">
+        <Card className="flex-[1_1_380px] items-center text-center" delay={0.05}>
+          <div className="flex w-full items-center justify-between">
+            <CardTitle>Today</CardTitle>
+            <Chip>{note}</Chip>
           </div>
-        </div>
-        <p className="text-3xl font-bold text-gray-900 dark:text-white">
-          {totalMl} <span className="text-lg font-normal text-gray-500">/ {goalMl} ml</span>
-        </p>
-        {streak?.hydration?.current > 0 && (
-          <p className="mt-2 text-sm text-sky-600 dark:text-sky-400">
-            🔥 {streak.hydration.current}-day hydration streak
-          </p>
-        )}
-      </section>
-
-      {/* Quick add */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        {QUICK_AMOUNTS.map((ml) => (
-          <button
-            key={ml}
-            type="button"
-            disabled={submitting}
-            onClick={() => addWater(ml)}
-            className="py-4 rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 font-semibold hover:bg-sky-100 dark:hover:bg-sky-900/40 disabled:opacity-50 transition"
-          >
-            +{ml} ml
-          </button>
-        ))}
-      </div>
-
-      <div className="flex gap-2 mb-8">
-        <input
-          type="number"
-          min="1"
-          max="2000"
-          placeholder="Custom ml"
-          value={custom}
-          onChange={(e) => setCustom(e.target.value)}
-          className="flex-1 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white"
-        />
-        <button
-          type="button"
-          disabled={submitting || !custom}
-          onClick={() => addWater(Number(custom), 'custom')}
-          className="btn-primary px-5 flex items-center gap-1 disabled:opacity-50"
-        >
-          <FiPlus /> Add
-        </button>
-      </div>
-
-      {/* Today log */}
-      <section>
-        <h2 className="font-semibold text-gray-900 dark:text-white mb-3">Today&apos;s log</h2>
-        {loading ? (
-          <div className="animate-pulse h-16 bg-gray-100 dark:bg-gray-700 rounded-xl" />
-        ) : logs.length === 0 ? (
-          <p className="text-sm text-gray-400">No water logged yet. Start with a quick add above.</p>
-        ) : (
-          <ul className="space-y-2">
-            {[...logs].reverse().map((log) => (
-              <li
-                key={log._id}
-                className="flex justify-between items-center py-2.5 px-3 rounded-lg bg-gray-50 dark:bg-gray-800/80 text-sm"
-              >
-                <span className="text-gray-700 dark:text-gray-200">+{log.amountMl} ml</span>
-                <span className="text-gray-400 text-xs">
-                  {new Date(log.loggedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </li>
+          <Ring size={220} stroke={14} pct={water / goal}>
+            <span className="font-mono text-[40px] font-medium leading-none tracking-tight">{fmt(water)}</span>
+            <span className="text-[13px] text-mute">of {fmt(goal)} ml</span>
+          </Ring>
+          <div className="flex w-full gap-2">
+            {[150, 250, 500].map((ml) => (
+              <Button key={ml} variant="primary" className="flex-1 px-2" onClick={() => addWater(ml)}>+{ml} ml</Button>
             ))}
-          </ul>
-        )}
-      </section>
-    </div>
-      </AppShell>
+          </div>
+          <div className="flex w-full items-center justify-between pt-1">
+            <span className="text-[13px] text-mute">Daily goal</span>
+            <div className="flex items-center gap-2.5">
+              <Button square onClick={goalDown} aria-label="Lower goal by 250 ml"><Icons.minus size={20} aria-hidden /></Button>
+              <span className="min-w-[84px] font-mono text-[15px]">{fmt(goal)} ml</span>
+              <Button square onClick={goalUp} aria-label="Raise goal by 250 ml"><Icons.plus size={20} aria-hidden /></Button>
+            </div>
+          </div>
+        </Card>
+
+        <div className="flex flex-[1.5_1_500px] flex-col gap-5">
+          <Card delay={0.12}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <CardTitle>Last 7 days</CardTitle>
+              <Chip variant="mute">Dashed line is your goal</Chip>
+            </div>
+            <div className="h-[220px]" role="img" aria-label={`Daily water intake in millilitres for the last seven days. Today ${water} of ${goal}.`}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data} margin={{ top: 22, right: 4, left: 4, bottom: 0 }}>
+                  <XAxis dataKey="d" axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: '#56655F' }} />
+                  <YAxis hide domain={[0, 3200]} />
+                  <ReferenceLine y={goal} stroke="#7C8E85" strokeDasharray="5 4" strokeWidth={2} />
+                  <RBar dataKey="v" radius={[10, 10, 4, 4]} maxBarSize={44} animationDuration={900}>
+                    {data.map((x) => (
+                      <Cell key={x.d} fill={x.today ? '#2B514B' : x.v >= goal ? '#3A6B63' : '#B5C4BA'} />
+                    ))}
+                    <LabelList dataKey="v" position="top" formatter={fmt} style={{ fontSize: 11, fill: '#56655F', fontFamily: 'IBM Plex Mono' }} />
+                  </RBar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Row className="gap-3">
+              <Kv label="Average"><span className="font-mono text-lg font-medium">{fmt(avg)} ml</span></Kv>
+              <Kv label="Days at goal"><span className="font-mono text-lg font-medium">{met} of {completed.length}</span></Kv>
+              <Kv label="Best streak"><span className="font-mono text-lg font-medium">12 days</span></Kv>
+            </Row>
+          </Card>
+
+          <Card className="gap-1.5" delay={0.18}>
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-2">
+              <CardTitle>Reminders</CardTitle>
+              <span className="text-[13px] text-mute">Few and gentle. Pause any time.</span>
+            </div>
+            {rem.map((r) => (
+              <div key={r.id} className="flex items-center gap-3.5 border-t border-line py-3.5">
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="text-[15px] font-medium">{r.name}</span>
+                  <span className="font-mono text-[13px] text-mute">{r.time}</span>
+                </div>
+                <Toggle label={`${r.name} reminder`} on={r.on && !paused} onChange={(v) => setRem((all) => all.map((x) => (x.id === r.id ? { ...x, on: v } : x)))} />
+              </div>
+            ))}
+            <div className="flex items-center gap-3.5 border-t border-line py-3.5">
+              <div className="flex flex-1 flex-col gap-0.5">
+                <span className="text-[15px] font-medium">Pause all reminders</span>
+                <span className="font-mono text-[13px] text-mute">Resume when you are ready</span>
+              </div>
+              <Toggle label="Pause all reminders" on={paused} onChange={setPaused} />
+            </div>
+          </Card>
+        </div>
+      </Row>
+    </Page>
   );
 }

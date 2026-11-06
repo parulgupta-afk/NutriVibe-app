@@ -1,166 +1,134 @@
-/**
- * VibeAI — matches NutriVibe 2.0 UI design
- */
-import React, { useState, useRef, useEffect } from 'react';
-import { aiApi } from '../api/ai';
-import AppShell from '../components/layout/AppShell';
-import { FiSend, FiCheck } from 'react-icons/fi';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Page, Card, CardTitle, Chip, Button, Kv, Row, cx } from '../components/ui.jsx';
+import { Icons } from '../components/icons.js';
+import { aiContext, weeklyReport } from '../data/mock.js';
 
-const CAPABILITIES = [
-  'Dietary profile',
-  'Allergies',
-  'Medication interaction rules',
-  'Meal history',
-  'Nutrition goals',
-  'Hydration history',
-  'Previously scanned products',
+const prompts = [
+  { id: 'dinner', text: 'Suggest something for dinner' },
+  { id: 'week', text: 'Summarize my nutrition this week' },
 ];
 
-const QUICK = [
-  'Suggest something for dinner',
-  'Summarize my nutrition this week',
+const suggestions = [
+  { name: 'Roti + paneer bhurji', why: 'Planned for tonight. Adds protein toward your 80 g target.' },
+  { name: 'Khichdi', why: 'A light one-pot meal of dal and rice from your plan.' },
+  { name: 'Vegetable pulao', why: 'Adds the vegetables you logged less of this week.' },
 ];
+
+const Bubble = ({ me, children, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.9, y: 8 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    transition={{ delay, type: 'spring', stiffness: 320, damping: 26 }}
+    className={cx(
+      'max-w-[640px] rounded-[18px] px-[18px] py-3.5 text-[15px] leading-relaxed',
+      me ? 'self-end rounded-br-md bg-teal text-white' : 'rounded-bl-md border border-line bg-panel2'
+    )}
+  >
+    {children}
+  </motion.div>
+);
 
 export default function VibeAI() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState(null);
-  const bottomRef = useRef(null);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, suggestions]);
-
-  const send = async (text) => {
-    const msg = (text || input).trim();
-    if (!msg || loading) return;
-    setInput('');
-    const next = [...messages, { role: 'user', content: msg }];
-    setMessages(next);
-    setLoading(true);
-    setSuggestions(null);
-    try {
-      const history = next.slice(0, -1).map((m) => ({ role: m.role, content: m.content }));
-      const res = await aiApi.chat(msg, history);
-      const reply = res.data?.reply || res.message || 'No reply';
-      // Heuristic: dinner suggestions show cards
-      if (/dinner|suggest|eat/i.test(msg) && /roti|khichdi|pulao|paneer|dal|meal/i.test(reply)) {
-        setSuggestions([
-          { name: 'Roti + paneer bhurji', blurb: 'Planned for tonight. Adds protein toward your target.', ok: true },
-          { name: 'Khichdi', blurb: 'A light one-pot meal of dal and rice from your plan.', ok: true },
-          { name: 'Vegetable pulao', blurb: 'Adds the vegetables you logged less of this week.', ok: true },
-        ]);
-      }
-      setMessages((m) => [...m, { role: 'assistant', content: reply, offline: res.data?.offline }]);
-    } catch (e) {
-      setMessages((m) => [
-        ...m,
-        { role: 'assistant', content: e.response?.data?.message || e.message || 'Something went wrong' },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [convo, setConvo] = useState('dinner');
 
   return (
-    <AppShell title="VibeAI" subtitle="Your Personal Nutrition Assistant">
-      <div className="flex flex-col xl:flex-row gap-6 items-start">
-        {/* Chat column */}
-        <div className="flex-1 w-full min-w-0 card-static rise">
-          <div className="flex justify-end mb-4">
-            <button type="button" className="btn-primary" onClick={() => send('Suggest something for dinner')}>
-              Suggest something for dinner
-            </button>
-          </div>
-
-          {suggestions && (
-            <div className="mb-5 space-y-4">
-              <div className="rounded-2xl bg-nv-panel2 border border-nv-line px-4 py-3 text-sm text-nv-ink leading-relaxed">
-                Based on your logged meals today and your preferences, here are three dinner suggestions.
-                Each one passed your safety check.
-              </div>
-              <div className="grid sm:grid-cols-3 gap-3">
-                {suggestions.map((s) => (
-                  <div key={s.name} className="sug flex flex-col gap-2.5 p-4 rounded-2xl bg-nv-panel border border-nv-line hover:border-nv-teal transition hover:-translate-y-0.5">
-                    <div className="font-semibold text-[15px]">{s.name}</div>
-                    <p className="text-[13px] text-nv-mute leading-snug flex-1">{s.blurb}</p>
-                    {s.ok && <span className="chip chip-ok w-fit">Safety-checked</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-3 min-h-[200px] max-h-[420px] overflow-y-auto mb-4">
-            {messages.length === 0 && !suggestions && (
-              <p className="text-sm text-nv-mute py-8 text-center">
-                Ask about meals, goals, or a scanned product. Safety verdicts always come from the rules engine.
-              </p>
-            )}
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] rounded-[18px] px-[18px] py-3.5 text-[15px] leading-relaxed whitespace-pre-wrap ${
-                  m.role === 'user'
-                    ? 'self-end bg-nv-teal text-white rounded-br-md'
-                    : 'self-start bg-nv-panel2 border border-nv-line rounded-bl-md'
-                }`}
-              >
-                {m.content}
-                {m.offline && (
-                  <span className="block text-xs mt-1 opacity-70">(offline mode)</span>
+    <Page>
+      <Row className="items-start">
+        <Card className="flex-[2_1_560px]" delay={0.05} hover={false}>
+          <div className="min-h-[420px]">
+            <AnimatePresence mode="wait">
+              <motion.div key={convo} initial={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-4">
+                {convo === 'dinner' ? (
+                  <>
+                    <Bubble me>Suggest something for dinner.</Bubble>
+                    <Bubble delay={0.15}>
+                      Based on your logged meals today and your vegetarian preference, here are three dinner suggestions. Each one
+                      passed your safety check.
+                    </Bubble>
+                    <Row className="gap-3">
+                      {suggestions.map((s, i) => (
+                        <motion.div
+                          key={s.name}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + i * 0.1 }}
+                          whileHover={{ y: -2 }}
+                          className="flex flex-1 basis-[200px] flex-col gap-2.5 rounded-2xl border border-line bg-panel p-4 hover:border-teal"
+                        >
+                          <b className="text-[15px]">{s.name}</b>
+                          <span className="text-[13px] leading-snug text-mute">{s.why}</span>
+                          <span><Chip variant="ok">Safety-checked</Chip></span>
+                        </motion.div>
+                      ))}
+                    </Row>
+                  </>
+                ) : (
+                  <>
+                    <Bubble me>Summarize my nutrition this week.</Bubble>
+                    <Bubble delay={0.15}>
+                      You planned {weeklyReport.planned} meals, logged {weeklyReport.logged} and followed the plan on {weeklyReport.followed}.
+                      Protein averaged {weeklyReport.avgProtein} g a day against your 80 g target, so a protein-forward dinner a few
+                      nights a week would help.
+                    </Bubble>
+                    <Row className="gap-3">
+                      <Kv label="Planned"><span className="font-mono text-2xl font-medium">{weeklyReport.planned}</span></Kv>
+                      <Kv label="Logged"><span className="font-mono text-2xl font-medium">{weeklyReport.logged}</span></Kv>
+                      <Kv label="Followed"><span className="font-mono text-2xl font-medium">{weeklyReport.followed}</span></Kv>
+                    </Row>
+                    <p className="text-[13px] text-mute">Numbers come from your records. VibeAI only explains them.</p>
+                  </>
                 )}
-              </div>
-            ))}
-            {loading && (
-              <div className="self-start text-nv-teal text-sm flex gap-1 items-center px-2">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse" />
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse [animation-delay:150ms]" />
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-nv-teal animate-pulse [animation-delay:300ms]" />
-              </div>
-            )}
-            <div ref={bottomRef} />
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-3">
-            {QUICK.map((q) => (
-              <button key={q} type="button" className="btn-secondary !h-10 !text-[13px]" onClick={() => send(q)}>
-                {q}
+          <div className="flex flex-wrap gap-2">
+            {prompts.map((p) => (
+              <button
+                key={p.id}
+                aria-pressed={convo === p.id}
+                onClick={() => setConvo(p.id)}
+                className={cx(
+                  'min-h-12 rounded-xl border px-3.5 py-1.5 text-left text-sm font-medium transition-colors',
+                  convo === p.id ? 'border-teal bg-teal-t' : 'border-line bg-panel hover:border-teal'
+                )}
+              >
+                {p.text}
               </button>
             ))}
           </div>
 
-          <div className="flex gap-2 items-center">
+          <form className="flex flex-wrap gap-2.5" onSubmit={(e) => e.preventDefault()}>
+            <label htmlFor="aiq" className="sr-only">Ask VibeAI</label>
             <input
-              className="input-field"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
+              id="aiq"
+              type="text"
               placeholder="Ask about meals, goals or a scanned product"
+              className="h-12 min-w-[200px] flex-1 rounded-xl border border-line bg-white px-4 text-[15px]"
             />
-            <button type="button" className="btn-primary !w-12 !px-0 shrink-0" onClick={() => send()} disabled={loading} aria-label="Send">
-              <FiSend />
-            </button>
-          </div>
-        </div>
+            <Button type="submit" variant="primary" square aria-label="Send">
+              <Icons.send size={20} aria-hidden />
+            </Button>
+          </form>
+        </Card>
 
-        {/* Right rail */}
-        <aside className="w-full xl:w-[280px] shrink-0 card-static rise">
-          <h2 className="ct mb-3">VibeAI can use</h2>
-          <ul className="divide-y divide-nv-line">
-            {CAPABILITIES.map((c) => (
-              <li key={c} className="flex items-center gap-2.5 py-2.5 text-sm text-nv-ink">
-                <FiCheck className="text-nv-safe shrink-0" />
-                {c}
-              </li>
+        <Card className="flex-[1_1_280px]" delay={0.12}>
+          <CardTitle>VibeAI can use</CardTitle>
+          <div className="flex flex-col">
+            {aiContext.map((c) => (
+              <div key={c} className="flex items-center gap-3.5 border-t border-line py-[11px]">
+                <Icons.check size={20} className="text-teal" aria-hidden />
+                <span className="text-sm">{c}</span>
+              </div>
             ))}
-          </ul>
-          <p className="text-[12px] text-nv-mute mt-4 leading-snug border-t border-nv-line pt-3">
+          </div>
+          <p className="flex gap-2 text-[13px] leading-snug text-mute">
+            <Icons.shield size={16} className="mt-0.5 shrink-0" aria-hidden />
             VibeAI never overrides the safety engine. For allergy and medication questions it uses the verified result.
           </p>
-        </aside>
-      </div>
-    </AppShell>
+        </Card>
+      </Row>
+    </Page>
   );
 }

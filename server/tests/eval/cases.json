@@ -1,0 +1,159 @@
+[
+  {
+    "id": "allergen-milk-01",
+    "category": "allergen",
+    "allergen": "milk",
+    "product": { "ingredients": "milk, sugar, cocoa", "allergens": ["milk"] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "UNSAFE",
+    "notes": "Direct milk allergen match"
+  },
+  {
+    "id": "allergen-milk-hidden-casein",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": { "ingredients": "casein, whey protein, water", "allergens": [] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "UNSAFE",
+    "notes": "Hidden milk derivative: casein"
+  },
+  {
+    "id": "allergen-milk-hidden-whey",
+    "category": "hidden",
+    "allergen": "milk",
+    "product": { "ingredients": "whey, natural flavors", "allergens": [] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "UNSAFE",
+    "notes": "Hidden milk derivative: whey"
+  },
+  {
+    "id": "allergen-egg-01",
+    "category": "allergen",
+    "allergen": "egg",
+    "product": { "ingredients": "wheat flour, eggs, salt", "allergens": ["egg"] },
+    "profile": { "allergies": ["egg"] },
+    "expected": "UNSAFE",
+    "notes": "Direct egg match"
+  },
+  {
+    "id": "allergen-egg-hidden-albumin",
+    "category": "hidden",
+    "allergen": "egg",
+    "product": { "ingredients": "albumin, sugar", "allergens": [] },
+    "profile": { "allergies": ["egg"] },
+    "expected": "UNSAFE",
+    "notes": "Hidden egg: albumin"
+  },
+  {
+    "id": "allergen-peanut-01",
+    "category": "allergen",
+    "allergen": "peanut",
+    "product": { "ingredients": "peanuts, salt", "allergens": ["peanut"] },
+    "profile": { "allergies": ["peanut"] },
+    "expected": "UNSAFE",
+    "notes": "Direct peanut"
+  },
+  {
+    "id": "cross-contam-may-contain",
+    "category": "cross-contamination",
+    "allergen": "peanut",
+    "product": { "ingredients": "wheat, sugar", "allergens": [], "mayContain": "peanuts" },
+    "profile": { "allergies": ["peanut"] },
+    "expected": "CAUTION",
+    "notes": "May contain traces"
+  },
+  {
+    "id": "cross-contam-facility",
+    "category": "cross-contamination",
+    "allergen": "milk",
+    "product": { "ingredients": "oats, water", "allergens": [], "warnings": "Manufactured in a facility that processes milk" },
+    "profile": { "allergies": ["milk"] },
+    "expected": "CAUTION",
+    "notes": "Shared facility"
+  },
+  {
+    "id": "plant-milk-soy",
+    "category": "plant-milk",
+    "allergen": "soy",
+    "product": { "ingredients": "soy milk, sugar", "allergens": ["soy"] },
+    "profile": { "allergies": ["soy"] },
+    "expected": "UNSAFE",
+    "notes": "Soy milk for soy-allergic user"
+  },
+  {
+    "id": "plant-milk-almond-ok",
+    "category": "plant-milk",
+    "allergen": null,
+    "product": { "ingredients": "almond milk, water", "allergens": ["tree nuts"] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "SAFE",
+    "notes": "Almond milk is safe for milk-allergic user"
+  },
+  {
+    "id": "diet-vegan-gelatin",
+    "category": "diet",
+    "diet": "vegan",
+    "product": { "ingredients": "gelatin, sugar", "allergens": [] },
+    "profile": { "dietaryRestrictions": ["vegan"] },
+    "expected": "UNSAFE",
+    "notes": "Gelatin not vegan"
+  },
+  {
+    "id": "diet-vegetarian-ok",
+    "category": "diet",
+    "diet": "vegetarian",
+    "product": { "ingredients": "milk, cheese, wheat", "allergens": ["milk", "wheat"] },
+    "profile": { "dietaryRestrictions": ["vegetarian"] },
+    "expected": "SAFE",
+    "notes": "Dairy is vegetarian"
+  },
+  {
+    "id": "med-warfarin-vitk",
+    "category": "medication",
+    "medication": "warfarin",
+    "product": { "ingredients": "spinach extract, kale", "allergens": [] },
+    "profile": { "medications": ["warfarin"] },
+    "expected": "CAUTION",
+    "notes": "High vitamin K interaction"
+  },
+  {
+    "id": "missing-ingredients",
+    "category": "missing",
+    "product": { "ingredients": "", "allergens": [] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Empty ingredient list must never be SAFE"
+  },
+  {
+    "id": "missing-product",
+    "category": "missing",
+    "product": null,
+    "profile": { "allergies": ["peanut"] },
+    "expected": "CANNOT_VERIFY",
+    "notes": "Unknown product"
+  },
+  {
+    "id": "indian-ins-320",
+    "category": "indian",
+    "product": { "ingredients": "INS 320, wheat flour", "allergens": [] },
+    "profile": { "allergies": [] },
+    "expected": "CAUTION",
+    "notes": "INS 320 (BHA) – additive awareness"
+  },
+  {
+    "id": "ocr-noisy-milk",
+    "category": "ocr",
+    "product": { "ingredients": "m1lk, sugar, cocoa", "allergens": [] },
+    "profile": { "allergies": ["milk"] },
+    "expected": "UNSAFE",
+    "notes": "OCR noise: m1lk → milk"
+  },
+  {
+    "id": "safe-plain-rice",
+    "category": "safe",
+    "product": { "ingredients": "rice, water, salt", "allergens": [] },
+    "profile": { "allergies": ["milk", "peanut", "egg"] },
+    "expected": "SAFE",
+    "notes": "No allergen match, complete data"
+  }
+]

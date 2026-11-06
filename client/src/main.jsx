@@ -1,55 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import axios from 'axios';
-import App from './App';
-import { AuthProvider } from './contexts/AuthContext';
-import { ProfileProvider } from './contexts/ProfileContext';
-import { ThemeProvider } from './contexts/ThemeContext';
+import App from './App.jsx';
+import { AppProvider } from './context/AppContext.jsx';
 import './index.css';
-import ScrollToTop from './components/common/ScrollToTop';
-
-// Local dev: empty baseURL → Vite proxies /api → :5000
-// Production: set VITE_API_BASE_URL to your API origin
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || '';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ScrollToTop />
-      <ThemeProvider>
-        <AuthProvider>
-          <ProfileProvider>
-            <App />
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                },
-              }}
-            />
-          </ProfileProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <AppProvider>
+        <App />
+      </AppProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
-
-// PWA service worker — register in production; unregister in development to prevent stale caching/port collisions
-if ('serviceWorker' in navigator) {
-  if (import.meta.env.PROD) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
-  } else {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister();
-      }
-    });
-  }
-}

@@ -158,6 +158,16 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get('/api/ready', (req, res) => {
+  const mongoState = mongoose.connection.readyState;
+  const mongoOk = mongoState === 1;
+  const checks = { mongo: mongoOk, redis: Boolean(process.env.REDIS_URL) };
+  res.status(mongoOk ? 200 : 503).json({
+    status: mongoOk ? 'ready' : 'not_ready',
+    checks,
+  });
+});
+
 
 // Phase 22: machine-readable API docs (matches real routes)
 const openapi = require('./docs/openapi.json');

@@ -1,0 +1,136 @@
+From c3869fb142649ab24440a5979bd495170fde2233 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 07:17:55 +0000
+Subject: [PATCH 3/6] ci: harden pipeline (least-privilege, audit, CodeQL,
+ Dependabot)
+
+- Top-level permissions: contents read; concurrency; job timeouts
+- Remove continue-on-error from lint (lint passes with 0 warnings)
+- Add npm audit (prod, high+) to server and client jobs
+- Add CodeQL workflow and Dependabot (npm, actions, docker)
+- Action SHA pinning NOT done: could not resolve SHAs offline; Dependabot
+  github-actions ecosystem keeps tags current meanwhile
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016pR1EvpjQr4Y9EDsjFPn32
+---
+ .github/dependabot.yml       | 16 ++++++++++++++++
+ .github/workflows/ci.yml     | 16 +++++++++++++++-
+ .github/workflows/codeql.yml | 26 ++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100644 .github/dependabot.yml
+ create mode 100644 .github/workflows/codeql.yml
+
+diff --git a/.github/dependabot.yml b/.github/dependabot.yml
+new file mode 100644
+index 0000000..2e5e244
+--- /dev/null
++++ b/.github/dependabot.yml
+@@ -0,0 +1,16 @@
++version: 2
++updates:
++  - package-ecosystem: npm
++    directory: /server
++    schedule: { interval: weekly }
++    open-pull-requests-limit: 5
++  - package-ecosystem: npm
++    directory: /client
++    schedule: { interval: weekly }
++    open-pull-requests-limit: 5
++  - package-ecosystem: github-actions
++    directory: /
++    schedule: { interval: weekly }
++  - package-ecosystem: docker
++    directory: /server
++    schedule: { interval: weekly }
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index b97c17d..9e99da6 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -7,9 +7,18 @@ on:
+   pull_request:
+     branches: [main]
+ 
++# Least privilege: jobs only read the repository.
++permissions:
++  contents: read
++
++concurrency:
++  group: ci-${{ github.ref }}
++  cancel-in-progress: true
++
+ jobs:
+   server-test:
+     runs-on: ubuntu-latest
++    timeout-minutes: 10
+     defaults:
+       run:
+         working-directory: server
+@@ -22,11 +31,14 @@ jobs:
+           cache-dependency-path: server/package-lock.json
+       - name: Install
+         run: npm ci
++      - name: Dependency audit (production, high+)
++        run: npm audit --omit=dev --audit-level=high
+       - name: Unit tests
+         run: npm test
+ 
+   client-build:
+     runs-on: ubuntu-latest
++    timeout-minutes: 10
+     defaults:
+       run:
+         working-directory: client
+@@ -41,7 +53,8 @@ jobs:
+         run: npm ci
+       - name: Lint
+         run: npm run lint
+-        continue-on-error: true
++      - name: Dependency audit (production, high+)
++        run: npm audit --omit=dev --audit-level=high
+       - name: Unit tests
+         run: npm test
+       - name: Build
+@@ -52,6 +65,7 @@ jobs:
+   docker-api:
+     runs-on: ubuntu-latest
+     needs: [server-test]
++    timeout-minutes: 15
+     steps:
+       - uses: actions/checkout@v4
+       - name: Build API image
+diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml
+new file mode 100644
+index 0000000..9c2424d
+--- /dev/null
++++ b/.github/workflows/codeql.yml
+@@ -0,0 +1,26 @@
++name: CodeQL
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  schedule:
++    - cron: '23 4 * * 1'
++
++permissions:
++  contents: read
++
++jobs:
++  analyze:
++    runs-on: ubuntu-latest
++    timeout-minutes: 20
++    permissions:
++      contents: read
++      security-events: write
++    steps:
++      - uses: actions/checkout@v4
++      - uses: github/codeql-action/init@v3
++        with:
++          languages: javascript-typescript
++      - uses: github/codeql-action/analyze@v3
+-- 
+2.43.0
+
