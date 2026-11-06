@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Product catalog schema for barcode lookups, ingredients, nutritional information, and caching.
+ */
 const productSchema = new mongoose.Schema({
   barcode: {
     type: String,
