@@ -1,6 +1,11 @@
 /**
- * Medication–food interaction rule (Engineering Phase 7).
+ * Medication–food interaction rule.
  * Can escalate to Unsafe; never downgrades a worse level.
+ *
+ * @param {Object} product Evaluated product details.
+ * @param {string[]} medications Array of declared user medications.
+ * @param {Object} state Mutable safety evaluation state.
+ * @returns {Object} Updated evaluation state.
  */
 const { checkMedicationInteractions } = require('../../data/medicationInteractions');
 
