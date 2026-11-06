@@ -27,6 +27,7 @@ const publicV1Routes = require('./routes/publicV1Routes');
 const { errorHandler } = require('./middleware/errorHandler');
 const { requestLogger } = require('./middleware/requestLogger');
 const { requestTiming } = require('./middleware/requestTiming');
+const { sanitizeInput } = require('./middleware/sanitizeInput');
 
 const app = express();
 
@@ -121,6 +122,7 @@ app.use(requestLogger);
 const bigJson = express.json({ limit: '8mb' });
 app.use((req, res, next) => (/^\/api\/(ai|meals)\//.test(req.path) ? bigJson(req, res, next) : express.json({ limit: '100kb' })(req, res, next)));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(sanitizeInput); // after body parsing, before any route
 app.use('/api', limiter);
 
 app.use('/api/auth', authLimiter, authRoutes);

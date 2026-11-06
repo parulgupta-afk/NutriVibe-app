@@ -224,11 +224,11 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    if (!email) {
+    if (!email || typeof email !== 'string' || email.length > 254) {
       return res.status(400).json({ success: false, message: 'Please provide an email' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     // Always return the same generic response whether or not the email
     // exists — this prevents someone from using this endpoint to figure
