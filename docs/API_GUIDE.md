@@ -12,6 +12,7 @@ NutriVibe provides a RESTful API powering food intelligence, safety evaluations,
 - **Health Check**: `GET /api/health`
 
 ### Headers
+
 | Header | Value | Description |
 | :--- | :--- | :--- |
 | `Content-Type` | `application/json` | Required for all POST/PUT/PATCH requests with JSON payloads |
@@ -24,8 +25,11 @@ NutriVibe provides a RESTful API powering food intelligence, safety evaluations,
 ## 2. Authentication Endpoints (`/api/auth`)
 
 ### `POST /api/auth/register`
+
 Creates a new user account with personal health goals and dietary restrictions.
+
 - **Request Body**:
+
   ```json
   {
     "name": "Jane Doe",
@@ -33,7 +37,9 @@ Creates a new user account with personal health goals and dietary restrictions.
     "password": "Password123!"
   }
   ```
+
 - **Response** (`201 Created`):
+
   ```json
   {
     "success": true,
@@ -52,8 +58,11 @@ Creates a new user account with personal health goals and dietary restrictions.
   ```
 
 ### `POST /api/auth/login`
+
 Authenticates existing credentials and returns a signed JWT.
+
 - **Request Body**:
+
   ```json
   {
     "email": "jane@example.com",
@@ -62,11 +71,15 @@ Authenticates existing credentials and returns a signed JWT.
   ```
 
 ### `GET /api/auth/me`
+
 Fetches authenticated user profile, preferences, and account metadata.
 
 ### `PUT /api/auth/preferences`
+
 Updates dietary restrictions, allergies, and health goals.
+
 - **Request Body**:
+
   ```json
   {
     "allergies": ["Dairy", "Peanuts"],
@@ -80,7 +93,9 @@ Updates dietary restrictions, allergies, and health goals.
 ## 3. Product Intelligence (`/api/products`)
 
 ### `GET /api/products/barcode/:barcode`
+
 Retrieves product details and performs an on-the-fly personalized safety evaluation.
+
 - **Query Parameters**:
   - `profileId` *(optional)*: Dependent ID to evaluate safety for a family profile.
 - **Canonical Verdicts Returned**:
@@ -90,9 +105,11 @@ Retrieves product details and performs an on-the-fly personalized safety evaluat
   - `CANNOT_VERIFY`: Incomplete product data or missing ingredient information.
 
 ### `GET /api/products/search?query=:term`
+
 Searches product catalogue by keyword, brand, or ingredients.
 
 ### `GET /api/products/:id/alternatives`
+
 Retrieves safer or healthier food alternatives personalized to the active user's restrictions.
 
 ---
@@ -100,9 +117,12 @@ Retrieves safer or healthier food alternatives personalized to the active user's
 ## 4. Nutrition & Hydration Tracking
 
 ### `POST /api/meals`
+
 Logs consumed meals and computes nutrient totals.
+
 - **Endpoint**: `/api/meals`
 - **Request Body**:
+
   ```json
   {
     "mealType": "breakfast",
@@ -120,8 +140,11 @@ Logs consumed meals and computes nutrient totals.
   ```
 
 ### `POST /api/hydration/log`
+
 Logs water intake and advances daily hydration goals.
+
 - **Request Body**:
+
   ```json
   {
     "amountMl": 350,
@@ -134,9 +157,11 @@ Logs water intake and advances daily hydration goals.
 ## 5. Indian Food Intelligence (`/api/indian`)
 
 ### `GET /api/indian/ins`
+
 Returns the full master catalog of FSSAI/INS food additives, categories, and sensitivities.
 
 ### `GET /api/indian/ins/lookup?q=:term`
+
 Looks up an additive by code (e.g., `INS 102`) or common name (e.g., `tartrazine`).
 
 ---
@@ -144,8 +169,10 @@ Looks up an additive by code (e.g., `INS 102`) or common name (e.g., `tartrazine
 ## 6. Public V1 Food Safety Check (`/v1/check`)
 
 Designed for third-party integrations, mobile clients, and agents.
+
 - **Header**: `X-API-Key: <your-key>`
 - **Request Body**:
+
   ```json
   {
     "productName": "Greek Yogurt",
@@ -153,7 +180,9 @@ Designed for third-party integrations, mobile clients, and agents.
     "allergies": ["Dairy"]
   }
   ```
+
 - **Response** (`200 OK`):
+
   ```json
   {
     "success": true,
@@ -176,6 +205,7 @@ Designed for third-party integrations, mobile clients, and agents.
 ## 7. Public API Key Management (`/v1/keys`)
 
 Authenticated users can generate and manage up to 10 active API keys:
+
 - `POST /v1/keys`: Creates a new API key (body: `{ name, rateLimitPerHour }`). The raw key is returned exactly once.
 - `GET /v1/keys`: Lists all keys owned by the user (returns prefixes and quotas; never raw keys or hashes).
 - `DELETE /v1/keys/:id`: Safely revokes an API key.
@@ -185,8 +215,7 @@ Authenticated users can generate and manage up to 10 active API keys:
 ## 8. Frontend Integration (Client v1 & Client v2)
 
 Both frontend clients connect to the same Express backend:
+
 - **Client v1 (`/client`)**: Uses Axios with default base path `/api` mapped via Vite proxy on port 5173.
 - **Client v2 (`/client-v2`)**: Includes an API adapter layer in `src/api/index.js` supporting mock fallback and live backend mode via `VITE_API_URL=/api` on port 5174.
 - **Authentication Token Sharing**: Both clients share the standard `localStorage.getItem('token')` convention for JWT bearer authorization.
-
-
