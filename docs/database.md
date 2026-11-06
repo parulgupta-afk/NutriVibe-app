@@ -21,6 +21,7 @@
 - `Tracking { user, createdAt }`  
 - `Tracking { user, profile, createdAt }`  
 - `Dependent { owner, createdAt }`  
+- `SafetyReport { product, user }` — fast query by product and user  
 - `ApiKey.keyHash` — unique index for O(1) authentication
 - `ApiKey { ownerId, active }` — user key lookup and limit enforcement  
 
