@@ -202,7 +202,7 @@ export default function Scanner() {
             loading={loading}
           />
           {error && (
-            <div className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-3 text-xs text-rose-300">
+            <div role="alert" aria-live="polite" className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-3 text-xs text-rose-300">
               {error}
             </div>
           )}
