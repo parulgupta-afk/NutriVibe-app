@@ -46,7 +46,14 @@ describe('client apiError utils', () => {
   it('correctly checks for 401 unauthorized status', () => {
     assert.equal(isUnauthorized({ response: { status: 401 } }), true);
     assert.equal(isUnauthorized({ response: { status: 403 } }), false);
+    assert.equal(isUnauthorized({ response: { status: 500 } }), false);
     assert.equal(isUnauthorized(null), false);
+    assert.equal(isUnauthorized(undefined), false);
+  });
+
+  it('falls back to generic error message string when response data is empty', () => {
+    const error = new Error('Database connection failed');
+    assert.equal(getApiErrorMessage(error), 'Database connection failed');
   });
 });
 
