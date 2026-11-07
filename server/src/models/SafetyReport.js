@@ -28,14 +28,6 @@ const safetyReportSchema = new mongoose.Schema({
       enum: ['SAFE', 'CAUTION', 'UNSAFE', 'CANNOT_VERIFY', 'Safe', 'Caution', 'Unsafe', 'Unknown', 'Cannot Verify'],
       default: 'CANNOT_VERIFY'
     },
-    ruleVersion: {
-      type: String,
-      default: '2.2.0'
-    },
-    dataCompleteness: {
-      type: String,
-      default: 'complete'
-    },
     score: {
       type: Number,
       min: 0,

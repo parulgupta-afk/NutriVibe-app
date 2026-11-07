@@ -29,17 +29,8 @@ exports.register = async (req, res, next) => {
 
     const { name, email, password, preferences } = req.body;
 
-    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid email',
-      });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-
     // Check if user exists
-    const existingUser = await User.findOne({ email: normalizedEmail });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -97,24 +88,8 @@ exports.login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid email',
-      });
-    }
-
-    if (!password || typeof password !== 'string') {
-      return res.status(400).json({
-        success: false,
-        message: 'Password is required',
-      });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-
     // Check if user exists
-    const user = await User.findOne({ email: normalizedEmail }).select('+password');
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -196,35 +171,25 @@ exports.googleAuth = async (req, res, next) => {
       });
     }
 
-    const googleId = typeof payload.sub === 'string' ? payload.sub.trim() : null;
-    const googleEmail = typeof payload.email === 'string' && payload.email.length <= 254 ? payload.email.trim().toLowerCase() : null;
-
-    if (!googleId || !googleEmail) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid Google profile payload.',
-      });
-    }
-
     // Look up by googleId first, then fall back to email — this lets
     // someone who already registered with email/password link their
     // existing account the first time they use "Sign in with Google"
     // with the same email address, instead of creating a duplicate.
-    let user = await User.findOne({ googleId }).select('+googleId');
+    let user = await User.findOne({ googleId: payload.sub }).select('+googleId');
 
     if (!user) {
-      user = await User.findOne({ email: googleEmail });
+      user = await User.findOne({ email: payload.email });
       if (user) {
-        user.googleId = googleId;
+        user.googleId = payload.sub;
         await user.save();
       }
     }
 
     if (!user) {
       user = await User.create({
-        name: payload.name || googleEmail.split('@')[0],
-        email: googleEmail,
-        googleId,
+        name: payload.name || payload.email.split('@')[0],
+        email: payload.email,
+        googleId: payload.sub,
         preferences: {
           dietaryRestrictions: [],
           allergies: [],
@@ -259,12 +224,11 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
-      return res.status(400).json({ success: false, message: 'Please provide a valid email' });
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please provide an email' });
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: normalizedEmail });
+    const user = await User.findOne({ email });
 
     // Always return the same generic response whether or not the email
     // exists — this prevents someone from using this endpoint to figure
@@ -321,22 +285,14 @@ exports.resetPassword = async (req, res, next) => {
     const { token } = req.params;
     const { password } = req.body;
 
-    if (!token || typeof token !== 'string' || !token.trim() || token.length > 254) {
-      return res.status(400).json({
-        success: false,
-        message: 'This reset link is invalid or has expired. Please request a new one.',
-      });
-    }
-
-    if (!password || typeof password !== 'string' || password.length < 6) {
+    if (!password || password.length < 6) {
       return res.status(400).json({
         success: false,
         message: 'Password must be at least 6 characters',
       });
     }
 
-    const normalizedToken = token.trim();
-    const hashedToken = crypto.createHash('sha256').update(normalizedToken).digest('hex');
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
     const user = await User.findOne({
       resetPasswordToken: hashedToken,

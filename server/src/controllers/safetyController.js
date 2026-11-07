@@ -1,7 +1,6 @@
 const SafetyReport = require('../models/SafetyReport');
 const Product = require('../models/Product');
 const { computeSafetyVerdict } = require('../services/safetyEngine');
-const { resolveEffectiveUser } = require('../services/profileResolver');
 
 // @desc    Get safety report for a product
 // @route   GET /api/safety/product/:productId
@@ -10,64 +9,41 @@ exports.getSafetyReport = async (req, res, next) => {
   try {
     const { productId } = req.params;
 
-    // Resolve profile (rejects unknown or foreign profileId with 404)
-    const { effectiveUser, profileId, profileName } = await resolveEffectiveUser(req);
+    // Check if report exists
+    let report = await SafetyReport.findOne({
+      product: productId,
+      user: req.user.id,
+    }).populate('product');
 
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found',
-      });
-    }
+    if (!report) {
+      // Generate a new report
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: 'Product not found',
+        });
+      }
 
-    // Always recompute fresh safety verdict using the deterministic rules engine
-    const verdict = computeSafetyVerdict(product, effectiveUser);
+      // Generate safety report based on user preferences
+      const verdict = computeSafetyVerdict(product, req.user);
 
-    let report = null;
-
-    // Upsert the stored report only for the account owner
-    if (!profileId) {
-      const query = SafetyReport.findOneAndUpdate(
-        { product: productId, user: req.user.id || req.user._id },
-        {
-          product: productId,
-          user: req.user.id || req.user._id,
-          riskAssessment: {
-            level: verdict.level,
-            verdict: verdict.verdict || verdict.level,
-            score: verdict.score,
-            ruleVersion: verdict.ruleVersion,
-            dataCompleteness: verdict.dataCompleteness,
-            factors: verdict.factors,
-          },
-          healthImpacts: [],
-          recommendations: verdict.recommendations,
-          status: 'reviewed',
-          reviewedAt: new Date(),
-        },
-        { new: true, upsert: true, runValidators: true }
-      );
-      report = query && typeof query.populate === 'function' ? await query.populate('product') : await query;
-    } else {
-      report = {
-        product,
-        user: req.user.id || req.user._id,
-        profileId,
-        profileName,
+      // Create report
+      report = await SafetyReport.create({
+        product: productId,
+        user: req.user.id,
         riskAssessment: {
           level: verdict.level,
-          verdict: verdict.verdict || verdict.level,
           score: verdict.score,
-          ruleVersion: verdict.ruleVersion,
-          dataCompleteness: verdict.dataCompleteness,
           factors: verdict.factors,
         },
         healthImpacts: [],
         recommendations: verdict.recommendations,
         status: 'reviewed',
         reviewedAt: new Date(),
-      };
+      });
+
+      await report.populate('product');
     }
 
     res.status(200).json({
@@ -75,13 +51,6 @@ exports.getSafetyReport = async (req, res, next) => {
       data: report,
     });
   } catch (error) {
-    if (error.statusCode) {
-      return res.status(error.statusCode).json({
-        success: false,
-        message: error.message,
-        error: { code: error.code || 'ERROR' }
-      });
-    }
     next(error);
   }
 };
