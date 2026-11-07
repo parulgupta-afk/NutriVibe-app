@@ -274,6 +274,8 @@ export default function Scanner() {
                 <div className="flex flex-col gap-2">
                   <span className="kl">Safer alternative for your profile</span>
                   <button
+                    type="button"
+                    aria-label="Switch to safer alternative: Oat and jaggery biscuits"
                     onClick={() => {
                       const safeSample = sampleProducts.find((s) => s.verdict === 'SAFE');
                       if (safeSample) setCurrentProduct(safeSample);
