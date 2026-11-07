@@ -5,6 +5,8 @@ export const verdictStyle = {
   SAFE: { stroke: '#2F7D4F', text: '#1F5A37', tint: '#DCEBDD', icon: 'check', chip: 'ok' },
   CAUTION: { stroke: '#B7791F', text: '#7A4E08', tint: '#F4E7C8', icon: 'alert', chip: 'warn' },
   UNSAFE: { stroke: '#B3382C', text: '#8C2A20', tint: '#F2D9D4', icon: 'x', chip: 'bad' },
+  CANNOT_VERIFY: { stroke: '#6B7280', text: '#374151', tint: '#E5E7EB', icon: 'alert', chip: 'mute' },
+  UNKNOWN: { stroke: '#6B7280', text: '#374151', tint: '#E5E7EB', icon: 'alert', chip: 'mute' },
 };
 
 /**
@@ -12,8 +14,9 @@ export const verdictStyle = {
  * a status icon and word (never colour alone) and a soft pulsing halo.
  */
 export default function VerdictRing({ verdict, size = 184 }) {
-  const v = verdictStyle[verdict];
-  const Icon = Icons[v.icon];
+  const v = verdictStyle[verdict] || verdictStyle.CANNOT_VERIFY;
+  const Icon = Icons[v.icon] || Icons.alert;
+  const displayLabel = verdict === 'CANNOT_VERIFY' ? 'CANNOT VERIFY' : (verdict || 'UNKNOWN');
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <div
@@ -24,7 +27,7 @@ export default function VerdictRing({ verdict, size = 184 }) {
       <Ring size={size} stroke={12} pct={1} color={v.stroke}>
         <Icon size={36} strokeWidth={2} style={{ color: v.text }} aria-hidden />
         <span className="font-serif text-[22px] font-semibold tracking-[.02em]" style={{ color: v.text }}>
-          {verdict}
+          {displayLabel}
         </span>
       </Ring>
     </div>

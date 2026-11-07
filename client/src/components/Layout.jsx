@@ -131,7 +131,11 @@ export function MobileNav() {
 
 export function PageHeader() {
   const { pathname } = useLocation();
-  const r = routes.find((x) => (x.to === '/' ? pathname === '/' : pathname.startsWith(x.to))) || routes[0];
+  const r =
+    routes.find((x) => (x.to === '/' ? pathname === '/' : pathname.startsWith(x.to))) ||
+    (pathname === '/privacy'
+      ? { to: '/privacy', label: 'Privacy', title: 'Privacy Policy', subtitle: 'How we handle and protect your data' }
+      : routes[0]);
   return (
     <header className="flex flex-wrap items-end justify-between gap-4">
       <motion.div key={r.to} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
