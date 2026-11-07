@@ -52,6 +52,9 @@ async function getFoodById(req, res, next) {
  */
 async function seedFoods(req, res, next) {
   try {
+    if (req.user?.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Admin only: access denied' });
+    }
     let inserted = 0;
     for (const item of sampleFoods) {
       const exists = await FoodItem.findOne({ name: item.name });
