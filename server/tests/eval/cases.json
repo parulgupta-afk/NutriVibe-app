@@ -2019,6 +2019,34 @@
     "notes": "Fermented foods and tyramine with MAOI"
   },
   {
+    "id": "med-maoi-lime-pickle",
+    "category": "medication",
+    "product": {
+      "name": "Lime Pickle",
+      "brand": "Mother's Recipe",
+      "ingredients": [
+        "Lime Pieces",
+        "Salt",
+        "Mustard Oil",
+        "Spices",
+        "Chilli Powder"
+      ],
+      "safetyInfo": {
+        "allergens": []
+      },
+      "processingLevel": "Processed"
+    },
+    "profile": {
+      "allergies": [],
+      "medications": [
+        "tranylcypromine"
+      ]
+    },
+    "expected": "UNSAFE",
+    "expectedVerdict": "UNSAFE",
+    "notes": "Lime Pickle containing pickled ingredients with MAOI tranylcypromine"
+  },
+  {
     "id": "med-statin-grapefruit",
     "category": "medication",
     "product": {
