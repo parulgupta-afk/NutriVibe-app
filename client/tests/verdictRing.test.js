@@ -1,11 +1,23 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { VERDICT_STYLES, getVerdictConfig } from '../src/utils/verdictStyles.js';
+import { verdictStyle } from '../src/components/VerdictRing.jsx';
 
 /**
  * Tests for VerdictRing style mappings and stroke calculations across canonical verdicts.
  */
 describe('client VerdictRing logic & styles tests', () => {
+  it('defines valid styling in component verdictStyle mapping for all verdicts', () => {
+    ['SAFE', 'CAUTION', 'UNSAFE', 'CANNOT_VERIFY', 'UNKNOWN'].forEach((v) => {
+      assert.ok(verdictStyle[v], `verdictStyle[${v}] should be defined`);
+      assert.ok(verdictStyle[v].stroke, `stroke for ${v}`);
+      assert.ok(verdictStyle[v].text, `text for ${v}`);
+      assert.ok(verdictStyle[v].tint, `tint for ${v}`);
+      assert.ok(verdictStyle[v].icon, `icon for ${v}`);
+      assert.ok(verdictStyle[v].chip, `chip for ${v}`);
+    });
+  });
+
   it('defines valid styling and labels for SAFE', () => {
     const safeUpper = VERDICT_STYLES.SAFE;
     const safeCapital = VERDICT_STYLES.Safe;
