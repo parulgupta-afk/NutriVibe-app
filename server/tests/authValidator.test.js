@@ -44,3 +44,4 @@ describe('auth validator schemas and email normalization', () => {
     assert.equal(result.email, 'reset@nutrivibe.app');
   });
 });
+
