@@ -18,12 +18,14 @@ describe('client dateFormatter utility tests', () => {
     const fixedDate = new Date('2026-11-04T14:30:00');
     assert.match(formatTime(fixedDate), /^\d{2}:\d{2}$/);
     assert.equal(formatTime(null), '--:--');
+    assert.equal(formatTime('invalid-time', 'None'), 'None');
   });
 
   it('identifies today correctly', () => {
     assert.equal(isToday(new Date()), true);
     assert.equal(isToday(new Date('2020-01-01')), false);
     assert.equal(isToday(null), false);
+    assert.equal(isToday('not-a-date'), false);
   });
 });
 
