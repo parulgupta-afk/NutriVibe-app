@@ -32,6 +32,7 @@ const INTERACTIONS = [
     triggerKeywords: [
       'aged cheese', 'cured meat', 'salami', 'soy sauce', 'fermented',
       'tyramine', 'sauerkraut', 'kimchi', 'aged', 'cured', 'pickled',
+      'pickle', 'pickles', 'achar',
       'liver', 'fava bean'
     ],
     severity: 'high',
@@ -97,7 +98,10 @@ const INTERACTIONS = [
   },
   {
     medicationKeywords: ['monoamine', 'linezolid'],
-    triggerKeywords: ['tyramine', 'aged cheese', 'cured meat', 'soy sauce', 'fermented'],
+    triggerKeywords: [
+      'tyramine', 'aged cheese', 'cured meat', 'soy sauce', 'fermented',
+      'pickle', 'pickles', 'achar'
+    ],
     severity: 'high',
     message:
       'Contains tyramine-rich ingredients that can interact dangerously with this medication class.'
