@@ -29,5 +29,14 @@ describe('client safeStorage utility tests', () => {
     safeStorage.removeItem('key_to_delete');
     assert.equal(safeStorage.getItem('key_to_delete'), null);
   });
+
+  it('clears all memory store entries when clear is invoked', () => {
+    safeStorage.setItem('item_a', 1);
+    safeStorage.setItem('item_b', 2);
+    assert.equal(safeStorage.getItem('item_a'), 1);
+    safeStorage.clear();
+    assert.equal(safeStorage.getItem('item_a'), null);
+    assert.equal(safeStorage.getItem('item_b'), null);
+  });
 });
 
