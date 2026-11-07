@@ -70,7 +70,7 @@ flowchart TD
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: React 18, Vite, JavaScript (ES Modules), Tailwind CSS, React Router v6, Axios, Lucide/Heroicons.
+- **Frontend**: React 18, Vite 6, JavaScript (ES Modules), Tailwind CSS, React Router v7, Axios, Lucide/Heroicons, Matter.js.
 - **Backend**: Node.js, Express.js, MongoDB, Mongoose, JWT, Helmet, Express Rate Limit.
 - **Caching**: Redis (with automatic in-memory fallback).
 - **AI & Integrations**: Google Gemini API, Open Food Facts API, Google OAuth 2.0.
