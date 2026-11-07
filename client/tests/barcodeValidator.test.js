@@ -26,6 +26,10 @@ describe('client barcodeValidator utility tests', () => {
     assert.equal(isValidBarcode('abc4006381333931'), false);
     assert.equal(isValidBarcode(''), false);
     assert.equal(isValidBarcode(null), false);
+    assert.equal(isValidBarcode(undefined), false);
+    assert.equal(calculateEanChecksum(null), null);
+    assert.equal(calculateEanChecksum(undefined), null);
+    assert.equal(calculateEanChecksum(''), null);
   });
 });
 
