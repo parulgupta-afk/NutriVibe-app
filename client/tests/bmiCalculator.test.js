@@ -34,6 +34,14 @@ describe('client bmiCalculator utility tests', () => {
 
     const res2 = calculateBmi(null, null);
     assert.equal(res2.bmi, null);
+
+    const res3 = calculateBmi(-70, 175);
+    assert.equal(res3.bmi, null);
+    assert.equal(res3.category, 'Unknown');
+
+    const res4 = calculateBmi('invalid', 'height');
+    assert.equal(res4.bmi, null);
+    assert.equal(res4.category, 'Unknown');
   });
 });
 
