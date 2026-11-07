@@ -34,7 +34,7 @@ function QuickAction({ to, onClick, icon, label, primary, delay }) {
       <Link to={to} className={cx(cls, 'basis-auto')} style={{ flex: 1 }}>{inner}</Link>
     </motion.div>
   ) : (
-    <motion.button onClick={onClick} className={cls} {...motionProps}>{inner}</motion.button>
+    <motion.button type="button" onClick={onClick} className={cls} {...motionProps}>{inner}</motion.button>
   );
 }
 
