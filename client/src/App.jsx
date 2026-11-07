@@ -8,10 +8,12 @@ import Hydration from './pages/Hydration.jsx';
 import Wellness from './pages/Wellness.jsx';
 import VibeAI from './pages/VibeAI.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+import IntroSplash from './components/intro/IntroSplash.jsx';
 
 export default function App() {
   return (
     <div className="flex min-h-screen">
+      <IntroSplash />
       <Sidebar />
       <main className="mx-auto flex min-w-0 max-w-[1240px] flex-1 flex-col gap-7 px-5 pb-28 pt-8 md:px-12 md:pb-10 md:pt-9">
         <PageHeader />

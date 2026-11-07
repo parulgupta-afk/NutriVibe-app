@@ -74,3 +74,15 @@ src/
   Gemini should only explain it.
 - This project is a UI layer. Authentication, authorization and validation belong on the
   server and must not rely on anything in this front end.
+
+## Intro splash
+
+`src/components/intro/IntroSplash.jsx` plays a short intro on the first visit of each browser
+session: food pieces rain down under real physics (matter-js), pile up, burst away, then the
+NutriVibe wordmark and Verdict Ring appear.
+
+- Skip with the button, a click, or Esc. It closes itself after the logo.
+- It never plays for users who prefer reduced motion.
+- Add `?intro` to the URL to replay it (for example `http://localhost:5173/?intro`).
+- Artwork: Microsoft Fluent Emoji 3D (MIT licence), in `src/assets/intro/`.
+- Pure logic (when to show, pile detection, pacing) is in `introLogic.js` with unit tests.
