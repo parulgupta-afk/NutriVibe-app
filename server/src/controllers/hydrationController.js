@@ -4,6 +4,7 @@
 const HydrationLog = require('../models/HydrationLog');
 const NutritionGoal = require('../models/NutritionGoal');
 const { updateHydrationStreak } = require('../services/streakService');
+const { updateGoalsSchema } = require('../validators/hydration.validator');
 
 function getLocalDate(date = new Date()) {
   return date.toISOString().slice(0, 10);
@@ -102,7 +103,19 @@ async function getOrUpdateGoals(req, res, next) {
     }
 
     // PUT
-    const updates = req.body;
+    const parsed = updateGoalsSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        error: { details: parsed.error.issues.map((i) => ({ field: i.path.join('.'), message: i.message })) },
+      });
+    }
+
+    const updates = { ...parsed.data };
+    delete updates.userId;
+    delete updates._id;
+
     const goal = await NutritionGoal.findOneAndUpdate(
       { userId },
       { $set: updates },
