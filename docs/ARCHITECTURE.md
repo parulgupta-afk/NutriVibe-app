@@ -112,6 +112,7 @@
 2. **Security Gateway:**
    - Helmet sets strict Content-Security-Policy, anti-clickjacking, and HSTS headers.
    - CORS restricts origin to verified `CLIENT_URL`.
+   - Global input sanitization recursively strips keys starting with `$` or containing `.` to eliminate NoSQL operator injection.
    - General and route-specific rate limiters mitigate abuse.
 3. **Authentication & Profile Attribution:**
    - JWT verified with secret; user record retrieved.

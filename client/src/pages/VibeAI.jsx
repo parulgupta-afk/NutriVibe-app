@@ -87,6 +87,7 @@ export default function VibeAI() {
             {prompts.map((p) => (
               <button
                 key={p.id}
+                type="button"
                 aria-pressed={convo === p.id}
                 onClick={() => setConvo(p.id)}
                 className={cx(

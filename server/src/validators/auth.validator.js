@@ -1,18 +1,18 @@
-const { z, nonEmptyString } = require('./common.validator');
+const { z, nonEmptyString, emailString } = require('./common.validator');
 
 const register = z.object({
   name: nonEmptyString(80),
-  email: z.string().email().max(254),
+  email: emailString,
   password: z.string().min(10).max(128),
 }).strict();
 
 const login = z.object({
-  email: z.string().email().max(254),
+  email: emailString,
   password: z.string().min(1).max(128),
 }).strict();
 
 const resetRequest = z.object({
-  email: z.string().email().max(254),
+  email: emailString,
 }).strict();
 
 const resetConfirm = z.object({

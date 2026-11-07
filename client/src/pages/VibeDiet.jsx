@@ -40,6 +40,7 @@ export default function VibeDiet() {
                 {row.map((meal, k) => (
                   <motion.button
                     key={`${i}-${k}-${meal}`}
+                    type="button"
                     layout
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -109,6 +110,7 @@ export default function VibeDiet() {
                   {grocery.map((g, i) => (
                     <button
                       key={g.n}
+                      type="button"
                       aria-pressed={g.on}
                       onClick={() => toggle(i)}
                       className={cx('flex min-h-12 w-full items-center gap-3 border-t border-line px-1 py-1.5 text-left text-sm font-medium', g.on && 'text-mute')}

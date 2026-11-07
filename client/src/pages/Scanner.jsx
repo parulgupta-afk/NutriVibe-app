@@ -202,7 +202,7 @@ export default function Scanner() {
             loading={loading}
           />
           {error && (
-            <div className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-3 text-xs text-rose-300">
+            <div role="alert" aria-live="polite" className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-3 text-xs text-rose-300">
               {error}
             </div>
           )}
@@ -211,7 +211,9 @@ export default function Scanner() {
             {sampleProducts.map((x) => (
               <button
                 key={x.id}
+                type="button"
                 aria-pressed={x.id === p.id}
+                aria-label={`Select sample product ${x.name}, verdict ${x.verdict}`}
                 onClick={() => {
                   setError(null);
                   setCurrentProduct(x);
@@ -272,6 +274,8 @@ export default function Scanner() {
                 <div className="flex flex-col gap-2">
                   <span className="kl">Safer alternative for your profile</span>
                   <button
+                    type="button"
+                    aria-label="Switch to safer alternative: Oat and jaggery biscuits"
                     onClick={() => {
                       const safeSample = sampleProducts.find((s) => s.verdict === 'SAFE');
                       if (safeSample) setCurrentProduct(safeSample);

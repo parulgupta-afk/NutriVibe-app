@@ -6,6 +6,16 @@ import { VERDICT_STYLES, getVerdictConfig } from '../src/utils/verdictStyles.js'
  * Tests for VerdictRing style mappings and stroke calculations across canonical verdicts.
  */
 describe('client VerdictRing logic & styles tests', () => {
+  it('defines valid styling in VERDICT_STYLES for all canonical verdicts', () => {
+    ['SAFE', 'Safe', 'CAUTION', 'Caution', 'UNSAFE', 'Unsafe', 'CANNOT_VERIFY', 'UNKNOWN', 'Unknown'].forEach((v) => {
+      assert.ok(VERDICT_STYLES[v], `VERDICT_STYLES[${v}] should be defined`);
+      assert.ok(VERDICT_STYLES[v].stroke, `stroke for ${v}`);
+      assert.ok(VERDICT_STYLES[v].text, `text for ${v}`);
+      assert.ok(VERDICT_STYLES[v].label, `label for ${v}`);
+      assert.ok(typeof VERDICT_STYLES[v].pct === 'number', `pct for ${v}`);
+    });
+  });
+
   it('defines valid styling and labels for SAFE', () => {
     const safeUpper = VERDICT_STYLES.SAFE;
     const safeCapital = VERDICT_STYLES.Safe;
@@ -55,5 +65,17 @@ describe('client VerdictRing logic & styles tests', () => {
     assert.equal(config.label, 'CAUTION');
     assert.equal(config.pct, 0.65);
     assert.equal(config.ariaLabel, 'Safety verdict: CAUTION');
+  });
+
+  it('clamps scores safely between 0 and 100 in getVerdictConfig', () => {
+    const low = getVerdictConfig('SAFE', -20);
+    assert.equal(low.pct, 0);
+
+    const high = getVerdictConfig('SAFE', 150);
+    assert.equal(high.pct, 1);
+
+    const fallback = getVerdictConfig('CUSTOM_UNRECOGNIZED_VERDICT');
+    assert.equal(fallback.label, 'CANNOT VERIFY');
+    assert.equal(fallback.pct, 0.5);
   });
 });
