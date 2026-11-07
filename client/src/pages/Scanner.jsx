@@ -211,7 +211,9 @@ export default function Scanner() {
             {sampleProducts.map((x) => (
               <button
                 key={x.id}
+                type="button"
                 aria-pressed={x.id === p.id}
+                aria-label={`Select sample product ${x.name}, verdict ${x.verdict}`}
                 onClick={() => {
                   setError(null);
                   setCurrentProduct(x);
