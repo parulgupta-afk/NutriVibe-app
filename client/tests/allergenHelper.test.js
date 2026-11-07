@@ -11,6 +11,8 @@ describe('client allergenHelper utility tests', () => {
     assert.equal(normalizeAllergenName('  Peanuts  '), 'peanuts');
     assert.equal(normalizeAllergenName(null), '');
     assert.equal(normalizeAllergenName(undefined), '');
+    assert.equal(normalizeAllergenName(123), '');
+    assert.equal(normalizeAllergenName({}), '');
   });
 
   it('maps known allergens to distinct color badge classes', () => {
