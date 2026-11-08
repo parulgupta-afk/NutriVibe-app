@@ -1,5 +1,6 @@
 /**
  * Phase 16: shared domain shapes (JSDoc).
+ * Defines data contracts for safety verdicts, user profiles, and recommendations.
  * Full TypeScript migration is deferred; these types document contracts
  * for editors and future .ts conversion without changing runtime.
  *
