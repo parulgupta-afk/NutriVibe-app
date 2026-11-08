@@ -38,5 +38,11 @@ describe('client debounce utility tests', () => {
     await new Promise((resolve) => setTimeout(resolve, 80));
     assert.equal(executed, false);
   });
+
+  it('returns a callable debounced function equipped with cancel method', () => {
+    const fn = debounce(() => {}, 100);
+    assert.equal(typeof fn, 'function');
+    assert.equal(typeof fn.cancel, 'function');
+  });
 });
 
