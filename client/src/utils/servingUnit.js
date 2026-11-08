@@ -21,6 +21,12 @@ const CONVERSION_FACTORS = {
   teaspoon: 5,
 };
 
+/**
+ * Convert imperial and culinary units to metric grams.
+ * @param {number|string} quantity
+ * @param {string} [unit='g']
+ * @returns {number}
+ */
 export function convertToMetricGrams(quantity, unit = 'g') {
   const q = Number(quantity);
   if (!q || q <= 0 || Number.isNaN(q)) return 0;
