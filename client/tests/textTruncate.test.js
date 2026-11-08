@@ -33,5 +33,10 @@ describe('client textTruncate utility tests', () => {
     assert.equal(truncateWords(undefined), '');
     assert.equal(toTitleCase(null), '');
   });
+
+  it('returns the exact string when string length equals maxLength', () => {
+    const exact = 'ExactLength10';
+    assert.equal(truncateText(exact, 13), exact);
+  });
 });
 
