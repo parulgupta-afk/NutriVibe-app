@@ -27,6 +27,11 @@ describe('client nutritionFormat utility tests', () => {
     assert.equal(sodiumToSalt(null), 0);
   });
 
+  it('handles tiny sodium amounts accurately without NaN', () => {
+    assert.equal(sodiumToSalt(0.02), 0.05);
+    assert.equal(sodiumToSalt(0), 0);
+  });
+
   it('calculates macro percentage distribution accurately', () => {
     const macros = calculateMacroPercentages({ protein: 25, carbs: 50, fat: 25 });
     assert.equal(macros.protein, 25);
