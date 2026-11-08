@@ -21,6 +21,11 @@ describe('client dateFormatter utility tests', () => {
     assert.equal(formatTime('invalid-time', 'None'), 'None');
   });
 
+  it('formats time with leading zeros for single-digit minutes or hours', () => {
+    const d = new Date('2026-11-04T08:05:00');
+    assert.match(formatTime(d), /^\d{2}:\d{2}$/);
+  });
+
   it('identifies today correctly', () => {
     assert.equal(isToday(new Date()), true);
     assert.equal(isToday(new Date('2020-01-01')), false);
