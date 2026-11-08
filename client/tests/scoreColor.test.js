@@ -35,5 +35,10 @@ describe('client scoreColor utility tests', () => {
     const res2 = getScoreColor(undefined);
     assert.equal(res2.label, 'Unknown');
   });
+
+  it('verifies boundary limits at exactly 0 and 100', () => {
+    assert.equal(getScoreColor(0).label, 'Poor');
+    assert.equal(getScoreColor(100).label, 'Excellent');
+  });
 });
 
