@@ -2,6 +2,12 @@
  * Standardized date & timestamp formatting helpers for NutriVibe client.
  */
 
+/**
+ * Format date input to ISO YYYY-MM-DD string.
+ * @param {string|Date|number} dateInput
+ * @param {string} [fallback='N/A']
+ * @returns {string}
+ */
 export function formatDate(dateInput, fallback = 'N/A') {
   if (!dateInput) return fallback;
   const date = new Date(dateInput);
