@@ -29,6 +29,12 @@ function sanitizeObject(obj) {
   return obj;
 }
 
+/**
+ * Express middleware to strip NoSQL operator injection keys from request objects.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 function sanitizeInput(req, res, next) {
   if (req.body && typeof req.body === 'object') {
     sanitizeObject(req.body);
