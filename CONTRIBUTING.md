@@ -60,6 +60,9 @@ cd ../client && npm install
 
 ## 4. Running Tests
 
+- Safety Evaluation Suite: `cd server && npm run eval`
+- Client Code Quality & Lint: `cd client && npm run lint`
+
 ### Backend Unit Tests
 
 Runs the built-in Node.js test runner across all unit tests in `server/tests/`:
