@@ -19,6 +19,11 @@ function isStorageAvailable() {
  * Safe client-side storage utility with seamless in-memory fallback.
  */
 export const safeStorage = {
+  /**
+   * Safely retrieve and parse JSON item from storage or memory fallback.
+   * @param {string} key
+   * @param {*} [defaultValue=null]
+   */
   getItem(key, defaultValue = null) {
     try {
       if (typeof window !== 'undefined' && isStorageAvailable()) {
