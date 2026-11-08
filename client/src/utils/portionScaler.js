@@ -2,6 +2,12 @@
  * Portion scaler for dynamic nutritional calculations on custom servings.
  */
 
+/**
+ * Dynamically scale base 100g nutritional macros to custom portion weight.
+ * @param {Record<string, number>} [base100g={}]
+ * @param {number} [targetGrams=100]
+ * @returns {object}
+ */
 export function scaleNutrition(base100g = {}, targetGrams = 100) {
   const target = Math.max(0, Number(targetGrams) || 0);
   const factor = target / 100;
