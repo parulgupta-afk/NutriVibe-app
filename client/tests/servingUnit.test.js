@@ -33,5 +33,10 @@ describe('client servingUnit utility tests', () => {
     assert.deepEqual(parseServingString(''), { quantity: 100, unit: 'g' });
     assert.deepEqual(parseServingString(null), { quantity: 100, unit: 'g' });
   });
+
+  it('parses fluid ounces string correctly', () => {
+    const parsed = parseServingString('8 fl oz');
+    assert.deepEqual(parsed, { quantity: 8, unit: 'fl oz' });
+  });
 });
 
