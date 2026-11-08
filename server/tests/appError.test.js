@@ -27,5 +27,11 @@ describe('AppError class and Codes dictionary tests', () => {
     assert.equal(Codes.RATE_LIMITED, 'RATE_LIMITED');
     assert.equal(Codes.UPSTREAM_TIMEOUT, 'UPSTREAM_TIMEOUT');
   });
+
+  it('attaches operational flag and stack trace correctly', () => {
+    const err = new AppError('Sample operational issue', 400, Codes.VALIDATION_ERROR);
+    assert.equal(err.isOperational, true);
+    assert.ok(typeof err.stack === 'string');
+  });
 });
 
