@@ -2,6 +2,12 @@
  * Body Mass Index (BMI) and health category calculation utility.
  */
 
+/**
+ * Calculate BMI and return categorization with healthy weight boundaries.
+ * @param {number|string} weightKg
+ * @param {number|string} heightCm
+ * @returns {{ bmi: number|null, category: string, healthyWeightRange: { min: number, max: number }|null }}
+ */
 export function calculateBmi(weightKg, heightCm) {
   const w = Number(weightKg);
   const h = Number(heightCm);
