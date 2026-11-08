@@ -32,6 +32,11 @@ describe('client exportCsv utility tests', () => {
     assert.equal(escapeCell(undefined), '');
   });
 
+  it('preserves clean numeric and alphabetical characters without quotes', () => {
+    assert.equal(escapeCell('NutriVibe'), 'NutriVibe');
+    assert.equal(escapeCell(12345), '12345');
+  });
+
   it('formats log entries into a sanitized CSV row', () => {
     const log = {
       createdAt: '2026-11-03T12:00:00.000Z',
