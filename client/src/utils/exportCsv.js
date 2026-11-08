@@ -1,6 +1,11 @@
 /**
  * Phase 5: export daily tracking logs as CSV (client-side, no backend needed).
  */
+/**
+ * Escapes CSV special characters (quotes, commas, newlines) according to RFC 4180.
+ * @param {*} value - Cell value to escape
+ * @returns {string} Sanitized CSV cell value
+ */
 function escapeCell(value) {
   const s = value == null ? '' : String(value);
   if (/[",\n]/.test(s)) {
