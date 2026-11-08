@@ -2,6 +2,11 @@
  * Health & safety score (0-100) color mapping utility for UI progress bars and badges.
  */
 
+/**
+ * Map numeric score (0-100) to Tailwind color classes and readable label.
+ * @param {number|null|undefined} score
+ * @returns {{ text: string, bg: string, border: string, bar: string, label: string }}
+ */
 export function getScoreColor(score) {
   if (score == null || Number.isNaN(Number(score))) {
     return {
