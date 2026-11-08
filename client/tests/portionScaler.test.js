@@ -51,5 +51,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.calories, 0);
     assert.equal(scaled.protein, 0);
   });
+
+  it('handles zero target grams resulting in zero macros', () => {
+    const scaled = scaleNutrition(base100g, 0);
+    assert.equal(scaled.grams, 0);
+    assert.equal(scaled.calories, 0);
+  });
 });
 
