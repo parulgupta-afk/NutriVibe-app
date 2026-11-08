@@ -19,6 +19,7 @@ NutriVibe provides a RESTful API powering food intelligence, safety evaluations,
 | `Authorization` | `Bearer <token>` | JWT token returned on login or registration |
 | `X-API-Key` | `<key>` | Required for external API endpoints under `/v1/*` |
 | `Idempotency-Key` | `<uuid>` | Optional header for safe request retries |
+| `RateLimit-Limit` | `integer` | Standard header indicating rate limit quota |
 
 ---
 
