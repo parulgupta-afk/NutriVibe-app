@@ -27,6 +27,12 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res.category, 'Obese');
   });
 
+  it('categorizes Obese for extreme high body weight', () => {
+    const res = calculateBmi(150, 160);
+    assert.equal(res.category, 'Obese');
+    assert.ok(res.bmi > 50);
+  });
+
   it('handles zero, negative, or missing inputs safely', () => {
     const res1 = calculateBmi(0, 175);
     assert.equal(res1.bmi, null);
