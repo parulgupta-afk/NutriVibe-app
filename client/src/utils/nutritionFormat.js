@@ -2,6 +2,12 @@
  * Nutrition and macro formatting helpers for product detail & meal tracker.
  */
 
+/**
+ * Format numeric weight in grams rounded to 1 decimal place.
+ * @param {number|string|null} value
+ * @param {string} [fallback='0g']
+ * @returns {string}
+ */
 export function formatGrams(value, fallback = '0g') {
   if (value == null || value === '' || Number.isNaN(Number(value))) return fallback;
   const num = Number(value);
