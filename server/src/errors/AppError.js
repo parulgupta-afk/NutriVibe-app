@@ -3,6 +3,11 @@
  * Phase 5 — does not replace Express error middleware; feeds it.
  */
 class AppError extends Error {
+  /**
+   * @param {string} message - Human-readable error description
+   * @param {number} [statusCode=500] - HTTP status code
+   * @param {string} [code='INTERNAL_ERROR'] - Machine-readable error code
+   */
   constructor(message, statusCode = 500, code = 'INTERNAL_ERROR') {
     super(message);
     this.statusCode = statusCode;
