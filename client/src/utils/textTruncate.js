@@ -2,6 +2,13 @@
  * Text formatting, ellipsis truncation, and title normalization utilities.
  */
 
+/**
+ * Truncate long strings at character boundary with ellipsis.
+ * @param {string} text
+ * @param {number} [maxLength=100]
+ * @param {string} [suffix='...']
+ * @returns {string}
+ */
 export function truncateText(text, maxLength = 100, suffix = '...') {
   if (!text || typeof text !== 'string') return '';
   if (text.length <= maxLength) return text;
