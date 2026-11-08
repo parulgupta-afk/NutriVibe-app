@@ -43,5 +43,11 @@ describe('auth validator schemas and email normalization', () => {
     });
     assert.equal(result.email, 'reset@nutrivibe.app');
   });
+
+  it('validates 24-character hexadecimal ObjectId correctly', () => {
+    const { objectId } = require('../src/validators/common.validator');
+    assert.equal(objectId.parse('507f1f77bcf86cd799439011'), '507f1f77bcf86cd799439011');
+    assert.throws(() => objectId.parse('invalid-id'));
+  });
 });
 
