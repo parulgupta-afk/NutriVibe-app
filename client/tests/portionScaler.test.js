@@ -57,5 +57,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.grams, 0);
     assert.equal(scaled.calories, 0);
   });
+
+  it('handles fractional gram servings with precision', () => {
+    const scaled = scaleNutrition(base100g, 150.5);
+    assert.ok(scaled.calories > 0);
+    assert.equal(scaled.grams, 150.5);
+  });
 });
 
