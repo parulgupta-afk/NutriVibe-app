@@ -39,5 +39,10 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.remainingMl, 2000);
     assert.equal(progress.isGoalMet, false);
   });
+
+  it('scales accurately for intense exercise sessions of 120 minutes', () => {
+    const goal = calculateDailyWaterGoal({ weightKg: 80, activityMinutes: 120 });
+    assert.equal(goal, 4200);
+  });
 });
 
