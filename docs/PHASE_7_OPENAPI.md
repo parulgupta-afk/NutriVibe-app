@@ -1,25 +1,9 @@
-# Phase 7 — API contracts / OpenAPI
+# OpenAPI status (honest)
 
-## Goal
+`server/src/docs/openapi.json` currently documents a **subset** of routes (on the order of ~10 paths), not the full ~70 route surface.
 
-Complete `server/src/docs/openapi.json` (or `server/openapi.json`) so every registered route is documented with request/response shapes aligned to Zod schemas.
+Until the file lists every registered route and a contract test compares Express routes to OpenAPI paths:
 
-## Contract test idea
-
-```js
-// server/tests/openapi.contract.test.js
-const documented = new Set(Object.keys(openapi.paths || {}));
-const registered = listExpressRoutes(app); // implement via app._router stack walk
-for (const r of registered) {
-  expect(documented.has(r.path) || documented.has(normalize(r.path))).toBe(true);
-}
-```
-
-Fail CI when a route exists without a documentation entry.
-
-## Steps
-
-1. Inventory all routes (print from Express or from route files).
-2. Ensure each path+method exists in openapi.json.
-3. Prefer generating requestBody schemas from the Zod validators in `server/src/validators/`.
-4. Validate the OpenAPI file (swagger-cli or similar) if available; else mark NOT VERIFIED.
+- Do not claim “every route is documented”.
+- Keep the contract test as a **partial** check (file exists, core paths present).
+- Track full coverage on the roadmap.

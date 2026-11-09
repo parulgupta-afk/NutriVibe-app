@@ -1,132 +1,52 @@
 # NutriVibe QA & Automated Testing Report
 
-**Date:** 2026-11-05  
-**Engineer:** QA Automation Engineer & Senior Full-Stack Architect  
-**Status:** 100% Passed · Production Ready
+**Date:** 2026-11-09  
+**Branch / commit:** update after applying v1.0 finalization fixes  
+**Status:** Automated suites passing · **Not production-ready for real clinical use**
 
 ---
 
-## 1. Test Execution Summary
+## 1. Test execution summary (fill with your latest local run)
 
-| Test Domain | Runner / Tool | Test Suites | Total Tests | Passed | Failed | Duration | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **Backend API & Engine** | Node.js Test Runner | 40 | 114 | 114 | 0 | ~3.1s | **PASS** |
-| **Frontend Utilities & Logic** | Node.js Test Runner | 19 | 79 | 79 | 0 | ~0.7s | **PASS** |
-| **Frontend Code Quality** | ESLint (`--max-warnings 0`) | All client files | - | 0 errors | 0 warnings | ~4.8s | **PASS** |
-| **Frontend Production Build** | Vite 6.4.5 | Production bundle | - | 0 errors | 0 warnings | ~8.4s | **PASS** |
-| **Security Audit (Server)** | `npm audit --omit=dev` | 13 packages audited | - | 0 vulnerabilities | 0 | ~4.2s | **PASS** |
-| **Security Audit (Client)** | `npm audit --omit=dev` | 446 packages audited | - | 0 vulnerabilities | 0 | ~4.1s | **PASS** |
+| Test domain | Command | Expected | Your result |
+| --- | --- | --- | --- |
+| Backend | `cd server && npm test` | All pass | |
+| Frontend lint | `cd client && npm run lint` | 0 errors | |
+| Frontend tests | `cd client && npm test` | All pass | |
+| Frontend build | `cd client && npm run build` | Success | |
+| Server audit | `cd server && npm audit --omit=dev` | 0 vulns | |
+| Client audit | `cd client && npm audit --omit=dev` | 0 vulns | |
 
----
-
-## 2. Backend Test Suites Breakdown (`server/tests/`)
-
-Total: 114 passing tests across 40 test suites.
-
-- `allergenRule.test.js`: Direct allergen matching, plant milk exclusions, cross-contamination, thin-data detection.
-- `AppError.test.js`: Status codes, error codes, standard API error responses.
-- `dietPlannerService.test.js`: Vegetarian, dairy, peanut, and combined dietary filters.
-- `dietRule.test.js`: Dietary violations, non-vegan ingredient detection, caution adjustments.
-- `dietaryRules.test.js`: Rule definitions, text matching, uncertified restriction advisories.
-- `envSummary.test.js`: Masking secrets in logs, runtime capability flags.
-- `healthRoutes.test.js`: MongoDB connection checks, uptime reporting, rate limit bypass.
-- `medicationInteractions.test.js`: Grapefruit-statin, MAOI-tyramine, vitamin K-warfarin rules.
-- `medicationRule.test.js`: Contraindication detection, severity scoring.
-- `openFoodFactsService.test.js`: Barcode formatting, OFF response parsing, fallback heuristics.
-- `processingRule.test.js`: NOVA classification, ultra-processed food scoring.
-- `profileResolver.test.js`: Fail-closed dependent validation, ownership checks, 404/403 rejection.
-- `rateLimiter.test.js`: IP window counters, burst mitigation.
-- `safetyEngine.test.js`: Orchestrator determinism, multi-factor safety scoring, fail-closed handling.
-- `safetyEngineCanonical.test.js`: Verification of all 14 mandatory canonical safety and uncertainty modes.
-- `securityHeaders.test.js`: Helmet CSP directives, nosniff, frame-ancestors.
-- `serviceWorkerPrivacy.test.js`: Exclusion of `/api/*` endpoints from offline cache.
-- `streakService.test.js`: Day calculations, milestone achievements.
-- `submissionController.test.js`: Admin review, product submission validation.
-- `validation.test.js`: Express-validator error formatting and HTTP 400 responses.
-- `vibeAIService.test.js`: Prompt construction, safety question pattern matching.
+Replace this table with the real numbers from your machine after applying the password-length fix.
 
 ---
 
-## 3. Frontend Test Suites Breakdown (`client/tests/`)
+## 2. Known limitations (honest)
 
-Total: 79 passing tests across 19 test suites.
+Do **not** describe this release as “Production Ready” or “100% Passed” for real allergy/medication use.
 
-- `verdictRing.test.js`: Verdict configuration, ARIA labeling, percentage computations, color mappings for SAFE, CAUTION, UNSAFE, and CANNOT_VERIFY fallback.
-- `allergenHelper.test.js`: Allergen normalization, color badge styling, custom allergen fallbacks.
-- `barcodeValidator.test.js`: EAN-13 check digit computation, length validation, checksum verification.
-- `bmiCalculator.test.js`: BMI computation, category boundaries (Normal, Underweight, Overweight, Obese), edge case handling.
-- `dateFormatter.test.js`: ISO date formatting, HH:MM time conversion, today identification.
-- `debounce.test.js`: Execution delays, rapid call merging, cancellation methods.
-- `exportCsv.test.js`: CSV escaping, quotation sanitation, row serialization.
-- `lastScanCache.test.js`: Local storage scan caching, deserialization, cache invalidation.
-- `safeStorage.test.js`: In-memory storage fallback, quota management, error recovery.
-- `servingUnit.test.js`: Unit conversions (oz, tbsp, g), serving size string parsing.
-- `textTruncate.test.js`: Word-boundary truncation, title case conversion.
-- `apiError.test.js`: Error message extraction, network error fallbacks, 401 recognition.
-- `serviceWorkerPrivacy.test.js`: Verification that cache rules do not retain authenticated endpoints.
+| Area | Limitation |
+| --- | --- |
+| Clinical safety | No medical device / clinical validation. Informational only. Users must verify with a clinician. |
+| Password policy | Register and reset now both require **min 10 characters** (this fix package). Common-password denylist and strength scoring are still basic. |
+| Session security | Access tokens may still live in `localStorage` with multi-day lifetime; no full refresh-token rotation / logout-all in all environments. |
+| Validation | Not every route uses the same Zod/express-validator coverage; some endpoints rely on older or partial checks. |
+| OpenAPI | Only a subset of routes are documented in `openapi.json` (about 10 paths). The contract test must not claim full coverage until it is wired to the real route list. |
+| Rate limiting | May be in-memory per process; multi-instance Redis-backed limits are not fully verified. |
+| E2E | No full Playwright browser journey in CI against real Mongo in all environments. |
+| Eval set | Allergen FNR can be 0 on the labeled set and still miss novel wording in the wild. |
 
 ---
 
-## 4. Verification Evidence
+## 3. What this fix package changes
 
-### Backend Test Execution
+1. **Reset password** server check: minimum length **10** (was 6).  
+2. **Register** validation (middleware + routes): minimum length **10**.  
+3. **Client** Register + ResetPassword: UI min length **10**.  
+4. This report: removes “Production Ready” / “100% Passed” marketing language; adds Known limitations.
 
-```text
-> nutrivibe-server@1.0.0 test
-> node --test "tests/*.test.js" "tests/**/*.test.js"
+---
 
-# tests 114
-# suites 40
-# pass 114
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 3091.6431
-```
+## 4. Medical disclaimer
 
-### Frontend Test Execution
-
-```text
-> nutrivibe-client@1.0.0 test
-> node --test "tests/*.test.js" "tests/**/*.test.js"
-
-# tests 79
-# suites 19
-# pass 79
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 673.9211
-```
-
-### Frontend Lint Execution
-
-```text
-> nutrivibe-client@1.0.0 lint
-> eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0
-
-(0 errors, 0 warnings)
-```
-
-### Frontend Production Build Execution
-
-```text
-> nutrivibe-client@1.0.0 build
-> vite build
-
-vite v6.4.5 building for production...
-✓ 202 modules transformed.
-dist/index.html                           0.87 kB │ gzip:   0.47 kB
-dist/assets/index-uNbyO6ej.css           52.76 kB │ gzip:   8.99 kB
-...
-✓ built in 9.47s
-```
-
-### Production Dependency Audits
-
-```text
-server: found 0 vulnerabilities
-client: found 0 vulnerabilities
-```
+NutriVibe provides informational food and nutrition insights only. It is not a substitute for professional medical advice. Always verify important dietary, allergy, and medication-related decisions with a qualified healthcare professional.

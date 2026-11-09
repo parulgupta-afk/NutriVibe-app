@@ -19,8 +19,8 @@ const validateRegister = [
   body('password')
     .notEmpty()
     .withMessage('Password is required')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters')
+    .isLength({ min: 10 })
+    .withMessage('Password must be at least 10 characters')
     .matches(/^(?=.*[A-Za-z])(?=.*\d)/)
     .withMessage('Password must contain at least one letter and one number'),
 

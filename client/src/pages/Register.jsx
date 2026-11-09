@@ -101,8 +101,8 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className="input-field pl-10"
-                placeholder="Min 6 characters"
-                minLength="6"
+                placeholder="Min 10 characters"
+                minLength="10"
               />
             </div>
           </div>

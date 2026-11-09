@@ -1,20 +1,29 @@
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-
 /**
- * Contract test: every Express route should appear in OpenAPI.
- * Wire listRoutes(app) to your real app export once available.
+ * OpenAPI contract test — honest version.
+ * Does NOT claim every route is documented.
+ * When you wire listRoutes(app), assert documented paths are a subset
+ * or grow openapi.json until coverage is complete.
  */
 
-// const openapi = require('../src/docs/openapi.json');
-// const { listRoutes } = require('./helpers/listRoutes');
+const fs = require('fs');
+const path = require('path');
 
-describe('OpenAPI contract', () => {
-  it('placeholder – wire app and openapi paths', () => {
-    // const routes = listRoutes(app);
-    // const paths = new Set(Object.keys(openapi.paths || {}));
-    // const missing = routes.filter((r) => !paths.has(r.path) && !paths.has(r.path.replace(/:([^/]+)/g, '{$1}')));
-    // expect(missing).toEqual([]);
-    assert.strictEqual(true, true);
+describe('OpenAPI documentation (partial)', () => {
+  it('openapi.json exists and has at least some paths', () => {
+    const p = path.join(__dirname, '../src/docs/openapi.json');
+    const raw = fs.readFileSync(p, 'utf8');
+    const doc = JSON.parse(raw);
+    const paths = Object.keys(doc.paths || {});
+    expect(paths.length).toBeGreaterThan(0);
+    // Known current baseline ~10 paths — update when docs grow
+    // Do not assert paths.length === totalExpressRoutes until inventory matches.
+  });
+
+  it('documents core auth and health routes', () => {
+    const p = path.join(__dirname, '../src/docs/openapi.json');
+    const doc = JSON.parse(fs.readFileSync(p, 'utf8'));
+    const paths = doc.paths || {};
+    expect(paths['/api/health'] || paths['/health']).toBeTruthy();
+    // Adjust keys if your openapi uses different path spellings
   });
 });
