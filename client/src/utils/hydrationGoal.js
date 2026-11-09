@@ -8,6 +8,7 @@
  * @returns {number} Recommended water intake in ml
  */
 export function calculateDailyWaterGoal({ weightKg = 70, activityMinutes = 0 } = {}) {
+  // Base intake is 35ml per kg body weight; activity adds 350ml per 30 minutes
   const baseMl = Math.max(30, Number(weightKg) || 70) * 35; // 35ml per kg base
   const activityMl = (Math.max(0, Number(activityMinutes) || 0) / 30) * 350; // 350ml per 30 mins exercise
   return Math.round(baseMl + activityMl);
