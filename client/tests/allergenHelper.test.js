@@ -36,5 +36,10 @@ describe('client allergenHelper utility tests', () => {
     assert.equal(formatAllergenTitle('  dairy'), 'Dairy');
     assert.equal(formatAllergenTitle(''), '');
   });
+
+  it('returns default styling for whitespace-only strings', () => {
+    const style = getAllergenBadgeStyle('   ');
+    assert.match(style, /bg-gray-100/);
+  });
 });
 
