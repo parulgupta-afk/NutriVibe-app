@@ -49,5 +49,10 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res4.bmi, null);
     assert.equal(res4.category, 'Unknown');
   });
+
+  it('handles NaN and non-finite numbers safely', () => {
+    const res = calculateBmi(Number.NaN, 175);
+    assert.equal(res.category, 'Unknown');
+  });
 });
 
