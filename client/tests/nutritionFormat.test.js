@@ -43,5 +43,10 @@ describe('client nutritionFormat utility tests', () => {
     const empty = calculateMacroPercentages({ protein: 0, carbs: 0, fat: 0 });
     assert.deepEqual(empty, { protein: 0, carbs: 0, fat: 0 });
   });
+
+  it('returns whole integer percentages summing to approximately 100', () => {
+    const res = calculateMacroPercentages({ protein: 30, carbs: 40, fat: 30 });
+    assert.equal(res.protein + res.carbs + res.fat, 100);
+  });
 });
 
