@@ -2,6 +2,7 @@
  * Serving unit normalization & measurement conversion utility.
  */
 
+// Canonical metric conversion ratios for culinary measurements
 const CONVERSION_FACTORS = {
   g: 1,
   gram: 1,
