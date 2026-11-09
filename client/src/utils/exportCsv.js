@@ -18,6 +18,11 @@ function escapeCell(value) {
  * @param {Array} logs - recentLogs or filtered logs from dashboard
  * @param {string} dateLabel - e.g. 2026-08-20
  */
+/**
+ * Exports client tracking logs into a downloadable CSV blob.
+ * @param {Array<object>} logs
+ * @param {string} dateLabel
+ */
 export function downloadLogsCsv(logs = [], dateLabel = 'export') {
   const headers = ['Time', 'Product', 'Brand', 'Safety', 'Profile', 'Barcode'];
   const rows = logs.map((log) => [
