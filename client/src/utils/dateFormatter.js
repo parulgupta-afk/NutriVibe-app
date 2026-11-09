@@ -15,6 +15,12 @@ export function formatDate(dateInput, fallback = 'N/A') {
   return date.toISOString().split('T')[0];
 }
 
+/**
+ * Formats time component of date to HH:MM format.
+ * @param {string|Date|number} dateInput
+ * @param {string} [fallback='--:--']
+ * @returns {string}
+ */
 export function formatTime(dateInput, fallback = '--:--') {
   if (!dateInput) return fallback;
   const date = new Date(dateInput);
