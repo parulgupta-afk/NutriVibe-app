@@ -42,5 +42,9 @@ describe('client safeStorage utility tests', () => {
   it('handles empty string key gracefully with defaultValue', () => {
     assert.equal(safeStorage.getItem('', 'defaultVal'), 'defaultVal');
   });
+
+  it('setItem returns true on successful storage', () => {
+    assert.equal(safeStorage.setItem('key_flag', 'val'), true);
+  });
 });
 
