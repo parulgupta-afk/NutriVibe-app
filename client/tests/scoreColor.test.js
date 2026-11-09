@@ -40,5 +40,9 @@ describe('client scoreColor utility tests', () => {
     assert.equal(getScoreColor(0).label, 'Poor');
     assert.equal(getScoreColor(100).label, 'Excellent');
   });
+
+  it('returns Fair styling at score 59 boundary', () => {
+    assert.equal(getScoreColor(59).label, 'Fair');
+  });
 });
 
