@@ -15,6 +15,13 @@ export function truncateText(text, maxLength = 100, suffix = '...') {
   return `${text.slice(0, maxLength).trimEnd()}${suffix}`;
 }
 
+/**
+ * Truncate sentence by word count limit.
+ * @param {string} text
+ * @param {number} [maxWords=15]
+ * @param {string} [suffix='...']
+ * @returns {string}
+ */
 export function truncateWords(text, maxWords = 15, suffix = '...') {
   if (!text || typeof text !== 'string') return '';
   const words = text.trim().split(/\s+/);
