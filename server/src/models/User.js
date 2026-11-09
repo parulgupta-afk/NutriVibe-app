@@ -55,6 +55,7 @@ const userSchema = new mongoose.Schema({
     default: 'user'
   },
   // Increment on password change / reset / logout-all to invalidate old JWTs
+  // Monotonically increasing counter for session revoking / logout-all
   tokenVersion: {
     type: Number,
     default: 0
