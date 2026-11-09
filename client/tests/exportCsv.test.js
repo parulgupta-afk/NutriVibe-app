@@ -63,5 +63,10 @@ describe('client exportCsv utility tests', () => {
     const row = formatCsvRow(log);
     assert.equal(row, ',Apple,,,Me,999');
   });
+
+  it('formats log with empty values and missing fields gracefully', () => {
+    const emptyRow = formatCsvRow({});
+    assert.match(emptyRow, /^,+Me,/);
+  });
 });
 
