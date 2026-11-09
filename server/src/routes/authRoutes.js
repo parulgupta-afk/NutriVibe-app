@@ -1,6 +1,15 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { register, login, getMe, updatePreferences, googleAuth, forgotPassword, resetPassword } = require('../controllers/authController');
+const {
+  register,
+  login,
+  getMe,
+  updatePreferences,
+  googleAuth,
+  forgotPassword,
+  resetPassword,
+  logoutAll,
+} = require('../controllers/authController');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -8,12 +17,12 @@ const router = express.Router();
 router.post('/register', [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').isLength({ min: 10, max: 128 }).withMessage('Password must be at least 10 characters')
+  body('password').isLength({ min: 10, max: 128 }).withMessage('Password must be at least 10 characters'),
 ], register);
 
 router.post('/login', [
   body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').notEmpty().withMessage('Password is required')
+  body('password').notEmpty().withMessage('Password is required'),
 ], login);
 
 router.post('/google', googleAuth);
@@ -27,5 +36,6 @@ router.post(
 
 router.get('/me', auth, getMe);
 router.put('/preferences', auth, updatePreferences);
+router.post('/logout-all', auth, logoutAll);
 
 module.exports = router;

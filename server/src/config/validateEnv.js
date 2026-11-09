@@ -1,8 +1,7 @@
 /**
- * Phase 4: production-aware env validation.
+ * Production-aware env validation.
  * - Always require MONGO_URI + JWT_SECRET
- * - In production, also require CLIENT_URL (CORS) and warn on missing optional keys
- * - Never print secret values
+ * - Production: CLIENT_URL required; JWT_SECRET must be >= 32 chars and not a known example
  */
 function validateEnv() {
   const required = ['MONGO_URI', 'JWT_SECRET'];
@@ -14,20 +13,32 @@ function validateEnv() {
     process.exit(1);
   }
 
-  if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 16) {
-    console.warn('JWT_SECRET is short; use at least 16 random characters in production.');
-  }
-
+  const secret = String(process.env.JWT_SECRET);
+  const exampleSecrets = new Set([
+    'change-me-to-a-long-random-string',
+    'secret',
+    'jwt_secret',
+    'your_jwt_secret',
+  ]);
   const isProd = process.env.NODE_ENV === 'production';
 
-  if (isProd && !process.env.CLIENT_URL) {
-    console.error('CLIENT_URL is required in production (used for CORS).');
-    process.exit(1);
+  if (secret.length < 16) {
+    console.warn('JWT_SECRET is short; use at least 32 random characters in production.');
+  }
+
+  if (isProd) {
+    if (secret.length < 32 || exampleSecrets.has(secret)) {
+      console.error('Production refuses to start: JWT_SECRET must be a random string of at least 32 characters (not an example value).');
+      process.exit(1);
+    }
+    if (!process.env.CLIENT_URL) {
+      console.error('CLIENT_URL is required in production (used for CORS).');
+      process.exit(1);
+    }
   }
 
   const optional = ['GEMINI_API_KEY', 'GOOGLE_CLIENT_ID', 'SMTP_HOST', 'SMTP_USER', 'SMTP_PASS'];
   const unsetOptional = optional.filter((key) => !process.env[key] || !String(process.env[key]).trim());
-
   if (isProd && unsetOptional.length) {
     console.warn(`Optional env not set (some features disabled): ${unsetOptional.join(', ')}`);
   }
@@ -35,11 +46,10 @@ function validateEnv() {
   return {
     isProd,
     hasGemini: Boolean(process.env.GEMINI_API_KEY),
-    hasGoogleOAuth: Boolean(process.env.GOOGLE_CLIENT_ID)
+    hasGoogleOAuth: Boolean(process.env.GOOGLE_CLIENT_ID),
   };
 }
 
-/** Safe summary for startup logs — never includes secret values */
 function envSummary() {
   return {
     NODE_ENV: process.env.NODE_ENV || 'development',
@@ -48,7 +58,7 @@ function envSummary() {
     JWT_SECRET: process.env.JWT_SECRET ? 'set' : 'missing',
     CLIENT_URL: process.env.CLIENT_URL || '(default localhost:5173)',
     GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'set' : 'missing',
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'set' : 'missing'
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'set' : 'missing',
   };
 }
 
