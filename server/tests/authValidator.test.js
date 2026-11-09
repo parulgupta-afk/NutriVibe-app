@@ -49,5 +49,12 @@ describe('auth validator schemas and email normalization', () => {
     assert.equal(objectId.parse('507f1f77bcf86cd799439011'), '507f1f77bcf86cd799439011');
     assert.throws(() => objectId.parse('invalid-id'));
   });
+
+  it('provides default page 1 and limit 20 for pagination schema', () => {
+    const { pagination } = require('../src/validators/common.validator');
+    const parsed = pagination.parse({});
+    assert.equal(parsed.page, 1);
+    assert.equal(parsed.limit, 20);
+  });
 });
 
