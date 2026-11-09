@@ -25,6 +25,11 @@ export function sodiumToSalt(sodiumGrams) {
   return Math.round(Number(sodiumGrams) * 2.5 * 100) / 100;
 }
 
+/**
+ * Calculate macro caloric and weight distribution percentages.
+ * @param {{ protein?: number, carbs?: number, fat?: number }} macros
+ * @returns {{ protein: number, carbs: number, fat: number }}
+ */
 export function calculateMacroPercentages({ protein = 0, carbs = 0, fat = 0 }) {
   const p = Math.max(0, Number(protein) || 0);
   const c = Math.max(0, Number(carbs) || 0);
