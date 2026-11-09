@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-/**
- * Primary user account schema for authentication, preferences, and account linking.
- */
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -28,7 +25,7 @@ const userSchema = new mongoose.Schema({
       function () { return !this.googleId; },
       'Please provide a password'
     ],
-    minlength: [6, 'Password must be at least 6 characters'],
+    minlength: [10, 'Password must be at least 10 characters'],
     select: false
   },
   // Set only for accounts created/linked via "Sign in with Google".
@@ -56,6 +53,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
+  },
+  // Increment on password change / reset / logout-all to invalidate old JWTs
+  tokenVersion: {
+    type: Number,
+    default: 0
   },
   preferences: {
     dietaryRestrictions: { type: [String], default: [] },

@@ -8,10 +8,17 @@ const { sendPasswordResetEmail } = require('../services/emailService');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '7d',
-  });
+const generateToken = (user) => {
+  const id = user._id || user;
+  const tokenVersion = typeof user.tokenVersion === 'number' ? user.tokenVersion : 0;
+  return jwt.sign(
+    { id, tokenVersion },
+    process.env.JWT_SECRET,
+    {
+      algorithm: 'HS256',
+      expiresIn: process.env.JWT_EXPIRE || '7d',
+    }
+  );
 };
 
 // @desc    Register user
@@ -51,7 +58,7 @@ exports.register = async (req, res, next) => {
     });
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     // Return user data (excluding password)
     const userData = {
@@ -107,7 +114,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     // Return user data (excluding password)
     const userData = {
@@ -199,7 +206,7 @@ exports.googleAuth = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     res.status(200).json({
       success: true,
@@ -307,12 +314,13 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     user.password = password; // pre-save hook hashes this automatically
+    user.tokenVersion = (user.tokenVersion || 0) + 1; // invalidate older JWTs
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
 
     // Log them straight in after a successful reset
-    const authToken = generateToken(user._id);
+    const authToken = generateToken(user);
 
     res.status(200).json({
       success: true,

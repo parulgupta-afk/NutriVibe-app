@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').isLength({ min: 10 }).withMessage('Password must be at least 10 characters')
+  body('password').isLength({ min: 10, max: 128 }).withMessage('Password must be at least 10 characters')
 ], register);
 
 router.post('/login', [
@@ -19,7 +19,11 @@ router.post('/login', [
 router.post('/google', googleAuth);
 
 router.post('/forgot-password', forgotPassword);
-router.post('/reset-password/:token', resetPassword);
+router.post(
+  '/reset-password/:token',
+  body('password').isLength({ min: 10, max: 128 }).withMessage('Password must be at least 10 characters'),
+  resetPassword
+);
 
 router.get('/me', auth, getMe);
 router.put('/preferences', auth, updatePreferences);

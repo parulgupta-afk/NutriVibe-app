@@ -21,6 +21,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (formData.password.length < 10) {
+      setError("Password must be at least 10 characters");
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
