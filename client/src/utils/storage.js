@@ -2,6 +2,7 @@
  * Safe localStorage wrapper with in-memory fallback for private browsing and quota limits.
  */
 
+// In-memory fallback map prevents crashes in environments with disabled localStorage
 const memoryStore = new Map();
 
 function isStorageAvailable() {
