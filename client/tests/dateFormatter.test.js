@@ -32,5 +32,10 @@ describe('client dateFormatter utility tests', () => {
     assert.equal(isToday(null), false);
     assert.equal(isToday('not-a-date'), false);
   });
+
+  it('formats epoch timestamp integers into YYYY-MM-DD', () => {
+    const epoch = Date.UTC(2026, 10, 5, 0, 0, 0);
+    assert.equal(formatDate(epoch), '2026-11-05');
+  });
 });
 
