@@ -29,6 +29,11 @@ export function calculateEanChecksum(barcodeWithoutCheckDigit) {
   return remainder === 0 ? 0 : 10 - remainder;
 }
 
+/**
+ * Validates barcode format and modulo-10 checksum algorithm.
+ * @param {string} barcode Barcode string to validate.
+ * @returns {boolean} True if valid EAN/UPC barcode.
+ */
 export function isValidBarcode(barcode) {
   if (!barcode || typeof barcode !== 'string') return false;
   const trimmed = barcode.trim();
