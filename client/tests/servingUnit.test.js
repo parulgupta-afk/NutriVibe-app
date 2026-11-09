@@ -38,5 +38,9 @@ describe('client servingUnit utility tests', () => {
     const parsed = parseServingString('8 fl oz');
     assert.deepEqual(parsed, { quantity: 8, unit: 'fl oz' });
   });
+
+  it('converts teaspoons to metric grams accurately', () => {
+    assert.equal(convertToMetricGrams(3, 'tsp'), 15);
+  });
 });
 
