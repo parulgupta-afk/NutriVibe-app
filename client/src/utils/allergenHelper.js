@@ -28,6 +28,11 @@ export function normalizeAllergenName(allergen) {
   return allergen.trim().toLowerCase();
 }
 
+/**
+ * Retrieve badge color classes based on recognized allergen keyword.
+ * @param {string} allergen
+ * @returns {string} Tailwind CSS class string
+ */
 export function getAllergenBadgeStyle(allergen) {
   const normalized = normalizeAllergenName(allergen);
   return ALLERGEN_COLOR_MAP[normalized] || DEFAULT_COLOR;
