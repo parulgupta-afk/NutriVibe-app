@@ -31,5 +31,9 @@ describe('client barcodeValidator utility tests', () => {
     assert.equal(calculateEanChecksum(undefined), null);
     assert.equal(calculateEanChecksum(''), null);
   });
+
+  it('rejects 13-character string containing alphabetic characters', () => {
+    assert.equal(isValidBarcode('400638133393A'), false);
+  });
 });
 
