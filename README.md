@@ -168,3 +168,8 @@ npm run build
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+
+## Environment Configuration
+
+Ensure `server/.env` and `client/.env` are populated according to their `.env.example` templates. The server automatically resolves the local `.env` file even when executed from project subdirectories.
