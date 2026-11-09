@@ -38,5 +38,9 @@ describe('client textTruncate utility tests', () => {
     const exact = 'ExactLength10';
     assert.equal(truncateText(exact, 13), exact);
   });
+
+  it('returns single word string untouched without truncation', () => {
+    assert.equal(truncateWords('NutriVibe', 5), 'NutriVibe');
+  });
 });
 
