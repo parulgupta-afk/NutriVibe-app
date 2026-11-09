@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { isCommonPassword } = require('../data/commonPasswords');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { validationResult } = require('express-validator');
@@ -8,8 +9,8 @@ const { sendPasswordResetEmail } = require('../services/emailService');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, tokenVersion = 0) => {
+  return jwt.sign({ id, tokenVersion }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d',
   });
 };
@@ -28,6 +29,20 @@ exports.register = async (req, res, next) => {
     }
 
     const { name, email, password, preferences } = req.body;
+
+    if (!password || typeof password !== 'string' || password.length < 10) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 10 characters',
+      });
+    }
+
+    if (isCommonPassword(password)) {
+      return res.status(400).json({
+        success: false,
+        message: 'This password is too common. Choose a stronger one.',
+      });
+    }
 
     if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
       return res.status(400).json({
@@ -60,7 +75,7 @@ exports.register = async (req, res, next) => {
     });
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.tokenVersion || 0);
 
     // Return user data (excluding password)
     const userData = {
@@ -132,7 +147,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.tokenVersion || 0);
 
     // Return user data (excluding password)
     const userData = {
@@ -234,7 +249,7 @@ exports.googleAuth = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.tokenVersion || 0);
 
     res.status(200).json({
       success: true,
@@ -355,7 +370,7 @@ exports.resetPassword = async (req, res, next) => {
     await user.save();
 
     // Log them straight in after a successful reset
-    const authToken = generateToken(user._id);
+    const authToken = generateToken(user._id, user.tokenVersion || 0);
 
     res.status(200).json({
       success: true,
@@ -450,6 +465,25 @@ exports.updatePreferences = async (req, res, next) => {
         email: user.email,
         preferences: user.preferences,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+// @desc    Invalidate all JWTs for this user (increment tokenVersion)
+// @route   POST /api/auth/logout-all
+// @access  Private
+exports.logoutAll = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'User not found' });
+    }
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: 'All sessions revoked. Please sign in again.',
     });
   } catch (error) {
     next(error);

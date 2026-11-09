@@ -1,4 +1,7 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 require('dotenv').config();
+
 const { validateEnv, envSummary } = require('./src/config/validateEnv');
 const connectDB = require('./src/config/database');
 
@@ -48,10 +51,11 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Rejection:', err && err.message ? err.message : err);
-  server.close(() => process.exit(1));
+  // In development, keep process alive so developer sees the error and can fix it;
+  // in production, exit so container / process manager restarts clean.
+  if (process.env.NODE_ENV === 'production') {
+    server.close(() => process.exit(1));
+  }
 });
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err && err.message ? err.message : err);
-  server.close(() => process.exit(1));
-});
+module.exports = server;
