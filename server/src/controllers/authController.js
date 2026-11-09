@@ -8,17 +8,10 @@ const { sendPasswordResetEmail } = require('../services/emailService');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Generate JWT
-const generateToken = (user) => {
-  const id = user._id || user;
-  const tokenVersion = typeof user.tokenVersion === 'number' ? user.tokenVersion : 0;
-  return jwt.sign(
-    { id, tokenVersion },
-    process.env.JWT_SECRET,
-    {
-      algorithm: 'HS256',
-      expiresIn: process.env.JWT_EXPIRE || '7d',
-    }
-  );
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE || '7d',
+  });
 };
 
 // @desc    Register user
@@ -36,8 +29,17 @@ exports.register = async (req, res, next) => {
 
     const { name, email, password, preferences } = req.body;
 
+    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email',
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Check if user exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -48,7 +50,7 @@ exports.register = async (req, res, next) => {
     // Create user
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password,
       preferences: preferences || {
         dietaryRestrictions: [],
@@ -58,7 +60,7 @@ exports.register = async (req, res, next) => {
     });
 
     // Generate token
-    const token = generateToken(user);
+    const token = generateToken(user._id);
 
     // Return user data (excluding password)
     const userData = {
@@ -95,8 +97,24 @@ exports.login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
+    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email',
+      });
+    }
+
+    if (!password || typeof password !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: 'Password is required',
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Check if user exists
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -114,7 +132,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Generate token
-    const token = generateToken(user);
+    const token = generateToken(user._id);
 
     // Return user data (excluding password)
     const userData = {
@@ -178,25 +196,35 @@ exports.googleAuth = async (req, res, next) => {
       });
     }
 
+    const googleId = typeof payload.sub === 'string' ? payload.sub.trim() : null;
+    const googleEmail = typeof payload.email === 'string' && payload.email.length <= 254 ? payload.email.trim().toLowerCase() : null;
+
+    if (!googleId || !googleEmail) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid Google profile payload.',
+      });
+    }
+
     // Look up by googleId first, then fall back to email — this lets
     // someone who already registered with email/password link their
     // existing account the first time they use "Sign in with Google"
     // with the same email address, instead of creating a duplicate.
-    let user = await User.findOne({ googleId: payload.sub }).select('+googleId');
+    let user = await User.findOne({ googleId }).select('+googleId');
 
     if (!user) {
-      user = await User.findOne({ email: payload.email });
+      user = await User.findOne({ email: googleEmail });
       if (user) {
-        user.googleId = payload.sub;
+        user.googleId = googleId;
         await user.save();
       }
     }
 
     if (!user) {
       user = await User.create({
-        name: payload.name || payload.email.split('@')[0],
-        email: payload.email,
-        googleId: payload.sub,
+        name: payload.name || googleEmail.split('@')[0],
+        email: googleEmail,
+        googleId,
         preferences: {
           dietaryRestrictions: [],
           allergies: [],
@@ -206,7 +234,7 @@ exports.googleAuth = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user);
+    const token = generateToken(user._id);
 
     res.status(200).json({
       success: true,
@@ -231,11 +259,12 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'Please provide an email' });
+    if (!email || typeof email !== 'string' || !email.trim() || email.length > 254) {
+      return res.status(400).json({ success: false, message: 'Please provide a valid email' });
     }
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
 
     // Always return the same generic response whether or not the email
     // exists — this prevents someone from using this endpoint to figure
@@ -292,6 +321,13 @@ exports.resetPassword = async (req, res, next) => {
     const { token } = req.params;
     const { password } = req.body;
 
+    if (!token || typeof token !== 'string' || token.length > 254) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid reset token',
+      });
+    }
+
     if (!password || typeof password !== 'string' || password.length < 10) {
       return res.status(400).json({
         success: false,
@@ -314,13 +350,12 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     user.password = password; // pre-save hook hashes this automatically
-    user.tokenVersion = (user.tokenVersion || 0) + 1; // invalidate older JWTs
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
 
     // Log them straight in after a successful reset
-    const authToken = generateToken(user);
+    const authToken = generateToken(user._id);
 
     res.status(200).json({
       success: true,

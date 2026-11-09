@@ -11,22 +11,25 @@ const Register = () => {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    setError(null);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     if (formData.password.length < 10) {
       setError("Password must be at least 10 characters");
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
@@ -37,6 +40,8 @@ const Register = () => {
 
     if (result.success) {
       navigate("/onboarding");
+    } else {
+      setError(result.error);
     }
   };
 
@@ -129,6 +134,8 @@ const Register = () => {
               />
             </div>
           </div>
+
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
           <button
             type="submit"
