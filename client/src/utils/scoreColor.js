@@ -18,6 +18,7 @@ export function getScoreColor(score) {
     };
   }
 
+  // Categorization thresholds: >=80 Excellent, >=60 Good, >=40 Fair, <40 Poor
   const num = Number(score);
 
   if (num >= 80) {
