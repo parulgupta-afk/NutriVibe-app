@@ -12,6 +12,7 @@ const {
 
 /**
  * Safely extracts ingredient array from string, array, or nested fields.
+ * Trims whitespace and filters out empty tokens.
  */
 function extractIngredientList(product) {
   if (!product) return [];
