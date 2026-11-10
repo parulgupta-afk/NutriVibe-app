@@ -1,3 +1,4 @@
+// Visual representation and hex color schemes across canonical safety verdicts
 export const VERDICT_STYLES = {
   SAFE: {
     stroke: '#10B981',
