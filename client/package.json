@@ -2,6 +2,8 @@
   "name": "nutrivibe-client",
   "version": "2.0.0",
   "type": "module",
+  "author": "Parul Gupta",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

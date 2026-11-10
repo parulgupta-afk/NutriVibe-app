@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "NutriVibe - Personalized Food Intelligence App Backend",
   "main": "server.js",
+  "author": "Parul Gupta",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
