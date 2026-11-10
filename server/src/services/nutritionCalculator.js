@@ -24,6 +24,7 @@ function calculateFromGrams(per100g, grams) {
 
 /**
  * Sum nutrition across multiple meal items.
+ * Computes aggregate total calories, protein, carbs, fat, and fiber.
  */
 function sumNutrition(items) {
   return items.reduce(
