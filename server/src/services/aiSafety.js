@@ -27,7 +27,7 @@ function validateGemini(schema, raw, fallbackKey) {
   }
 }
 
-/** Wrap untrusted text so the model treats it as data, not instructions. */
+/** Wrap untrusted text with explicit boundaries so the model treats it as data, not instructions. */
 function delimitUntrusted(label, text) {
   const safe = String(text || '').slice(0, 8000).replace(/```/g, '');
   return `\n<<<UNTRUSTED_${label}_START>>>\n${safe}\n<<<UNTRUSTED_${label}_END>>>\n`;
