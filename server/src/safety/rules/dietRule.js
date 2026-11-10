@@ -14,6 +14,7 @@ const { checkDietaryRestrictions } = require('../../data/dietaryRules');
  * @returns {Object} Updated evaluation state.
  */
 function applyDietRules(product, userRestrictions, state) {
+  // Evaluates declared dietary restrictions against known animal and prohibited derivatives
   const dietConflicts = checkDietaryRestrictions(userRestrictions || [], product);
   for (const conflict of dietConflicts) {
     state.factors.push({
