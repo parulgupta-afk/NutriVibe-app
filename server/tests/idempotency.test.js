@@ -65,4 +65,13 @@ describe('idempotency helpers', () => {
     assert.deepEqual(body2, { success: true, data: { id: 'log1' } });
     assert.equal(res2.statusCode, 201);
   });
+
+  it('passes through to next handler when idempotency header is absent', () => {
+    const req = { get: () => undefined, user: { id: 'u1' } };
+    let passed = false;
+    idempotency(req, {}, () => {
+      passed = true;
+    });
+    assert.equal(passed, true);
+  });
 });
