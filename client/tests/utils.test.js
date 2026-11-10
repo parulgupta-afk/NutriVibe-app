@@ -55,6 +55,10 @@ describe('client apiError utils', () => {
     const error = new Error('Database connection failed');
     assert.equal(getApiErrorMessage(error), 'Database connection failed');
   });
+
+  it('returns default fallback when error object is an empty dictionary', () => {
+    assert.equal(getApiErrorMessage({}), 'Something went wrong');
+  });
 });
 
 describe('client lastScanCache utils', () => {
