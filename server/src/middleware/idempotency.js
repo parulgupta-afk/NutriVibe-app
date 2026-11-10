@@ -14,6 +14,7 @@
 const crypto = require('crypto');
 
 const STORE = new Map(); // key → { status, body, expiresAt }
+// 24-hour retention window for idempotent mutation responses
 const TTL_MS = 24 * 60 * 60 * 1000;
 const MAX_KEYS = 5000;
 
