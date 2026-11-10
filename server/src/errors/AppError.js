@@ -12,6 +12,7 @@ class AppError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.code = code;
+    /** Indicates this error was deliberately raised by application logic */
     this.isOperational = true;
     Error.captureStackTrace?.(this, this.constructor);
   }
