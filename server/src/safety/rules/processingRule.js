@@ -7,6 +7,7 @@
  * @returns {Object} Updated evaluation state.
  */
 function applyProcessingRules(product, state) {
+  // Informational factor: attaches Ultra-Processed note without overriding Unsafe
   if (product.processingLevel === 'Ultra-Processed' && state.level !== 'Unsafe') {
     state.factors.push({
       name: 'High processing level',
