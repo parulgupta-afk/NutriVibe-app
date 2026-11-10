@@ -4,6 +4,7 @@
 
 /**
  * Creates a debounced function that delays invoking func until after wait ms.
+ * Debounced instance maintains cancel() method to clear any pending timer.
  * @param {Function} func
  * @param {number} [wait=300] - Delay in milliseconds
  * @returns {Function & { cancel: () => void }}
