@@ -49,5 +49,12 @@ describe('medicationRule unit tests', () => {
     assert.equal(state.level, 'Unsafe');
     assert.equal(state.score, 10);
   });
+
+  it('handles product with no ingredients text without error', () => {
+    const product = { name: 'Empty item' };
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyMedicationRules(product, ['atorvastatin'], initialState);
+    assert.equal(state.level, 'Safe');
+  });
 });
 
