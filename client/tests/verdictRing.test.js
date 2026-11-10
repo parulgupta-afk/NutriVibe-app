@@ -78,4 +78,10 @@ describe('client VerdictRing logic & styles tests', () => {
     assert.equal(fallback.label, 'CANNOT VERIFY');
     assert.equal(fallback.pct, 0.5);
   });
+
+  it('resolves fallback config for undefined verdict input', () => {
+    const result = getVerdictConfig(undefined);
+    assert.equal(result.label, 'CANNOT VERIFY');
+    assert.equal(result.pct, 0.5);
+  });
 });
