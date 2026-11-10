@@ -144,6 +144,9 @@ node --test tests/safetyEngineCanonical.test.js
 cd ../client
 npm test
 
+# Run safety benchmark evaluation (210 labeled test cases)
+npm run eval
+
 # Run frontend linting & static analysis
 npm run lint
 
