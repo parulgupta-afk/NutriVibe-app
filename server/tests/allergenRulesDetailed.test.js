@@ -63,5 +63,10 @@ describe('allergenRule detailed unit tests', () => {
 
     assert.equal(hasInsufficientData(completeProduct), false);
   });
+
+  it('returns empty array when user allergies list is empty', () => {
+    const product = { name: 'Peanut Butter', ingredients: ['Peanuts', 'Salt'] };
+    assert.deepEqual(findMatchingAllergens(product, []), []);
+  });
 });
 
