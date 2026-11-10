@@ -7,6 +7,7 @@ const Meal = require('../models/Meal');
 const HydrationLog = require('../models/HydrationLog');
 const NutritionGoal = require('../models/NutritionGoal');
 
+// Canonical achievement milestone identifiers and user-facing labels
 const ACHIEVEMENTS = {
   FIRST_MEAL: { id: 'first_meal', label: 'First Meal' },
   HYDRATION_HERO: { id: 'hydration_hero', label: 'Hydration Hero' },
