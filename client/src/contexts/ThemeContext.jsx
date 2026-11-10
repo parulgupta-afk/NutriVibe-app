@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
+// LocalStorage key identifier for user interface theme preference
 const STORAGE_KEY = 'nutrivibe_theme';
 
 /**
