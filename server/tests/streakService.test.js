@@ -28,6 +28,10 @@ describe('streakService unit tests', () => {
       assert.equal(dayDiff('2026-10-31', '2026-11-01'), 1);
       assert.equal(dayDiff('2026-12-31', '2027-01-01'), 1);
     });
+
+    it('handles identical dates returning zero', () => {
+      assert.equal(dayDiff('2026-06-15', '2026-06-15'), 0);
+    });
   });
 
   describe('hasAchievement', () => {
