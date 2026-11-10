@@ -2,6 +2,7 @@
  * Phase 5: remember the last successful scan on this device
  * so the Scanner can offer a one-tap re-open if the network is slow.
  */
+// Key identifier in localStorage for caching the most recent barcode scan
 const KEY = 'nutrivibe_last_scan';
 
 export function saveLastScan({ barcode, name, brand, safetyLevel }) {
