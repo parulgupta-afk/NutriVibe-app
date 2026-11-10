@@ -1,5 +1,6 @@
 /**
  * Phase 23: normalize API error messages for toasts / UI.
+ * Gracefully resolves top-level message, nested error object, or fallback string.
  * Prefers server `message`, then `error.message`, then status text.
  */
 export function getApiErrorMessage(error, fallback = 'Something went wrong') {
