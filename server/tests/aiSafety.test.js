@@ -106,5 +106,11 @@ describe('AI safety', () => {
       assert.strictEqual(res.allowed, true);
       assert.strictEqual(res.remaining, 9);
     });
+
+    test('delimitUntrusted handles empty string safely', () => {
+      const delimited = delimitUntrusted('QUERY', '');
+      assert.ok(delimited.includes('<<<UNTRUSTED_QUERY_START>>>'));
+      assert.ok(delimited.includes('<<<UNTRUSTED_QUERY_END>>>'));
+    });
   });
 });
