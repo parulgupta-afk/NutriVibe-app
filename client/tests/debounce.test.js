@@ -44,5 +44,15 @@ describe('client debounce utility tests', () => {
     assert.equal(typeof fn, 'function');
     assert.equal(typeof fn.cancel, 'function');
   });
+
+  it('safely invokes debounced function with multiple arguments', async () => {
+    let received = [];
+    const debounced = debounce((...args) => {
+      received = args;
+    }, 20);
+    debounced('alpha', 42, true);
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    assert.deepEqual(received, ['alpha', 42, true]);
+  });
 });
 
