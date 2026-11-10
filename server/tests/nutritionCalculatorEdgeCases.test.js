@@ -70,5 +70,10 @@ describe('nutritionCalculator edge cases and boundary conditions', () => {
     assert.equal(rounded.fat, 10.0);
     assert.equal(rounded.fiber, 5.7);
   });
+
+  it('handles empty items array in sumNutrition safely', () => {
+    const sum = sumNutrition([]);
+    assert.deepEqual(sum, { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
+  });
 });
 
