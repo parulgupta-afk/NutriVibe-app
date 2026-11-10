@@ -10,6 +10,7 @@
 const { checkMedicationInteractions } = require('../../data/medicationInteractions');
 
 function applyMedicationRules(product, medications, state) {
+  // Evaluates high and medium risk drug-food interactions (e.g., grapefruit, MAOIs)
   const interactionMatches = checkMedicationInteractions(medications || [], product);
 
   for (const match of interactionMatches) {
