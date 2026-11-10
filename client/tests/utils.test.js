@@ -92,5 +92,12 @@ describe('client lastScanCache utils', () => {
     clearLastScan();
     assert.equal(loadLastScan(), null);
   });
+
+  it('handles saveLastScan with empty object without throwing', () => {
+    saveLastScan({});
+    const loaded = loadLastScan();
+    assert.ok(loaded);
+    assert.equal(loaded.safetyLevel, 'Unknown');
+  });
 });
 
