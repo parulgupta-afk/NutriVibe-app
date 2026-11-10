@@ -58,5 +58,11 @@ describe('processingRule unit tests', () => {
     assert.equal(snap.fiber, null);
     assert.equal(snap.score, 70);
   });
+
+  it('reduces score when sugar exceeds threshold in buildNutritionSnapshot', () => {
+    const sugary = { nutritionalInfo: { sugar: 25 } };
+    const snap = buildNutritionSnapshot(sugary);
+    assert.ok(snap.score < 70);
+  });
 });
 
