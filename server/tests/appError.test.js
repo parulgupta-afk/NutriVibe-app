@@ -33,5 +33,10 @@ describe('AppError class and Codes dictionary tests', () => {
     assert.equal(err.isOperational, true);
     assert.ok(typeof err.stack === 'string');
   });
+
+  it('defaults statusCode to 500 when called with single argument', () => {
+    const err = new AppError('Internal unexpected error');
+    assert.equal(err.statusCode, 500);
+  });
 });
 
