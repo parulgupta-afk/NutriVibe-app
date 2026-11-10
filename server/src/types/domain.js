@@ -50,7 +50,7 @@
  * @property {object} [scoreBreakdown]
  */
 
-// Runtime marker so the file is a valid CommonJS module
+// Runtime marker and canonical domain contract version identifier
 module.exports = {
   DOMAIN_VERSION: 1
 };
