@@ -28,5 +28,15 @@ describe('requestTiming middleware unit tests', () => {
     assert.ok(true);
     done();
   });
+
+  it('handles request with empty url gracefully', (t, done) => {
+    const req = { method: 'POST' };
+    const res = new EventEmitter();
+    res.statusCode = 201;
+    requestTiming(req, res, () => {});
+    res.emit('finish');
+    assert.ok(true);
+    done();
+  });
 });
 
