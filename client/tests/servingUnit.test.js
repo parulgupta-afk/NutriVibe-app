@@ -42,5 +42,9 @@ describe('client servingUnit utility tests', () => {
   it('converts teaspoons to metric grams accurately', () => {
     assert.equal(convertToMetricGrams(3, 'tsp'), 15);
   });
+
+  it('handles negative quantity in convertToMetricGrams returning zero', () => {
+    assert.equal(convertToMetricGrams(-5, 'g'), 0);
+  });
 });
 
