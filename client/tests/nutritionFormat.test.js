@@ -48,5 +48,10 @@ describe('client nutritionFormat utility tests', () => {
     const res = calculateMacroPercentages({ protein: 30, carbs: 40, fat: 30 });
     assert.equal(res.protein + res.carbs + res.fat, 100);
   });
+
+  it('handles null and undefined safely in sodiumToSalt', () => {
+    assert.equal(sodiumToSalt(null), 0);
+    assert.equal(sodiumToSalt(undefined), 0);
+  });
 });
 
