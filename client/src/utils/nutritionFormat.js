@@ -20,6 +20,11 @@ export function formatCalories(value, fallback = '0 kcal') {
   return `${num} kcal`;
 }
 
+/**
+ * Converts sodium in grams to table salt equivalent (sodium * 2.5).
+ * @param {number|string|null} sodiumGrams
+ * @returns {number}
+ */
 export function sodiumToSalt(sodiumGrams) {
   if (sodiumGrams == null || Number.isNaN(Number(sodiumGrams))) return 0;
   return Math.round(Number(sodiumGrams) * 2.5 * 100) / 100;
