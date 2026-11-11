@@ -44,5 +44,11 @@ describe('client hydrationGoal utility tests', () => {
     const goal = calculateDailyWaterGoal({ weightKg: 80, activityMinutes: 120 });
     assert.equal(goal, 4200);
   });
+
+  it('handles negative currentMl by clamping to zero in calculateHydrationProgress', () => {
+    const progress = calculateHydrationProgress(-100, 2000);
+    assert.equal(progress.percentage, 0);
+    assert.equal(progress.remainingMl, 2000);
+  });
 });
 
