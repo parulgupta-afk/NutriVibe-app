@@ -38,6 +38,11 @@ export function getAllergenBadgeStyle(allergen) {
   return ALLERGEN_COLOR_MAP[normalized] || DEFAULT_COLOR;
 }
 
+/**
+ * Capitalizes first letter of allergen token for readable badge display.
+ * @param {string} allergen
+ * @returns {string}
+ */
 export function formatAllergenTitle(allergen) {
   if (!allergen || typeof allergen !== 'string') return '';
   const trimmed = allergen.trim();
