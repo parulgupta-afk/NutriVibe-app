@@ -41,5 +41,9 @@ describe('client allergenHelper utility tests', () => {
     const style = getAllergenBadgeStyle('   ');
     assert.match(style, /bg-gray-100/);
   });
+
+  it('handles single character allergen string in formatAllergenTitle', () => {
+    assert.equal(formatAllergenTitle('a'), 'A');
+  });
 });
 
