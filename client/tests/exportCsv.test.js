@@ -68,5 +68,9 @@ describe('client exportCsv utility tests', () => {
     const emptyRow = formatCsvRow({});
     assert.match(emptyRow, /^,+Me,/);
   });
+
+  it('escapes cells containing carriage returns safely', () => {
+    assert.equal(escapeCell('Line1\r\nLine2'), '"Line1\r\nLine2"');
+  });
 });
 
