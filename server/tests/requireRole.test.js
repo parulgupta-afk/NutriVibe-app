@@ -68,6 +68,15 @@ describe('requireRole Middleware & Seed Route Authorization', () => {
 
       assert.equal(nextCalled, true);
     });
+
+    it('handles undefined user property returning 401', () => {
+      const middleware = requireRole('admin');
+      const req = { user: undefined };
+      let statusCode = null;
+      const res = { status: (c) => { statusCode = c; return res; }, json: () => res };
+      middleware(req, res, () => {});
+      assert.equal(statusCode, 401);
+    });
   });
 
   describe('foodController seedFoods controller authorization', () => {
