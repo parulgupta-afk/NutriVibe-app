@@ -66,6 +66,12 @@ describe('NoSQL Operator Injection Protection', () => {
       assert.deepEqual(req.query, { page: '1', sort: 'desc' });
       assert.deepEqual(req.params, { id: 'abc-123' });
     });
+
+    it('handles null and primitive inputs without modification', () => {
+      assert.equal(sanitizeObject(null), null);
+      assert.equal(sanitizeObject(undefined), undefined);
+      assert.equal(sanitizeObject(42), 42);
+    });
   });
 
   describe('authController string checks and query protection', () => {
