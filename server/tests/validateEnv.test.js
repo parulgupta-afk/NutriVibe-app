@@ -10,6 +10,8 @@ describe('validateEnv and envSummary unit tests', () => {
     assert.ok(summary.JWT_SECRET === 'set' || summary.JWT_SECRET === 'missing');
     // Ensure raw secrets are NEVER exposed in summary
     assert.notEqual(summary.JWT_SECRET, process.env.JWT_SECRET);
+    assert.equal(typeof summary, 'object');
+    assert.ok('PORT' in summary);
   });
 
   it('validateEnv returns boolean capability flags without crashing when required keys are set', () => {
