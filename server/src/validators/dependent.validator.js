@@ -1,5 +1,6 @@
 const { z, objectId, nonEmptyString } = require('./common.validator');
 
+/** Zod schema validating strict dependent profile creation payloads */
 const createDependent = z.object({
   name: nonEmptyString(80),
   relationship: nonEmptyString(40).optional(),
