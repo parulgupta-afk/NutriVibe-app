@@ -35,5 +35,9 @@ describe('client barcodeValidator utility tests', () => {
   it('rejects 13-character string containing alphabetic characters', () => {
     assert.equal(isValidBarcode('400638133393A'), false);
   });
+
+  it('returns false for barcode containing spaces within digits', () => {
+    assert.equal(isValidBarcode('40063813339 31'), false);
+  });
 });
 
