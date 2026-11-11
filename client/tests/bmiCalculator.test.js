@@ -54,5 +54,11 @@ describe('client bmiCalculator utility tests', () => {
     const res = calculateBmi(Number.NaN, 175);
     assert.equal(res.category, 'Unknown');
   });
+
+  it('handles negative height values returning Unknown', () => {
+    const result = calculateBmi(70, -175);
+    assert.equal(result.bmi, null);
+    assert.equal(result.category, 'Unknown');
+  });
 });
 
