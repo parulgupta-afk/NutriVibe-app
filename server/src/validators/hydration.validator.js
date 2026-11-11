@@ -8,6 +8,7 @@ const safeTimezone = z
   .max(64)
   .regex(/^[a-zA-Z0-9_\-+/]+$/, 'Invalid timezone format');
 
+/** Zod schema validating bounded numeric targets and safe timezone for hydration goals */
 const updateGoalsSchema = z
   .object({
     calories: z.coerce.number().min(500, 'Calories must be between 500 and 10000').max(10000, 'Calories must be between 500 and 10000').optional(),
