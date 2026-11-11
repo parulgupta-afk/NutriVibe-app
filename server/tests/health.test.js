@@ -53,6 +53,7 @@ describe('Health and Readiness Endpoints', () => {
       assert.equal(response.status, 200);
       assert.equal(response.body.status, 'ok');
       assert.ok(response.body.timestamp);
+      assert.equal(typeof response.body.timestamp, 'string');
     });
   });
 
