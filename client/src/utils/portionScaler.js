@@ -9,7 +9,7 @@
  * @returns {object}
  */
 export function scaleNutrition(base100g = {}, targetGrams = 100) {
-  // Rounds calories to nearest integer and macros to 1 decimal place
+  // Rounds calories to nearest integer, macros to 1 decimal place, and sodium to 2 decimal places
   const target = Math.max(0, Number(targetGrams) || 0);
   const factor = target / 100;
 
