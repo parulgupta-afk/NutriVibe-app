@@ -22,6 +22,7 @@ function escapeCell(value) {
  * Exports client tracking logs into a downloadable CSV blob.
  * @param {Array<object>} logs
  * @param {string} dateLabel
+ * @returns {void}
  */
 export function downloadLogsCsv(logs = [], dateLabel = 'export') {
   const headers = ['Time', 'Product', 'Brand', 'Safety', 'Profile', 'Barcode'];
