@@ -41,6 +41,7 @@ describe('intro: piece sizing and spawn pacing', () => {
     assert.equal(pieceBaseSize(400) > 48, true);
     assert.equal(pieceBaseSize(4000), 118);
     assert.equal(pieceBaseSize(10), 48);
+    assert.equal(pieceBaseSize(-100), 48);
   });
   it('speeds up from 130 ms to 26 ms and holds there', () => {
     assert.equal(spawnInterval(0), 130);
