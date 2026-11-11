@@ -3,6 +3,7 @@
  * Ensures req.user exists and has one of the allowed roles.
  */
 function requireRole(...roles) {
+  // Flattens varargs so both ('admin') and (['admin', 'editor']) are supported
   const allowed = roles.flat();
   return (req, res, next) => {
     if (!req.user) {
