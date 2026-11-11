@@ -42,6 +42,11 @@ export function convertToMetricGrams(quantity, unit = 'g') {
   return Math.round(q * factor * 10) / 10;
 }
 
+/**
+ * Parses serving description into quantity and measurement unit.
+ * @param {string} servingStr
+ * @returns {{ quantity: number, unit: string }}
+ */
 export function parseServingString(servingStr) {
   if (!servingStr || typeof servingStr !== 'string') {
     return { quantity: 100, unit: 'g' };
