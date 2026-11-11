@@ -14,6 +14,12 @@ export function calculateDailyWaterGoal({ weightKg = 70, activityMinutes = 0 } =
   return Math.round(baseMl + activityMl);
 }
 
+/**
+ * Calculates current progress percentage and remaining intake toward target.
+ * @param {number|string} currentMl
+ * @param {number|string} [targetMl=2500]
+ * @returns {{ percentage: number, remainingMl: number, glassesRemaining: number, isGoalMet: boolean }}
+ */
 export function calculateHydrationProgress(currentMl, targetMl = 2500) {
   const current = Math.max(0, Number(currentMl) || 0);
   const target = Math.max(1, Number(targetMl) || 2500);
