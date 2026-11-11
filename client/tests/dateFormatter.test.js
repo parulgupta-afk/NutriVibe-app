@@ -37,5 +37,9 @@ describe('client dateFormatter utility tests', () => {
     const epoch = Date.UTC(2026, 10, 5, 0, 0, 0);
     assert.equal(formatDate(epoch), '2026-11-05');
   });
+
+  it('returns false for undefined in isToday', () => {
+    assert.equal(isToday(undefined), false);
+  });
 });
 
