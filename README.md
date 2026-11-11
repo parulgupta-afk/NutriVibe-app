@@ -147,7 +147,7 @@ npm test
 # Run safety benchmark evaluation (210 labeled test cases)
 npm run eval
 
-# Run frontend linting & static analysis
+# Run frontend linting & static analysis (ESLint & markdownlint)
 npm run lint
 
 # Run production build
