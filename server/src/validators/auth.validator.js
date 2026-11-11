@@ -1,5 +1,6 @@
 const { z, nonEmptyString, emailString } = require('./common.validator');
 
+/** Zod schemas for user registration, authentication, and credential recovery */
 const register = z.object({
   name: nonEmptyString(80),
   email: emailString,
