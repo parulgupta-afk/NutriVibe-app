@@ -28,6 +28,11 @@ export function formatTime(dateInput, fallback = '--:--') {
   return date.toTimeString().slice(0, 5);
 }
 
+/**
+ * Evaluates whether given date corresponds to today in the local timezone.
+ * @param {string|Date|number} dateInput
+ * @returns {boolean}
+ */
 export function isToday(dateInput) {
   if (!dateInput) return false;
   const date = new Date(dateInput);
