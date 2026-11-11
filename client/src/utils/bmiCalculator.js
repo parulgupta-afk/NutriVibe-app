@@ -23,7 +23,7 @@ export function calculateBmi(weightKg, heightCm) {
   const heightMeters = h / 100;
   const bmi = Math.round((w / (heightMeters * heightMeters)) * 10) / 10;
 
-  // Normal weight range baseline: 18.5 <= BMI <= 24.9
+  // Canonical BMI thresholds: Underweight < 18.5, Normal 18.5-24.9, Overweight 25-29.9, Obese >= 30
   const minNormalWeight = Math.round(18.5 * heightMeters * heightMeters * 10) / 10;
   const maxNormalWeight = Math.round(24.9 * heightMeters * heightMeters * 10) / 10;
 
