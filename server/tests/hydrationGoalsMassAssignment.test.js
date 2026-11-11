@@ -50,6 +50,11 @@ describe('Hydration Goals Mass Assignment Protection', () => {
       assert.equal(updateGoalsSchema.safeParse({ timezone: 'America/New_York' }).success, true);
       assert.equal(updateGoalsSchema.safeParse({ timezone: 'Europe/London' }).success, true);
     });
+
+    it('accepts zero values for protein, carbs, and fat in updateGoalsSchema', () => {
+      const res = updateGoalsSchema.safeParse({ protein: 0, carbs: 0, fat: 0 });
+      assert.equal(res.success, true);
+    });
   });
 
   describe('getOrUpdateGoals controller execution', () => {
