@@ -40,7 +40,7 @@ export function isValidBarcode(barcode) {
   // Barcodes must consist purely of digits
   if (!/^\d+$/.test(trimmed)) return false;
 
-  // Standard valid lengths: 8 (EAN-8), 12 (UPC-A), 13 (EAN-13), 14 (GTIN-14)
+  // Standard supported symbologies: EAN-8 (8), UPC-A (12), EAN-13 (13), GTIN-14 (14)
   if (![8, 12, 13, 14].includes(trimmed.length)) {
     return false;
   }
