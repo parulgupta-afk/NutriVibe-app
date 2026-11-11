@@ -63,5 +63,11 @@ describe('client portionScaler utility tests', () => {
     assert.ok(scaled.calories > 0);
     assert.equal(scaled.grams, 150.5);
   });
+
+  it('handles non-numeric target grams by falling back to zero', () => {
+    const scaled = scaleNutrition(base100g, 'invalid');
+    assert.equal(scaled.grams, 0);
+    assert.equal(scaled.calories, 0);
+  });
 });
 
