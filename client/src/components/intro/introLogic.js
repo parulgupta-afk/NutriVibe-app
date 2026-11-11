@@ -24,7 +24,11 @@ export function markIntroSeen(storage) {
   }
 }
 
-/** Piece size from stage width, clamped so phones and large monitors both look right. */
+/**
+ * Piece size from stage width, clamped between 48px and 118px.
+ * @param {number} width Stage viewport width in pixels.
+ * @returns {number} Clamped dimension.
+ */
 export function pieceBaseSize(width) {
   return Math.max(48, Math.min(width * (width < 560 ? 0.22 : 0.092), 118));
 }
