@@ -3,6 +3,7 @@
  * Does not change responses. Helps establish a performance baseline.
  */
 function requestTiming(req, res, next) {
+  // High-resolution nanosecond timestamp for duration precision
   const start = process.hrtime.bigint();
 
   res.on('finish', () => {
