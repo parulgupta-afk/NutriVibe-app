@@ -10,6 +10,7 @@
  * @returns {Function & { cancel: () => void }}
  */
 export function debounce(func, wait = 300) {
+  // Internal timer reference to track active debounce delay
   let timeoutId = null;
 
   function debounced(...args) {
