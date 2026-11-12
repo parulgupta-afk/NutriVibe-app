@@ -107,6 +107,11 @@ describe('computeSafetyVerdict', () => {
     const v = computeSafetyVerdict(product, user);
     assert.equal(v.level, 'Safe');
   });
+
+  it('returns Unknown verdict when product is undefined or null', () => {
+    const v = computeSafetyVerdict(null, baseUser());
+    assert.equal(v.level, 'Unknown');
+  });
 });
 
 describe('checkDietaryRestrictions', () => {
