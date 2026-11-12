@@ -54,5 +54,10 @@ describe('client debounce utility tests', () => {
     await new Promise((resolve) => setTimeout(resolve, 40));
     assert.deepEqual(received, ['alpha', 42, true]);
   });
+
+  it('instantiates debounced wrapper with default wait duration', () => {
+    const fn = debounce(() => {});
+    assert.equal(typeof fn, 'function');
+  });
 });
 
