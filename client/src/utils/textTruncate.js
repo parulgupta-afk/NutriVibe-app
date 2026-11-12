@@ -9,6 +9,7 @@
  * @param {string} [suffix='...']
  * @returns {string}
  */
+// Safely truncates input text to maxLength characters and appends suffix
 export function truncateText(text, maxLength = 100, suffix = '...') {
   if (!text || typeof text !== 'string') return '';
   if (text.length <= maxLength) return text;
