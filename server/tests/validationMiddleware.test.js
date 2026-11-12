@@ -43,8 +43,8 @@ describe('validation middleware unit tests', () => {
     assert.ok(capturedBody.errors.length > 0);
   });
 
-  it('calls next() when middleware called with empty config', async () => {
-    const middleware = validate({});
+  it('calls next() when middleware called with empty array of validations', async () => {
+    const middleware = validate([]);
     let nextCalled = false;
     await middleware({}, {}, () => {
       nextCalled = true;
