@@ -42,5 +42,9 @@ describe('client textTruncate utility tests', () => {
   it('returns single word string untouched without truncation', () => {
     assert.equal(truncateWords('NutriVibe', 5), 'NutriVibe');
   });
+
+  it('handles empty string input returning empty string in truncateText', () => {
+    assert.equal(truncateText(''), '');
+  });
 });
 
