@@ -42,4 +42,13 @@ describe('validation middleware unit tests', () => {
     assert.equal(capturedBody.error.code, 'VALIDATION_ERROR');
     assert.ok(capturedBody.errors.length > 0);
   });
+
+  it('calls next() when middleware called with empty config', async () => {
+    const middleware = validate({});
+    let nextCalled = false;
+    await middleware({}, {}, () => {
+      nextCalled = true;
+    });
+    assert.equal(nextCalled, true);
+  });
 });
