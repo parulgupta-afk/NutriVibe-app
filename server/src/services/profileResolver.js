@@ -25,6 +25,7 @@ async function resolveEffectiveUser(req) {
   }
 
   // Consistent 404 handler prevents ownership oracles across foreign and missing profiles
+  // Factory to generate standard 404 AppError for missing or unauthorized profile
   const notFound = () => new AppError('Profile not found', 404, Codes.NOT_FOUND);
 
   // Reject non-strings (e.g. {"$ne":null} operator injection) and bad ObjectIds.
