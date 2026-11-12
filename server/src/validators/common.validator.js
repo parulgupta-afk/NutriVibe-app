@@ -2,6 +2,7 @@ const { z } = require('zod');
 
 /** Validates a 24-character hexadecimal MongoDB ObjectId */
 const objectId = z.string().regex(/^[a-fA-F0-9]{24}$/, 'Invalid ObjectId');
+// Validates trimmed non-empty string up to max length
 const nonEmptyString = (max = 500) => z.string().trim().min(1).max(max);
 const optionalString = (max = 500) => z.string().trim().max(max).optional();
 const emailString = z.string().trim().toLowerCase().pipe(z.string().email().max(254));
