@@ -40,6 +40,14 @@ describe('profileResolver unit tests', () => {
     assert.deepEqual(result.effectiveUser, user);
     assert.equal(result.profileId, null);
   });
+
+  it('handles null profileId as default account owner', async () => {
+    const user = { id: 'owner_999', preferences: {} };
+    const req = { user, query: { profileId: null } };
+    const result = await resolveEffectiveUser(req);
+    assert.deepEqual(result.effectiveUser, user);
+    assert.equal(result.profileId, null);
+  });
 });
 
 
