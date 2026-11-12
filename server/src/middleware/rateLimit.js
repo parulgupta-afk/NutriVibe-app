@@ -40,6 +40,7 @@ module.exports = { authLimiter, scanLimiter, aiLimiter, createLimiter };
 */
 
 // Scaffold export so imports do not crash until wired:
+// Fallback pass-through middleware stubs for rate limiting
 module.exports = {
   authLimiter: (req, res, next) => next(),
   scanLimiter: (req, res, next) => next(),
