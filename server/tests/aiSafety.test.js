@@ -54,6 +54,16 @@ describe('AI safety', () => {
       assert.strictEqual(r.ok, false);
       assert.deepStrictEqual(r.data, SAFE_FALLBACKS.ingredients);
     });
+
+    test('null input returns safe fallback without throwing', () => {
+      const r = validateGemini(
+        schemas.ingredientExtraction,
+        null,
+        'ingredients'
+      );
+      assert.strictEqual(r.ok, false);
+      assert.deepStrictEqual(r.data, SAFE_FALLBACKS.ingredients);
+    });
   });
 
   describe('Prompt Injection Protection & Delimiting', () => {
