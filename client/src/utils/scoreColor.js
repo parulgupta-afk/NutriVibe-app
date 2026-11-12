@@ -7,6 +7,7 @@
  * @param {number|null|undefined} score
  * @returns {{ text: string, bg: string, border: string, bar: string, label: string }}
  */
+// Evaluates numeric health & safety score and returns appropriate color scheme
 export function getScoreColor(score) {
   if (score == null || Number.isNaN(Number(score))) {
     return {
