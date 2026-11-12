@@ -2,6 +2,7 @@
  * Shared validate middleware.
  * Usage: router.post('/x', validate({ body: schema }), handler)
  */
+// Configures validation middleware for request body, query, and params schemas
 function validate({ body, query, params } = {}) {
   return (req, res, next) => {
     const details = [];
