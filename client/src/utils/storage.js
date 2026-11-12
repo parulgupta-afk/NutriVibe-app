@@ -19,6 +19,7 @@ function isStorageAvailable() {
 /**
  * Safe client-side storage utility with seamless in-memory fallback.
  */
+// Exposes standard storage API methods (getItem, setItem, removeItem, clear)
 export const safeStorage = {
   /**
    * Safely retrieve and parse JSON item from storage or memory fallback.
