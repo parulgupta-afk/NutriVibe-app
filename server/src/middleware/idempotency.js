@@ -18,6 +18,7 @@ const STORE = new Map(); // key → { status, body, expiresAt }
 const TTL_MS = 24 * 60 * 60 * 1000;
 const MAX_KEYS = 5000;
 
+// Evicts expired entries and enforces max in-memory cache capacity
 function cleanup() {
   const now = Date.now();
   for (const [k, v] of STORE.entries()) {
