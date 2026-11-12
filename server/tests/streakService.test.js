@@ -32,6 +32,10 @@ describe('streakService unit tests', () => {
     it('handles identical dates returning zero', () => {
       assert.equal(dayDiff('2026-06-15', '2026-06-15'), 0);
     });
+
+    it('calculates difference across multiple month spans', () => {
+      assert.equal(dayDiff('2026-01-01', '2026-03-01'), 59);
+    });
   });
 
   describe('hasAchievement', () => {
