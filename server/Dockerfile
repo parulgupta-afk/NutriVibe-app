@@ -1,5 +1,5 @@
 # Phase 19: API image
-FROM node:20-alpine
+FROM node:25-alpine
 
 WORKDIR /app
 
