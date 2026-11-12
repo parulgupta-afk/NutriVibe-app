@@ -23,6 +23,7 @@ const errorHandler = (err, req, res, next) => {
     ...(isDev ? { stack: err.stack } : {})
   });
 
+  // Transform Mongoose CastError to 404 NOT_FOUND response
   if (err.name === 'CastError') {
     message = 'Resource not found';
     code = 'NOT_FOUND';
