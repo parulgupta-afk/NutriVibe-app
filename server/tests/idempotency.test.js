@@ -74,4 +74,13 @@ describe('idempotency helpers', () => {
     });
     assert.equal(passed, true);
   });
+
+  it('passes through to next handler when req.user is absent', () => {
+    const req = { get: () => 'some-key', user: undefined };
+    let passed = false;
+    idempotency(req, {}, () => {
+      passed = true;
+    });
+    assert.equal(passed, true);
+  });
 });
