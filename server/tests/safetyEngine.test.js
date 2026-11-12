@@ -108,8 +108,8 @@ describe('computeSafetyVerdict', () => {
     assert.equal(v.level, 'Safe');
   });
 
-  it('returns Unknown verdict when product is undefined or null', () => {
-    const v = computeSafetyVerdict(null, baseUser());
+  it('returns Unknown verdict when product has empty ingredients and safety info', () => {
+    const v = computeSafetyVerdict(baseProduct({ ingredients: [] }), baseUser());
     assert.equal(v.level, 'Unknown');
   });
 });
