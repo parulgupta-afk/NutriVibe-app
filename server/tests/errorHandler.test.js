@@ -104,4 +104,13 @@ describe('errorHandler', () => {
     assert.equal(res.body.error.code, 'VALIDATION_ERROR');
     assert.match(res.body.message, /Please provide a valid email/);
   });
+
+  it('maps unhandled generic Error to 500 INTERNAL_ERROR', () => {
+    const req = { path: '/api/unhandled', method: 'GET' };
+    const res = mockRes();
+    const err = new Error('Unexpected database failure');
+    errorHandler(err, req, res, () => {});
+    assert.equal(res.statusCode, 500);
+    assert.equal(res.body.error.code, 'INTERNAL_ERROR');
+  });
 });
