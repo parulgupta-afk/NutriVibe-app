@@ -2,6 +2,7 @@ const { z } = require('zod');
 
 /** Structured Gemini outputs must pass these schemas or we use safe fallbacks. */
 
+// Validates extracted ingredients and allergens from vision/OCR models
 const ingredientExtraction = z.object({
   ingredients: z.array(z.string().max(200)).max(200),
   allergens: z.array(z.string().max(80)).max(30).optional(),
