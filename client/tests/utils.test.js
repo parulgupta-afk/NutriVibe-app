@@ -51,6 +51,10 @@ describe('client apiError utils', () => {
     assert.equal(isUnauthorized(undefined), false);
   });
 
+  it('extracts fallback message when error object has empty string message', () => {
+    assert.equal(getApiErrorMessage({ message: '' }), 'Something went wrong');
+  });
+
   it('falls back to generic error message string when response data is empty', () => {
     const error = new Error('Database connection failed');
     assert.equal(getApiErrorMessage(error), 'Database connection failed');
