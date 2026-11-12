@@ -38,5 +38,10 @@ describe('AppError class and Codes dictionary tests', () => {
     const err = new AppError('Internal unexpected error');
     assert.equal(err.statusCode, 500);
   });
+
+  it('correctly sets isOperational property to true on instances', () => {
+    const err = new AppError('Operational notice', 400);
+    assert.strictEqual(err.isOperational, true);
+  });
 });
 
