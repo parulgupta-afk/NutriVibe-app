@@ -46,5 +46,9 @@ describe('client safeStorage utility tests', () => {
   it('setItem returns true on successful storage', () => {
     assert.equal(safeStorage.setItem('key_flag', 'val'), true);
   });
+
+  it('handles removeItem on non-existent key without error', () => {
+    assert.doesNotThrow(() => safeStorage.removeItem('missing_key_xyz'));
+  });
 });
 
