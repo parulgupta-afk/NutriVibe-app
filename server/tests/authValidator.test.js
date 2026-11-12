@@ -56,5 +56,9 @@ describe('auth validator schemas and email normalization', () => {
     assert.equal(parsed.page, 1);
     assert.equal(parsed.limit, 20);
   });
+
+  it('rejects invalid email formats in emailString validator', () => {
+    assert.throws(() => emailString.parse('not-an-email'));
+  });
 });
 
