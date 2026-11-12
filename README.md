@@ -175,3 +175,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ## Environment Configuration
 
 Ensure `server/.env` and `client/.env` are populated according to their `.env.example` templates. The server automatically resolves the local `.env` file even when executed from project subdirectories.
+
+All automated test suites, linting rules, and production build checks are enforced prior to releases.
