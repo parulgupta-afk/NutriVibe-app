@@ -31,6 +31,7 @@ const CANONICAL_VERDICTS = {
  * @param {string} level Legacy or raw level name.
  * @returns {'SAFE'|'CAUTION'|'UNSAFE'|'CANNOT_VERIFY'}
  */
+// Maps internal rule outcome strings to canonical verdict enum
 function normalizeVerdict(level) {
   switch (level) {
     case 'Unsafe':
