@@ -25,6 +25,7 @@ export function getApiErrorMessage(error, fallback = 'Something went wrong') {
   return fallback;
 }
 
+// Checks if an API error response has HTTP 401 Unauthorized status
 export function isUnauthorized(error) {
   return error?.response?.status === 401;
 }
