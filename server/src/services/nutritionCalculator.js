@@ -8,6 +8,7 @@
  * @param {Object} per100g - { calories, protein, carbs, fat, fiber, ... }
  * @param {number} grams - actual weight consumed
  */
+// Pro-rates nutritional components proportionally to weight consumed
 function calculateFromGrams(per100g, grams) {
   if (!per100g || !grams || grams <= 0) {
     return { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
