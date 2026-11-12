@@ -16,6 +16,7 @@ const ACHIEVEMENTS = {
   WELLNESS_30: { id: 'wellness_journey_30', label: 'Wellness Journey' },
 };
 
+// Calculates signed difference in calendar days between two ISO date strings
 function dayDiff(dateA, dateB) {
   // Both YYYY-MM-DD
   const a = new Date(dateA + 'T00:00:00Z');
