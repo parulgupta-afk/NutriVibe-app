@@ -15,6 +15,7 @@ export function calculateEanChecksum(barcodeWithoutCheckDigit) {
   const digits = barcodeWithoutCheckDigit.replace(/\D/g, '');
   if (digits.length === 0) return null;
 
+  // Strips non-digit characters and computes alternating weight checksum
   let sum = 0;
   const isOddLen = digits.length % 2 !== 0;
 
