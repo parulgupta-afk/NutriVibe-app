@@ -50,5 +50,9 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.percentage, 0);
     assert.equal(progress.remainingMl, 2000);
   });
+
+  it('calculateDailyWaterGoal uses default parameters when called with empty object', () => {
+    assert.equal(calculateDailyWaterGoal({}), 2450);
+  });
 });
 
