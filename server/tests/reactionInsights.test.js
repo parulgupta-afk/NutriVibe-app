@@ -54,5 +54,10 @@ describe('reaction insights correlation tests', () => {
     assert.equal(result.topSymptoms.length, 1);
     assert.equal(result.topSymptoms[0].name, 'cough');
   });
+
+  it('handles empty reaction entry objects without throwing', () => {
+    const result = calculateReactionInsights([{}]);
+    assert.equal(result.totalEntries, 1);
+  });
 });
 
