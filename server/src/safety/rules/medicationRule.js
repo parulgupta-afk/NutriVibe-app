@@ -23,6 +23,7 @@ function applyMedicationRules(product, medications, state) {
       `⚕️ ${match.message} (relevant to: ${match.medication})`
     );
 
+    // High-severity interaction forces Unsafe and reduces safety score to 15
     if (match.severity === 'high') {
       state.level = 'Unsafe';
       state.score = Math.min(state.score, 15);
