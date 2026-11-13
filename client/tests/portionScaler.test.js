@@ -69,5 +69,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.grams, 0);
     assert.equal(scaled.calories, 0);
   });
+
+  it('handles empty base nutrition object returning zeros', () => {
+    const scaled = scaleNutrition({}, 150);
+    assert.equal(scaled.calories, 0);
+    assert.equal(scaled.protein, 0);
+  });
 });
 
