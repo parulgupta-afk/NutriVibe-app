@@ -11,6 +11,7 @@
 export function formatDate(dateInput, fallback = 'N/A') {
   if (!dateInput) return fallback;
   const date = new Date(dateInput);
+  // Validates date parseability before formatting ISO string
   if (Number.isNaN(date.getTime())) return fallback;
   return date.toISOString().split('T')[0];
 }
