@@ -45,5 +45,10 @@ describe('client allergenHelper utility tests', () => {
   it('handles single character allergen string in formatAllergenTitle', () => {
     assert.equal(formatAllergenTitle('a'), 'A');
   });
+
+  it('getAllergenBadgeStyle handles null and undefined safely with default classes', () => {
+    assert.match(getAllergenBadgeStyle(null), /bg-gray-100/);
+    assert.match(getAllergenBadgeStyle(undefined), /bg-gray-100/);
+  });
 });
 
