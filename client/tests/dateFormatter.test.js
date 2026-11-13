@@ -41,5 +41,9 @@ describe('client dateFormatter utility tests', () => {
   it('returns false for undefined in isToday', () => {
     assert.equal(isToday(undefined), false);
   });
+
+  it('formatTime returns fallback for invalid date strings', () => {
+    assert.equal(formatTime('invalid-date-string'), '--:--');
+  });
 });
 
