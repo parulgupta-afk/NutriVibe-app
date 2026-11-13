@@ -10,6 +10,7 @@ NutriVibe provides a RESTful API powering food intelligence, safety evaluations,
 - **Public API Base URL**: `http://localhost:5000/v1`
 - **Interactive OpenAPI Documentation**: `GET /api/docs` (Swagger UI) & `GET /api/openapi.json`
 - **Health Check**: `GET /api/health`
+- **Liveness Probe**: `GET /health` (root liveness check for container orchestrators)
 
 ### Headers
 
