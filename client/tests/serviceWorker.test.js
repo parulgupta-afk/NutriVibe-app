@@ -40,4 +40,9 @@ describe('service worker privacy', () => {
     assert.equal(res.status, 503);
     assert.equal(res.headers.get('Cache-Control'), 'no-store');
   });
+
+  it('initializes service worker handlers without error', () => {
+    const { handlers } = load();
+    assert.ok(typeof handlers.fetch === 'function');
+  });
 });
