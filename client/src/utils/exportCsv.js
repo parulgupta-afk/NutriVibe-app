@@ -25,6 +25,7 @@ function escapeCell(value) {
  * @returns {void}
  */
 export function downloadLogsCsv(logs = [], dateLabel = 'export') {
+  // Column headers for exported CSV document
   const headers = ['Time', 'Product', 'Brand', 'Safety', 'Profile', 'Barcode'];
   const rows = logs.map((log) => [
     log.createdAt ? new Date(log.createdAt).toISOString() : '',
