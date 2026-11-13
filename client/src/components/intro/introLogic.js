@@ -16,6 +16,7 @@ export function shouldShowIntro({ storage, search = '', prefersReducedMotion = f
   }
 }
 
+// Marks intro splash as viewed in client storage
 export function markIntroSeen(storage) {
   try {
     storage?.setItem(INTRO_STORAGE_KEY, '1');
