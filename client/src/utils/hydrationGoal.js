@@ -23,6 +23,7 @@ export function calculateDailyWaterGoal({ weightKg = 70, activityMinutes = 0 } =
 export function calculateHydrationProgress(currentMl, targetMl = 2500) {
   const current = Math.max(0, Number(currentMl) || 0);
   const target = Math.max(1, Number(targetMl) || 2500);
+  // Percentage of daily goal achieved, capped at 100%
   const percentage = Math.min(100, Math.round((current / target) * 100));
   const remainingMl = Math.max(0, target - current);
 
