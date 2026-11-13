@@ -47,6 +47,7 @@ export function convertToMetricGrams(quantity, unit = 'g') {
  * @param {string} servingStr
  * @returns {{ quantity: number, unit: string }}
  */
+// Parses arbitrary serving string format with fallback defaults
 export function parseServingString(servingStr) {
   if (!servingStr || typeof servingStr !== 'string') {
     return { quantity: 100, unit: 'g' };
