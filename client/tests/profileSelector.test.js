@@ -50,4 +50,8 @@ describe('client ProfileSelector logic tests', () => {
     assert.deepEqual(getDependentBadge('Spouse'), { label: 'Partner', color: 'pink' });
     assert.deepEqual(getDependentBadge('Friend'), { label: 'Dependent', color: 'gray' });
   });
+
+  it('resolves Me when dependents array is empty', () => {
+    assert.equal(resolveProfileDisplayName('dep_1', []), 'Me');
+  });
 });
