@@ -60,5 +60,12 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(result.bmi, null);
     assert.equal(result.category, 'Unknown');
   });
+
+  it('calculateBmi returns healthy weight range for valid inputs', () => {
+    const res = calculateBmi(70, 175);
+    assert.ok(res.healthyWeightRange);
+    assert.ok(res.healthyWeightRange.min > 50);
+    assert.ok(res.healthyWeightRange.max < 85);
+  });
 });
 
