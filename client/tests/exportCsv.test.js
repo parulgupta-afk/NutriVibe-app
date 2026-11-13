@@ -69,6 +69,11 @@ describe('client exportCsv utility tests', () => {
     assert.match(emptyRow, /^,+Me,/);
   });
 
+  it('escapeCell handles boolean values as strings', () => {
+    assert.equal(escapeCell(true), 'true');
+    assert.equal(escapeCell(false), 'false');
+  });
+
   it('escapes cells containing carriage returns safely', () => {
     assert.equal(escapeCell('Line1\r\nLine2'), '"Line1\r\nLine2"');
   });
