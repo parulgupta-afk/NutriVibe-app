@@ -76,4 +76,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Safe');
     assert.equal(config.ariaLabel, 'Safety level: Safe');
   });
+
+  it('formats aria-label without score when score is explicitly null', () => {
+    const config = getBadgeConfig('Safe', null);
+    assert.equal(config.ariaLabel, 'Safety level: Safe');
+  });
 });
