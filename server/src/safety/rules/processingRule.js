@@ -32,6 +32,7 @@ function buildNutritionSnapshot(product) {
   const calories = Number(n.calories);
 
   // Simple 0–100 heuristic for display only — NOT safety
+  // Evaluates nutrient components (sugar, fiber, protein, calories) against thresholds
   let score = 70;
   if (!Number.isNaN(sugar) && sugar > 15) score -= 15;
   if (!Number.isNaN(fiber) && fiber >= 3) score += 10;
