@@ -20,6 +20,7 @@ export function calculateBmi(weightKg, heightCm) {
     };
   }
 
+  // Converts height to meters and calculates body mass index rounded to 1 decimal
   const heightMeters = h / 100;
   const bmi = Math.round((w / (heightMeters * heightMeters)) * 10) / 10;
 
