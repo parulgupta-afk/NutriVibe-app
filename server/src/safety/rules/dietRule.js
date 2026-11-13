@@ -24,6 +24,7 @@ function applyDietRules(product, userRestrictions, state) {
     });
     state.recommendations.push(conflict.message);
 
+    // Soft escalation: modifies score and factors without forcing an Unsafe status
     if (state.level === 'Safe' && (conflict.severity || 0) >= 35) {
       state.level = 'Caution';
       state.score = Math.min(state.score, 65);
