@@ -13,4 +13,9 @@ describe('INS additives', () => {
   it('returns empty for clean text', () => {
     assert.equal(matchInsInText('fresh tomato and salt').length, 0);
   });
+
+  it('returns empty array when text input is null or empty', () => {
+    assert.deepEqual(matchInsInText(''), []);
+    assert.deepEqual(matchInsInText(null), []);
+  });
 });
