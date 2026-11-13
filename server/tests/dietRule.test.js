@@ -56,5 +56,11 @@ describe('dietRule unit tests', () => {
     assert.equal(state.level, 'Safe');
     assert.equal(state.score, 100);
   });
+
+  it('handles null product gracefully returning state', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyDietRules(null, ['Vegetarian'], initialState);
+    assert.equal(state.level, 'Safe');
+  });
 });
 
