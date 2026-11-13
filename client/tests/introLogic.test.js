@@ -81,4 +81,8 @@ describe('intro: pile fill detection', () => {
     const tops = Array(COLS).fill(100); tops[6] = 590;
     assert.equal(lowestColumn(tops, () => 0.9), 6);
   });
+
+  it('pieceBaseSize clamps to lower bound on zero width', () => {
+    assert.equal(pieceBaseSize(0), 48);
+  });
 });
