@@ -39,5 +39,9 @@ describe('client barcodeValidator utility tests', () => {
   it('returns false for barcode containing spaces within digits', () => {
     assert.equal(isValidBarcode('40063813339 31'), false);
   });
+
+  it('calculateEanChecksum returns null for non-string number input', () => {
+    assert.equal(calculateEanChecksum(12345), null);
+  });
 });
 
