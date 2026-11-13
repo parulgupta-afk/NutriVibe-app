@@ -53,5 +53,10 @@ describe('client nutritionFormat utility tests', () => {
     assert.equal(sodiumToSalt(null), 0);
     assert.equal(sodiumToSalt(undefined), 0);
   });
+
+  it('formatCalories handles null and empty string with default fallback', () => {
+    assert.equal(formatCalories(null), '0 kcal');
+    assert.equal(formatCalories(''), '0 kcal');
+  });
 });
 
