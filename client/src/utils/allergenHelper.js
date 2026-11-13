@@ -2,6 +2,7 @@
  * Allergen badge and chip normalization helper for client pages.
  */
 
+// Canonical color classes for recognized allergens
 const ALLERGEN_COLOR_MAP = {
   dairy: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300',
   milk: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300',
