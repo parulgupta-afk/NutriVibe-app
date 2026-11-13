@@ -13,6 +13,8 @@ const {
 /**
  * Safely extracts ingredient array from string, array, or nested fields.
  * Trims whitespace and filters out empty tokens.
+ * @param {object} product Product model or plain object
+ * @returns {string[]} Array of trimmed individual ingredient strings
  */
 function extractIngredientList(product) {
   if (!product) return [];
