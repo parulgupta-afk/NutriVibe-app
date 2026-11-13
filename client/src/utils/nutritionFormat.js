@@ -14,6 +14,7 @@ export function formatGrams(value, fallback = '0g') {
   return `${Math.round(num * 10) / 10}g`;
 }
 
+// Formats integer calorie value with unit suffix
 export function formatCalories(value, fallback = '0 kcal') {
   if (value == null || value === '' || Number.isNaN(Number(value))) return fallback;
   const num = Math.round(Number(value));
