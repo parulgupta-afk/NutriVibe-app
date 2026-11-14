@@ -45,6 +45,8 @@ function extractAllergenList(product) {
 
 /**
  * Safely extracts warnings / may-contain declarations.
+ * @param {object} product Product model or plain object
+ * @returns {string[]} Array of normalized warning strings
  */
 function extractWarningList(product) {
   if (!product) return [];
