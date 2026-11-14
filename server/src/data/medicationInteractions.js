@@ -125,6 +125,9 @@ const INTERACTIONS = [
 /**
  * Given the user's listed medications and a product's text fields,
  * return any matching interaction warnings.
+ * @param {string[]} medications User's active medication list
+ * @param {object} product Product metadata including ingredients and warnings
+ * @returns {Array<{medication: string, severity: 'high'|'moderate', message: string, matchedIngredients: string[]}>}
  */
 function checkMedicationInteractions(medications = [], product) {
   if (!medications || medications.length === 0) return [];
