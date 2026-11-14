@@ -20,6 +20,13 @@ const STYLES = {
   }
 };
 
+/**
+ * Resolves styling and accessibility labels for safety badges.
+ * @param {string} [level='Unknown'] Safety verdict level
+ * @param {number|null} [score] Optional numeric safety score
+ * @param {'sm'|'md'|'lg'} [size='md'] Badge sizing preset
+ * @returns {{key: string, style: object, sizeClass: string, ariaLabel: string}}
+ */
 function getBadgeConfig(level = 'Unknown', score, size = 'md') {
   const key = STYLES[level] ? level : 'Unknown';
   const style = STYLES[key];
