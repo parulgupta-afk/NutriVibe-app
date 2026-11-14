@@ -147,4 +147,10 @@ describe('rankAlternatives', () => {
       assert.equal(ranked[0].safetyLevel, 'Safe');
     }
   });
+
+  it('returns empty array when candidates list is empty', () => {
+    const base = product({ brand: 'BrandA' });
+    const ranked = rankAlternatives(base, [], user());
+    assert.deepEqual(ranked, []);
+  });
 });
