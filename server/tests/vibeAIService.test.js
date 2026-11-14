@@ -25,6 +25,12 @@ describe('vibeAIService unit tests', () => {
       assert.equal(isSafetyQuestion('What is my current meal logging streak?'), false);
       assert.equal(isSafetyQuestion('Suggest a high protein breakfast.'), false);
     });
+
+    it('returns false for empty string or nullish inputs', () => {
+      assert.equal(isSafetyQuestion(''), false);
+      assert.equal(isSafetyQuestion(null), false);
+      assert.equal(isSafetyQuestion(undefined), false);
+    });
   });
 });
 
