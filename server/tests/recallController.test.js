@@ -42,5 +42,28 @@ describe('recallController unit tests', () => {
     assert.equal(statusCode, 403);
     assert.match(responseData.message, /Admin only/i);
   });
+
+  it('rejects seedDemo request from moderator user with 403', async () => {
+    let statusCode = null;
+    let responseData = null;
+
+    const req = {
+      user: { role: 'moderator' },
+    };
+    const res = {
+      status: (code) => {
+        statusCode = code;
+        return res;
+      },
+      json: (data) => {
+        responseData = data;
+        return res;
+      },
+    };
+
+    await seedDemo(req, res, () => {});
+    assert.equal(statusCode, 403);
+    assert.match(responseData.message, /Admin only/i);
+  });
 });
 
