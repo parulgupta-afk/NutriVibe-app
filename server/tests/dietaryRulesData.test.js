@@ -47,4 +47,13 @@ describe('dietaryRules dataset and checker tests', () => {
     assert.match(conflicts[0].message, /No clear "SpaceDiet" certification/);
     assert.equal(conflicts[0].severity, 20);
   });
+
+  it('returns no conflicts when product has preferred certification', () => {
+    const product = {
+      name: 'Vegan Bar',
+      ingredients_text: 'Oats, nuts',
+      safetyInfo: { certifications: ['vegan'] }
+    };
+    assert.deepEqual(checkDietaryRestrictions(['vegan'], product), []);
+  });
 });
