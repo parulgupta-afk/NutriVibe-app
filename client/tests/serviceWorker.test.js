@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
+/**
+ * Loads service worker in a sandboxed vm context with mock caches and fetch.
+ * Verifies caching isolation and offline 503 fallback behavior.
+ */
 function load() {
   const handlers = {};
   const puts = [];
