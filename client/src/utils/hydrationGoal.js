@@ -4,7 +4,8 @@
 
 /**
  * Calculate recommended daily water intake based on body weight and activity.
- * @param {{ weightKg?: number, activityMinutes?: number }} [options]
+ * Employs 35ml per kg body weight baseline plus 350ml per 30 minutes of exercise.
+ * @param {{ weightKg?: number, activityMinutes?: number }} [options] User biometrics
  * @returns {number} Recommended water intake in ml
  */
 export function calculateDailyWaterGoal({ weightKg = 70, activityMinutes = 0 } = {}) {
