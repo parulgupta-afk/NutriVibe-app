@@ -3,6 +3,7 @@
  */
 /**
  * Escapes CSV special characters (quotes, commas, newlines) according to RFC 4180.
+ * Wraps cells containing special characters in quotes and doubles inner quotation marks.
  * @param {*} value - Cell value to escape
  * @returns {string} Sanitized CSV cell value
  */
