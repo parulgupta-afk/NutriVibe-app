@@ -44,6 +44,12 @@ async function matchesForUser(req, res, next) {
   }
 }
 
+/**
+ * Seed illustrative demo recall record (restricted to admin users only).
+ * @param {object} req Express request
+ * @param {object} res Express response
+ * @param {Function} next Express next callback
+ */
 async function seedDemo(req, res, next) {
   try {
     if (req.user.role !== 'admin') {
