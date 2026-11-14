@@ -68,5 +68,9 @@ describe('allergenRule detailed unit tests', () => {
     const product = { name: 'Peanut Butter', ingredients: ['Peanuts', 'Salt'] };
     assert.deepEqual(findMatchingAllergens(product, []), []);
   });
+
+  it('returns false for hasRelevantCrossContamination when product is null', () => {
+    assert.equal(hasRelevantCrossContamination(null, ['Peanuts']), false);
+  });
 });
 
