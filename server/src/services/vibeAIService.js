@@ -70,6 +70,11 @@ async function gatherContext(userId, user) {
   };
 }
 
+/**
+ * Detects whether user message involves food safety, allergies, or drug interactions.
+ * @param {string} text Input prompt text
+ * @returns {boolean} True if query requires deterministic safety engine check
+ */
 function isSafetyQuestion(text) {
   return /safe|allerg|react|interact|medication|meds|can i eat|should i avoid|unsafe/i.test(text);
 }
