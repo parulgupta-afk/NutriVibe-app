@@ -4,9 +4,10 @@
 
 /**
  * Dynamically scale base 100g nutritional macros to custom portion weight.
- * @param {Record<string, number>} [base100g={}]
- * @param {number} [targetGrams=100]
- * @returns {object}
+ * Rounds calories to whole integer, macronutrients to 1 decimal place, and sodium to 2 decimal places.
+ * @param {Record<string, number>} [base100g={}] Base nutrition per 100g
+ * @param {number} [targetGrams=100] Target portion in grams
+ * @returns {object} Scaled macronutrient profile for the target portion
  */
 export function scaleNutrition(base100g = {}, targetGrams = 100) {
   // Rounds calories to nearest integer, macros to 1 decimal place, and sodium to 2 decimal places
