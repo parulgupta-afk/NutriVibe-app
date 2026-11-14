@@ -23,10 +23,11 @@ const CONVERSION_FACTORS = {
 };
 
 /**
- * Convert imperial and culinary units to metric grams.
- * @param {number|string} quantity
- * @param {string} [unit='g']
- * @returns {number}
+ * Convert imperial and culinary units to metric grams/milliliters.
+ * Supports ounces, fluid ounces, cups, tablespoons, and teaspoons.
+ * @param {number|string} quantity Raw quantity value
+ * @param {string} [unit='g'] Measurement unit string
+ * @returns {number} Converted metric weight or volume in grams/ml rounded to 1 decimal
  */
 export function convertToMetricGrams(quantity, unit = 'g') {
   const q = Number(quantity);
