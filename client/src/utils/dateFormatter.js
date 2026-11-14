@@ -17,10 +17,11 @@ export function formatDate(dateInput, fallback = 'N/A') {
 }
 
 /**
- * Formats time component of date to HH:MM format.
- * @param {string|Date|number} dateInput
- * @param {string} [fallback='--:--']
- * @returns {string}
+ * Formats time component of date to 24-hour HH:MM format using local time string.
+ * Returns fallback when input is empty or invalid date.
+ * @param {string|Date|number} dateInput Input timestamp or date object
+ * @param {string} [fallback='--:--'] Fallback placeholder string
+ * @returns {string} Formatted HH:MM string
  */
 export function formatTime(dateInput, fallback = '--:--') {
   if (!dateInput) return fallback;
