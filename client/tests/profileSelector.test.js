@@ -1,6 +1,12 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
+/**
+ * Resolves display name for selected dependent or defaults to primary user.
+ * @param {string|null|undefined} activeProfileId Dependent ID or null for primary account
+ * @param {Array<{_id: string, name: string}>} [dependents=[]] List of dependents
+ * @returns {string} Resolved display name ('Me' or dependent name)
+ */
 function resolveProfileDisplayName(activeProfileId, dependents = []) {
   if (!activeProfileId) return 'Me';
   const match = dependents.find((d) => d._id === activeProfileId);
