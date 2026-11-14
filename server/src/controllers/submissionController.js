@@ -46,6 +46,12 @@ async function adminList(req, res, next) {
   }
 }
 
+/**
+ * Admin review endpoint to approve or reject a pending submission.
+ * @param {object} req Express request with user, params.id, and body.status
+ * @param {object} res Express response
+ * @param {Function} next Express next callback
+ */
 async function adminReview(req, res, next) {
   try {
     if (req.user.role !== 'admin') {
