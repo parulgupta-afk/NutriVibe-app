@@ -141,3 +141,11 @@
 | SVG Progress Ring | `client/src/components/common/Ring.jsx` |
 | Semantic Safety Badge | `client/src/components/common/SafetyBadge.jsx` |
 | Barcode & OCR Scanner | `client/src/pages/Scanner.jsx` |
+
+---
+
+## 5. Architectural Invariants
+
+1. **Deterministic Safety Authority:** Product safety verdicts (`SAFE`, `CAUTION`, `UNSAFE`, `CANNOT_VERIFY`) are calculated solely through deterministic rules in `server/src/safety/rules/`. AI or LLM models are NEVER authorized to grant product clearance.
+2. **Fail-Closed Default:** Unparseable, corrupted, or missing ingredient records resolve to `CANNOT_VERIFY` or `UNSAFE`, never defaulting to `SAFE`.
+3. **Multi-Profile Isolation:** Dependent safety assessments strictly inherit individual allergen and medication constraints without leakage into other profiles.
