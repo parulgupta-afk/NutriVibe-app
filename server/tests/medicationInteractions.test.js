@@ -65,4 +65,9 @@ describe('checkMedicationInteractions', () => {
     assert.ok(mangoAcharMatches.length >= 1);
     assert.ok(mangoAcharMatches.some((m) => m.severity === 'high'));
   });
+
+  it('returns empty array when product has empty ingredients and name', () => {
+    const matches = checkMedicationInteractions(['warfarin'], productWith([], ''));
+    assert.deepEqual(matches, []);
+  });
 });
