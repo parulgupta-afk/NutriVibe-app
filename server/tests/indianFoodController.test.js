@@ -66,5 +66,21 @@ describe('indianFoodController and INS additives tests', () => {
     assert.ok(codes.includes('INS 211'));
     assert.ok(codes.includes('INS 110'));
   });
+
+  it('lookupIns handles undefined query parameter gracefully', async () => {
+    let result = null;
+    const req = { query: { q: undefined } };
+    const res = {
+      json: (data) => {
+        result = data;
+        return res;
+      },
+    };
+
+    await lookupIns(req, res);
+    assert.ok(result);
+    assert.equal(result.success, true);
+    assert.equal(result.data.matches.length, 0);
+  });
 });
 
