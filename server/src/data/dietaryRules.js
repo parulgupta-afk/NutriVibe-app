@@ -127,6 +127,9 @@ const DIETARY_RULES = [
 /**
  * Check product against a list of user dietary restrictions.
  * Returns an array of conflict objects (empty if all good / unknown).
+ * @param {string[]} userRestrictions List of user dietary preferences
+ * @param {object} product Product metadata including ingredients and certifications
+ * @returns {Array<{restriction: string, severity: number, message: string, matchedIngredients?: string[]}>}
  */
 function checkDietaryRestrictions(userRestrictions = [], product) {
   if (!userRestrictions || userRestrictions.length === 0) return [];
