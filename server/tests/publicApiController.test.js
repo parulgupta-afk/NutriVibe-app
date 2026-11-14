@@ -127,4 +127,12 @@ describe('publicApiController hardening', () => {
       assert.equal(res.code, 400, JSON.stringify(body));
     }
   });
+
+  it('authenticateApiKey returns 401 when X-API-Key is not a string', async () => {
+    const res = mk();
+    let nextCalled = false;
+    await authenticateApiKey({ headers: { 'x-api-key': 12345 } }, res, () => { nextCalled = true; });
+    assert.equal(res.code, 401);
+    assert.equal(nextCalled, false);
+  });
 });
