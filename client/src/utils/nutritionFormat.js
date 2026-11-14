@@ -4,9 +4,10 @@
 
 /**
  * Format numeric weight in grams rounded to 1 decimal place.
- * @param {number|string|null} value
- * @param {string} [fallback='0g']
- * @returns {string}
+ * Returns provided fallback string when input is nullish or non-numeric.
+ * @param {number|string|null} value Input weight in grams
+ * @param {string} [fallback='0g'] Fallback string for invalid inputs
+ * @returns {string} Formatted gram string (e.g. '12.5g')
  */
 export function formatGrams(value, fallback = '0g') {
   if (value == null || value === '' || Number.isNaN(Number(value))) return fallback;
