@@ -85,6 +85,9 @@ async function revokeKey(req, res, next) {
 /**
  * Authenticate via X-API-Key header ONLY (query-string keys leak into logs,
  * proxies and browser history). Enforces the key's own hourly quota atomically.
+ * @param {object} req Express request containing headers
+ * @param {object} res Express response object
+ * @param {Function} next Express next middleware callback
  */
 async function authenticateApiKey(req, res, next) {
   try {
