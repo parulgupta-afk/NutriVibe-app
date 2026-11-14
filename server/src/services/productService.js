@@ -147,6 +147,11 @@ async function findOrFetchByBarcode(barcode) {
 /**
  * Rank alternative products for a user (pure ranking over an in-memory list).
  * Exported for unit tests — same scoring as previous controller.
+ * @param {object} product Base product being compared against
+ * @param {Array<object>} candidates Candidate replacement products
+ * @param {object} user User profile with allergens and dietary preferences
+ * @param {number} [limit=5] Maximum number of alternatives to return
+ * @returns {Array<object>} Safely filtered and ranked alternatives
  */
 function rankAlternatives(product, candidates, user, limit = 5) {
   return rankRecommendations(product, candidates, user, limit);
