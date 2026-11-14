@@ -53,9 +53,10 @@ function normalizeVerdict(level) {
 
 /**
  * Computes deterministic safety assessment against user preferences.
+ * Verdict follows canonical values: SAFE, CAUTION, UNSAFE, CANNOT_VERIFY.
  * @param {Object} product Product document or barcode lookup result.
  * @param {Object} user User profile or effective dependent profile.
- * @returns {Object} Canonical safety evaluation report.
+ * @returns {Object} Canonical safety evaluation report with level, score, factors, and recommendations.
  */
 function computeSafetyVerdict(product, user) {
   const preferences = user?.preferences || user || {};
