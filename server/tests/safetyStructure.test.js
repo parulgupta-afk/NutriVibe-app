@@ -48,4 +48,11 @@ describe('Phase 8 structure', () => {
     assert.equal(v.level, 'Unsafe');
     assert.equal(v.safety.level, 'Unsafe');
   });
+
+  it('verifies computeSafetyVerdict returns array of factors and recommendations', () => {
+    const v = computeSafetyVerdict(product(), user());
+    assert.equal(Array.isArray(v.factors), true);
+    assert.equal(Array.isArray(v.recommendations), true);
+    assert.equal(typeof v.verdict, 'string');
+  });
 });
