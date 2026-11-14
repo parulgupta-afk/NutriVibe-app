@@ -37,6 +37,11 @@ export function pieceBaseSize(width) {
 /**
  * Top edge (y) of the resting pile in each of COLS vertical strips; `height` means empty.
  * `bodies` are { x, y, r, speed } in stage pixels.
+ * @param {Array<{x: number, y: number, r: number, speed: number}>} bodies Physics bodies
+ * @param {number} width Stage viewport width
+ * @param {number} height Stage viewport height
+ * @param {number} [cols=COLS] Number of columns
+ * @returns {number[]} Array of resting vertical boundary positions per column
  */
 export function columnTops(bodies, width, height, cols = COLS) {
   const tops = Array(cols).fill(height);
