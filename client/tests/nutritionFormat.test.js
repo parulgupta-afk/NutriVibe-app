@@ -58,5 +58,9 @@ describe('client nutritionFormat utility tests', () => {
     assert.equal(formatCalories(null), '0 kcal');
     assert.equal(formatCalories(''), '0 kcal');
   });
+
+  it('formatGrams returns default fallback for empty string input', () => {
+    assert.equal(formatGrams(''), '0g');
+  });
 });
 
