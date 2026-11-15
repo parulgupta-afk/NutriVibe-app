@@ -5,6 +5,10 @@
 // Key identifier in localStorage for caching the most recent barcode scan
 const KEY = 'nutrivibe_last_scan';
 
+/**
+ * Persists most recent successful barcode scan to localStorage for rapid access.
+ * @param {{ barcode: string, name?: string, brand?: string, safetyLevel?: string }} scanData
+ */
 export function saveLastScan({ barcode, name, brand, safetyLevel }) {
   try {
     const payload = {
