@@ -16,6 +16,9 @@ const ApiKey = require('../models/ApiKey');
 
 /**
  * Export all personal data belonging to the authenticated user.
+ * @param {object} req Express request with authenticated user
+ * @param {object} res Express response
+ * @param {Function} next Express next callback
  */
 async function exportMe(req, res, next) {
   try {
