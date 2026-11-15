@@ -55,6 +55,11 @@ describe('streakService unit tests', () => {
       const streak = {};
       assert.equal(hasAchievement(streak, ACHIEVEMENTS.HYDRATION_HERO.id), false);
     });
+
+    it('returns false when streak achievements property is null', () => {
+      const streak = { achievements: null };
+      assert.equal(hasAchievement(streak, ACHIEVEMENTS.FIRST_MEAL.id), false);
+    });
   });
 
   describe('ACHIEVEMENTS definitions', () => {
