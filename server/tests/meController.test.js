@@ -177,6 +177,28 @@ describe('meController unit tests (GDPR Account Export & Deletion)', () => {
       assert.match(responseData.message, /password confirmation is required/i);
     });
 
+    it('rejects deleteMe when password confirmation is an empty string', async () => {
+      let statusCode = null;
+      let responseData = null;
+      const req = { user: mockUser, body: { password: '' } };
+      const res = {
+        status(code) {
+          statusCode = code;
+          return res;
+        },
+        json(data) {
+          responseData = data;
+          return res;
+        },
+      };
+
+      await deleteMe(req, res, () => {});
+
+      assert.equal(statusCode, 400);
+      assert.equal(responseData.success, false);
+      assert.match(responseData.message, /password confirmation is required/i);
+    });
+
     it('rejects with 401 when password confirmation is invalid', async () => {
       User.findById = () => ({
         select: async () => mockUser,
