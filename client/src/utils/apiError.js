@@ -3,6 +3,12 @@
  * Gracefully resolves top-level message, nested error object, or fallback string.
  * Prefers server `message`, then `error.message`, then status text.
  */
+/**
+ * Normalizes HTTP or network errors into human-readable strings for UI display.
+ * @param {object|Error|null} error Axios or JavaScript error instance
+ * @param {string} [fallback='Something went wrong'] Fallback string when error message is unavailable
+ * @returns {string} User-facing error message
+ */
 export function getApiErrorMessage(error, fallback = 'Something went wrong') {
   if (!error) return fallback;
 
