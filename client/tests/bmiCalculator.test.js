@@ -67,5 +67,11 @@ describe('client bmiCalculator utility tests', () => {
     assert.ok(res.healthyWeightRange.min > 50);
     assert.ok(res.healthyWeightRange.max < 85);
   });
+
+  it('calculateBmi returns null and Unknown when called with no arguments', () => {
+    const res = calculateBmi();
+    assert.equal(res.bmi, null);
+    assert.equal(res.category, 'Unknown');
+  });
 });
 
