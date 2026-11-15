@@ -50,5 +50,10 @@ describe('client safeStorage utility tests', () => {
   it('handles removeItem on non-existent key without error', () => {
     assert.doesNotThrow(() => safeStorage.removeItem('missing_key_xyz'));
   });
+
+  it('stores and retrieves boolean values accurately', () => {
+    safeStorage.setItem('is_active', false);
+    assert.equal(safeStorage.getItem('is_active'), false);
+  });
 });
 
