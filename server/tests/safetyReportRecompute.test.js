@@ -195,4 +195,28 @@ describe('Safety Report Dynamic Recomputation & Profile Isolation', () => {
       SafetyReport.findOneAndUpdate = origFindOneAndUpdate;
     }
   });
+
+  it('returns 404 when product does not exist in database', async () => {
+    const origFindById = Product.findById;
+    Product.findById = async () => null;
+    try {
+      const req = {
+        params: { productId: '507f1f77bcf86cd799439000' },
+        user: { id: 'u1', preferences: {} },
+        query: {},
+      };
+      let statusCode = null;
+      let body = null;
+      const res = {
+        status: (c) => { statusCode = c; return res; },
+        json: (b) => { body = b; return res; },
+      };
+      await getSafetyReport(req, res, () => {});
+      assert.equal(statusCode, 404);
+      assert.equal(body.success, false);
+      assert.equal(body.message, 'Product not found');
+    } finally {
+      Product.findById = origFindById;
+    }
+  });
 });
