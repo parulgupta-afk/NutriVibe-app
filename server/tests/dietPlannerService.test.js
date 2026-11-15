@@ -57,5 +57,9 @@ describe('dietPlannerService unit tests', () => {
     const names = result.map((f) => f.name);
     assert.deepEqual(names, ['Rolled Oats', 'Yellow Moong Dal']);
   });
+
+  it('returns empty array when foods input is empty', () => {
+    assert.deepEqual(filterFoodsByPreferences([], {}), []);
+  });
 });
 
