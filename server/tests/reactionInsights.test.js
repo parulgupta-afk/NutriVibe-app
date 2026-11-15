@@ -59,5 +59,11 @@ describe('reaction insights correlation tests', () => {
     const result = calculateReactionInsights([{}]);
     assert.equal(result.totalEntries, 1);
   });
+
+  it('calculateReactionInsights defaults to empty array when called with no arguments', () => {
+    const result = calculateReactionInsights();
+    assert.equal(result.totalEntries, 0);
+    assert.deepEqual(result.topFoodsMentioned, []);
+  });
 });
 
