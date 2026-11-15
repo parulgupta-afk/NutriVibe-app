@@ -103,5 +103,11 @@ describe('client lastScanCache utils', () => {
     assert.ok(loaded);
     assert.equal(loaded.safetyLevel, 'Unknown');
   });
+
+  it('loadLastScan returns null on corrupted JSON in localStorage', () => {
+    localStorage.setItem('nutrivibe_last_scan', '{corrupted');
+    assert.equal(loadLastScan(), null);
+    clearLastScan();
+  });
 });
 
