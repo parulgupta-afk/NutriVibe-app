@@ -43,5 +43,9 @@ describe('client barcodeValidator utility tests', () => {
   it('calculateEanChecksum returns null for non-string number input', () => {
     assert.equal(calculateEanChecksum(12345), null);
   });
+
+  it('calculateEanChecksum returns null for object input', () => {
+    assert.equal(calculateEanChecksum({}), null);
+  });
 });
 
