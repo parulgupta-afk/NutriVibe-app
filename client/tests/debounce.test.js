@@ -59,5 +59,12 @@ describe('client debounce utility tests', () => {
     const fn = debounce(() => {});
     assert.equal(typeof fn, 'function');
   });
+
+  it('allows invoking cancel when no execution is pending without error', () => {
+    const debounced = debounce(() => {}, 50);
+    assert.doesNotThrow(() => {
+      debounced.cancel();
+    });
+  });
 });
 
