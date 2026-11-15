@@ -18,4 +18,8 @@ describe('INS additives', () => {
     assert.deepEqual(matchInsInText(''), []);
     assert.deepEqual(matchInsInText(null), []);
   });
+
+  it('returns empty array when text input is undefined', () => {
+    assert.deepEqual(matchInsInText(undefined), []);
+  });
 });
