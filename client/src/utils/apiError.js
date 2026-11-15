@@ -31,7 +31,11 @@ export function getApiErrorMessage(error, fallback = 'Something went wrong') {
   return fallback;
 }
 
-// Checks if an API error response has HTTP 401 Unauthorized status
+/**
+ * Evaluates whether an error object corresponds to an HTTP 401 Unauthorized response.
+ * @param {object|null} error Axios error object
+ * @returns {boolean} True if status is 401
+ */
 export function isUnauthorized(error) {
   return error?.response?.status === 401;
 }
