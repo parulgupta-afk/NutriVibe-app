@@ -40,6 +40,11 @@ async function listReactions(req, res, next) {
   }
 }
 
+/**
+ * Computes frequency counts for foods and symptoms across logged reactions.
+ * @param {Array<object>} [list=[]] List of user reaction records
+ * @returns {{ totalEntries: number, topFoodsMentioned: Array<{name: string, count: number}>, topSymptoms: Array<{name: string, count: number}> }}
+ */
 function calculateReactionInsights(list = []) {
   const foodCounts = {};
   const symptomCounts = {};
