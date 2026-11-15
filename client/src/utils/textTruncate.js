@@ -30,6 +30,11 @@ export function truncateWords(text, maxWords = 15, suffix = '...') {
   return `${words.slice(0, maxWords).join(' ')}${suffix}`;
 }
 
+/**
+ * Converts space-delimited string to Title Case.
+ * @param {string} str Input string
+ * @returns {string} Title-cased string
+ */
 export function toTitleCase(str) {
   if (!str || typeof str !== 'string') return '';
   return str
