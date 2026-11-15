@@ -3,9 +3,13 @@ const Product = require('../models/Product');
 const { computeSafetyVerdict } = require('../services/safetyEngine');
 const { resolveEffectiveUser } = require('../services/profileResolver');
 
-// @desc    Get safety report for a product
-// @route   GET /api/safety/product/:productId
-// @access  Private
+/**
+ * Retrieves dynamically computed safety assessment report for a given product.
+ * Evaluates product contents against authenticated user or selected dependent preferences.
+ * @param {object} req Express request with params.productId and optional query.profileId
+ * @param {object} res Express response
+ * @param {Function} next Express next callback
+ */
 exports.getSafetyReport = async (req, res, next) => {
   try {
     const { productId } = req.params;
