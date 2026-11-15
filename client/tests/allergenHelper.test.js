@@ -50,5 +50,10 @@ describe('client allergenHelper utility tests', () => {
     assert.match(getAllergenBadgeStyle(null), /bg-gray-100/);
     assert.match(getAllergenBadgeStyle(undefined), /bg-gray-100/);
   });
+
+  it('formatAllergenTitle handles null and undefined safely returning empty string', () => {
+    assert.equal(formatAllergenTitle(null), '');
+    assert.equal(formatAllergenTitle(undefined), '');
+  });
 });
 
