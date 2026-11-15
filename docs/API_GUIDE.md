@@ -21,6 +21,7 @@ NutriVibe provides a RESTful API powering food intelligence, safety evaluations,
 | `X-API-Key` | `<key>` | Required for external API endpoints under `/v1/*` |
 | `Idempotency-Key` | `<uuid>` | Optional header for safe request retries |
 | `RateLimit-Limit` | `integer` | Standard header indicating rate limit quota |
+| `RateLimit-Remaining` | `integer` | Standard header indicating remaining quota units in current window |
 
 ---
 
