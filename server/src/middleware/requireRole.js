@@ -1,6 +1,8 @@
 /**
- * Role-based access control middleware.
+ * Role-based access control middleware factory.
  * Ensures req.user exists and has one of the allowed roles.
+ * @param {...string|string[]} roles Allowed role names
+ * @returns {Function} Express middleware callback
  */
 function requireRole(...roles) {
   // Flattens varargs so both ('admin') and (['admin', 'editor']) are supported
