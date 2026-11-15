@@ -50,5 +50,9 @@ describe('client textTruncate utility tests', () => {
   it('handles empty string input returning empty string in truncateWords', () => {
     assert.equal(truncateWords(''), '');
   });
+
+  it('converts single lowercase word to title case in toTitleCase', () => {
+    assert.equal(toTitleCase('apple'), 'Apple');
+  });
 });
 
