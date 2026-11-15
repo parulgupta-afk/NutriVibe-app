@@ -43,5 +43,10 @@ describe('AppError class and Codes dictionary tests', () => {
     const err = new AppError('Operational notice', 400);
     assert.strictEqual(err.isOperational, true);
   });
+
+  it('defines NOT_FOUND code string in Codes dictionary', () => {
+    assert.equal(Codes.NOT_FOUND, 'NOT_FOUND');
+    assert.equal(Codes.USER_NOT_FOUND, 'USER_NOT_FOUND');
+  });
 });
 
