@@ -52,9 +52,10 @@ describe('validation middleware unit tests', () => {
     assert.equal(nextCalled, true);
   });
 
-  it('exports validateMongoIdParam and validatePagination arrays', () => {
+  it('exports validateMongoIdParam and validatePagination validators', () => {
     const { validateMongoIdParam, validatePagination } = require('../src/middleware/validation');
-    assert.ok(Array.isArray(validateMongoIdParam));
+    assert.ok(typeof validateMongoIdParam === 'function');
+    assert.ok(Array.isArray(validateMongoIdParam()));
     assert.ok(Array.isArray(validatePagination));
   });
 });
