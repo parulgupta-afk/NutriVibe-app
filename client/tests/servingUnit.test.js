@@ -50,5 +50,9 @@ describe('client servingUnit utility tests', () => {
   it('handles negative quantity in convertToMetricGrams returning zero', () => {
     assert.equal(convertToMetricGrams(-5, 'g'), 0);
   });
+
+  it('converts cups to metric grams/ml accurately', () => {
+    assert.equal(convertToMetricGrams(1, 'cup'), 240);
+  });
 });
 
