@@ -75,5 +75,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.calories, 0);
     assert.equal(scaled.protein, 0);
   });
+
+  it('defaults to 100g portion when targetGrams is omitted', () => {
+    const scaled = scaleNutrition(base100g);
+    assert.equal(scaled.grams, 100);
+    assert.equal(scaled.calories, 200);
+  });
 });
 
