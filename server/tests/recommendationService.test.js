@@ -47,4 +47,9 @@ describe('rankRecommendations', () => {
     assert.ok(ranked.some((c) => c.barcode === 's'));
     assert.ok(ranked[0].scoreBreakdown);
   });
+
+  it('returns empty array when candidates array is empty', () => {
+    const ranked = rankRecommendations(product(), [], user());
+    assert.deepEqual(ranked, []);
+  });
 });
