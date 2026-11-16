@@ -55,6 +55,11 @@ describe('Hydration Goals Mass Assignment Protection', () => {
       const res = updateGoalsSchema.safeParse({ protein: 0, carbs: 0, fat: 0 });
       assert.equal(res.success, true);
     });
+
+    it('rejects negative values for protein in updateGoalsSchema', () => {
+      const res = updateGoalsSchema.safeParse({ protein: -5 });
+      assert.equal(res.success, false);
+    });
   });
 
   describe('getOrUpdateGoals controller execution', () => {
