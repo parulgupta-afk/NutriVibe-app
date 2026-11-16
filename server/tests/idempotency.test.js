@@ -83,4 +83,30 @@ describe('idempotency helpers', () => {
     });
     assert.equal(passed, true);
   });
+
+  it('returns 400 when idempotency key exceeds 128 characters', () => {
+    const req = {
+      get: (h) => (h.toLowerCase() === 'idempotency-key' ? 'x'.repeat(129) : undefined),
+      user: { id: 'u1' }
+    };
+    let statusCode = null;
+    let responseBody = null;
+    const res = {
+      status(c) {
+        statusCode = c;
+        return this;
+      },
+      json(b) {
+        responseBody = b;
+        return this;
+      }
+    };
+
+    idempotency(req, res, () => {
+      assert.fail('next should not be called');
+    });
+
+    assert.equal(statusCode, 400);
+    assert.equal(responseBody.error.code, 'VALIDATION_ERROR');
+  });
 });
