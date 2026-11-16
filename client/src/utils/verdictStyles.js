@@ -1,5 +1,6 @@
-// Visual representation and hex color schemes across canonical safety verdicts
-// Canonical verdict palette mapping for gauge rings and visual indicators
+/**
+ * Visual styling, hex strokes, text colors, and percentage fill mappings for canonical safety verdicts.
+ */
 export const VERDICT_STYLES = {
   SAFE: {
     stroke: '#10B981',
