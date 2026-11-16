@@ -48,6 +48,18 @@ describe('errorHandler', () => {
     assert.equal(res.body.error.code, 'UNAUTHORIZED');
   });
 
+  it('maps JsonWebTokenError message to Invalid token', () => {
+    const req = { path: '/api/auth/me', method: 'GET' };
+    const res = mockRes();
+    const err = new Error('invalid signature');
+    err.name = 'JsonWebTokenError';
+
+    errorHandler(err, req, res, () => {});
+
+    assert.equal(res.statusCode, 401);
+    assert.equal(res.body.message, 'Invalid token');
+  });
+
   it('maps TokenExpiredError to 401 with Token expired message', () => {
     const req = { path: '/api/auth/me', method: 'GET' };
     const res = mockRes();
