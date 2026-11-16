@@ -11,4 +11,11 @@ describe('public check shape', () => {
     assert.ok(typeof v.score === 'number');
     assert.ok(Array.isArray(v.factors));
   });
+
+  it('returns CANNOT_VERIFY when product has empty ingredients and no metadata', () => {
+    const product = { name: '', ingredients: [] };
+    const user = { preferences: { allergies: ['Dairy'], medications: [], dietaryRestrictions: [] } };
+    const v = computeSafetyVerdict(product, user);
+    assert.equal(v.verdict, 'CANNOT_VERIFY');
+  });
 });
