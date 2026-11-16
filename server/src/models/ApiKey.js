@@ -19,6 +19,11 @@ const apiKeySchema = new mongoose.Schema({
   windowCount: { type: Number, default: 0 },
 }, { timestamps: true });
 
+/**
+ * Hashes raw API key string using SHA-256 for secure database storage.
+ * @param {string} raw Raw API key token
+ * @returns {string} Hex-encoded SHA-256 hash
+ */
 apiKeySchema.statics.hashKey = function (raw) {
   return crypto.createHash('sha256').update(raw).digest('hex');
 };
