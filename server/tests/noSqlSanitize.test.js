@@ -72,6 +72,11 @@ describe('NoSQL Operator Injection Protection', () => {
       assert.equal(sanitizeObject(undefined), undefined);
       assert.equal(sanitizeObject(42), 42);
     });
+
+    it('handles string and boolean primitives in sanitizeObject safely', () => {
+      assert.equal(sanitizeObject('safe-text'), 'safe-text');
+      assert.equal(sanitizeObject(false), false);
+    });
   });
 
   describe('authController string checks and query protection', () => {
