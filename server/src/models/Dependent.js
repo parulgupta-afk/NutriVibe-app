@@ -30,6 +30,7 @@ const dependentSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// Compound index optimizing dependent listing by account owner
 dependentSchema.index({ owner: 1, createdAt: 1 });
 
 module.exports = mongoose.model('Dependent', dependentSchema);
