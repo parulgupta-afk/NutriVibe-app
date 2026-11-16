@@ -28,6 +28,10 @@ apiKeySchema.statics.hashKey = function (raw) {
   return crypto.createHash('sha256').update(raw).digest('hex');
 };
 
+/**
+ * Generates high-entropy cryptographically random raw API key with nv_ prefix.
+ * @returns {string} Raw API key string
+ */
 apiKeySchema.statics.generateRawKey = function () {
   return `nv_${crypto.randomBytes(24).toString('hex')}`;
 };
