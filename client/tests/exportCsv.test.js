@@ -77,5 +77,9 @@ describe('client exportCsv utility tests', () => {
   it('escapes cells containing carriage returns safely', () => {
     assert.equal(escapeCell('Line1\r\nLine2'), '"Line1\r\nLine2"');
   });
+
+  it('escapeCell formats numeric zero as string 0', () => {
+    assert.equal(escapeCell(0), '0');
+  });
 });
 
