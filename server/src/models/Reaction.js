@@ -29,6 +29,7 @@ const reactionSchema = new mongoose.Schema({
   notes: String,
 }, { timestamps: true });
 
+// Compound index optimizing chronological reaction retrieval by user
 reactionSchema.index({ userId: 1, occurredAt: -1 });
 
 module.exports = mongoose.model('Reaction', reactionSchema);
