@@ -61,7 +61,12 @@ export function isPileFull(tops, height, cols = COLS) {
   return filled >= Math.ceil(cols * 0.86);
 }
 
-/** Index of the lowest part of the pile (largest top), ties broken by `rand`. */
+/**
+ * Index of the lowest part of the pile (largest top), ties broken by `rand`.
+ * @param {number[]} tops Column heights
+ * @param {Function} [rand=Math.random] Randomizer function
+ * @returns {number} Column index with lowest top position
+ */
 export function lowestColumn(tops, rand = Math.random) {
   let best = 0;
   for (let c = 1; c < tops.length; c++) {
