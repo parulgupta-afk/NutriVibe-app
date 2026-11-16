@@ -95,6 +95,11 @@ userSchema.pre('save', async function () {
   }
 });
 
+/**
+ * Verifies entered plaintext password against stored bcrypt hash.
+ * @param {string} enteredPassword Candidate plaintext password
+ * @returns {Promise<boolean>} Resolves true if password matches
+ */
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
