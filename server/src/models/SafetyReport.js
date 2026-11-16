@@ -102,7 +102,7 @@ const safetyReportSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Compound index for unique user-product reports
+// Compound unique index ensuring one persistent safety report per product and user
 safetyReportSchema.index({ product: 1, user: 1 }, { unique: true });
 
 // Pre-save middleware
