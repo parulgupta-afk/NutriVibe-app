@@ -55,6 +55,11 @@ describe('Health and Readiness Endpoints', () => {
       assert.ok(response.body.timestamp);
       assert.equal(typeof response.body.timestamp, 'string');
     });
+
+    it('returns 404 for unmatched routes in health router', async () => {
+      const response = await invokeHandler('/unknown-probe');
+      assert.equal(response.status, 404);
+    });
   });
 
   describe('GET /ready (Readiness)', () => {
