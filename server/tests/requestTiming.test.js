@@ -38,5 +38,16 @@ describe('requestTiming middleware unit tests', () => {
     assert.ok(true);
     done();
   });
+
+  it('handles finish event safely for api routes without errors', (t, done) => {
+    const req = { method: 'GET', originalUrl: '/api/products', path: '/api/products' };
+    const res = new EventEmitter();
+    res.statusCode = 200;
+
+    requestTiming(req, res, () => {});
+    res.emit('finish');
+    assert.ok(true);
+    done();
+  });
 });
 
