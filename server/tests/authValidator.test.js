@@ -60,5 +60,9 @@ describe('auth validator schemas and email normalization', () => {
   it('rejects invalid email formats in emailString validator', () => {
     assert.throws(() => emailString.parse('not-an-email'));
   });
+
+  it('rejects empty string in emailString validator', () => {
+    assert.throws(() => emailString.parse(''));
+  });
 });
 
