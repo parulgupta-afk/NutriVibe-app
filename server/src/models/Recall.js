@@ -1,6 +1,6 @@
 /**
- * Food recall records (Phase 7 Option B)
- * Alerts only on conservative matches (barcode or exact product+brand).
+ * Food recall records schema (Phase 7 Option B).
+ * Alerts only on conservative matches (exact barcode or exact product+brand).
  */
 const mongoose = require('mongoose');
 
