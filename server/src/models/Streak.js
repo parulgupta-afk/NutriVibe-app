@@ -1,6 +1,6 @@
 /**
- * Server-side streak engine (Phase 3).
- * All calculations happen on the server using the user's timezone.
+ * Server-side streak engine and gamification model (Phase 3).
+ * Tracks meal logging streaks, hydration consistency, wellness logs, and milestones.
  */
 const mongoose = require('mongoose');
 
