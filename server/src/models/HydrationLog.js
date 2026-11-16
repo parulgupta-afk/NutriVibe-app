@@ -32,6 +32,7 @@ const hydrationLogSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+// Compound index optimizing daily hydration intake aggregations
 hydrationLogSchema.index({ userId: 1, localDate: 1 });
 
 module.exports = mongoose.model('HydrationLog', hydrationLogSchema);
