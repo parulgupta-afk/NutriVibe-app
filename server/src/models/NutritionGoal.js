@@ -1,5 +1,6 @@
 /**
- * Configurable nutrition & hydration goals (Phase 2/3).
+ * Configurable daily nutrition and hydration goals schema (Phase 2/3).
+ * Stores calorie, macronutrient, fiber, water targets, and user timezone.
  */
 const mongoose = require('mongoose');
 
