@@ -1,5 +1,6 @@
 /**
- * Community product submissions (Phase 6) — never auto-trusted
+ * Community product submissions schema (Phase 6).
+ * Submissions remain pending review and are never automatically trusted in safety checks.
  */
 const mongoose = require('mongoose');
 
