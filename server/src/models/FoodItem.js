@@ -59,7 +59,7 @@ const foodItemSchema = new mongoose.Schema({
   tags: [String],
 }, { timestamps: true });
 
-// Text search index
+// Compound text search index for food items and local culinary aliases
 foodItemSchema.index({ name: 'text', aliases: 'text' });
 
 module.exports = mongoose.model('FoodItem', foodItemSchema);
