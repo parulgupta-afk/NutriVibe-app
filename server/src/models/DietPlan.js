@@ -59,7 +59,7 @@ const dietPlanSchema = new mongoose.Schema({
     enum: ['draft', 'active', 'archived'],
     default: 'draft',
   },
-  // Preferences snapshot used for generation
+  // Snapshot of user preferences and nutritional goals captured at plan generation time
   preferences: {
     allergies: [String],
     restrictions: [String],
