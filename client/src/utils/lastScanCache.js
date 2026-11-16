@@ -20,7 +20,7 @@ export function saveLastScan({ barcode, name, brand, safetyLevel }) {
     };
     localStorage.setItem(KEY, JSON.stringify(payload));
   } catch {
-    // private mode / quota — ignore
+    // Silently handle quota exhaustion or private browsing mode restrictions
   }
 }
 
