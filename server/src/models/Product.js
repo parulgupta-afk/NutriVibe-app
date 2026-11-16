@@ -104,7 +104,7 @@ const productSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for search
+// Compound text index enabling multi-field keyword search across catalog
 productSchema.index({ name: 'text', brand: 'text', category: 'text' });
 
 module.exports = mongoose.model('Product', productSchema);
