@@ -68,6 +68,7 @@ const mealSchema = new mongoose.Schema({
   aiConfidence: Number,
 }, { timestamps: true });
 
+// Compound indexes supporting efficient date-filtered meal diary queries
 mealSchema.index({ userId: 1, localDate: 1 });
 mealSchema.index({ userId: 1, mealType: 1, localDate: 1 });
 
