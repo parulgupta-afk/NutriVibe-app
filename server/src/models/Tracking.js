@@ -80,7 +80,7 @@ const trackingSchema = new mongoose.Schema(
   }
 );
 
-// Query patterns: daily/history by user, product history, profile-scoped history
+// Compound indexes optimized for user audit logs, product scan frequencies, and dependent profile filtering
 trackingSchema.index({ user: 1, createdAt: -1 });
 trackingSchema.index({ product: 1, createdAt: -1 });
 trackingSchema.index({ user: 1, product: 1 });
