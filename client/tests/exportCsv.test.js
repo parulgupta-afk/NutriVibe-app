@@ -1,7 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
-// Helper mirroring client export formatting
+/**
+ * Test helper mirroring client RFC 4180 CSV cell sanitization and escaping.
+ * @param {*} value Cell value to escape
+ * @returns {string} Sanitized cell string
+ */
 function escapeCell(value) {
   const s = value == null ? '' : String(value);
   if (/[",\n]/.test(s)) {
