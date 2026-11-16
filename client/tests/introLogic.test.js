@@ -85,4 +85,9 @@ describe('intro: pile fill detection', () => {
   it('pieceBaseSize clamps to lower bound on zero width', () => {
     assert.equal(pieceBaseSize(0), 48);
   });
+
+  it('easeOutCubic returns exact 0 and 1 at boundaries', () => {
+    assert.equal(easeOutCubic(0), 0);
+    assert.equal(easeOutCubic(1), 1);
+  });
 });
