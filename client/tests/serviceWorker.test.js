@@ -49,4 +49,10 @@ describe('service worker privacy', () => {
     const { handlers } = load();
     assert.ok(typeof handlers.fetch === 'function');
   });
+
+  it('registers install and activate event listeners', () => {
+    const { handlers } = load();
+    assert.ok(typeof handlers.install === 'function');
+    assert.ok(typeof handlers.activate === 'function');
+  });
 });
