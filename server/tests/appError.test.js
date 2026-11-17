@@ -48,5 +48,9 @@ describe('AppError class and Codes dictionary tests', () => {
     assert.equal(Codes.NOT_FOUND, 'NOT_FOUND');
     assert.equal(Codes.USER_NOT_FOUND, 'USER_NOT_FOUND');
   });
+
+  it('defines UPSTREAM_UNAVAILABLE in Codes dictionary', () => {
+    assert.equal(Codes.UPSTREAM_UNAVAILABLE, 'UPSTREAM_UNAVAILABLE');
+  });
 });
 
