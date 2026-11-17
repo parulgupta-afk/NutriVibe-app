@@ -4,6 +4,10 @@ const nodemailer = require('nodemailer');
 // inbox on every single password reset — one test account per server run.
 let cachedTransporter = null;
 
+/**
+ * Resolves or initializes Nodemailer transporter (SMTP in production, Ethereal in development).
+ * @returns {Promise<import('nodemailer').Transporter>} Configured Nodemailer transporter
+ */
 async function getTransporter() {
   if (cachedTransporter) return cachedTransporter;
 
