@@ -44,6 +44,12 @@ async function getTransporter() {
   return cachedTransporter;
 }
 
+/**
+ * Sends password reset instructions email with temporary reset link.
+ * @param {string} toEmail Recipient email address
+ * @param {string} resetUrl Password reset URL containing token
+ * @returns {Promise<object>} Nodemailer send result info
+ */
 async function sendPasswordResetEmail(toEmail, resetUrl) {
   const transporter = await getTransporter();
 
