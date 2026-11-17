@@ -127,5 +127,24 @@ describe('submissionController unit tests', () => {
     assert.equal(statusCode, 400);
     assert.match(responseData.message, /status must be approved or rejected/i);
   });
+
+  it('submit returns 400 when body is completely empty', async () => {
+    let statusCode = null;
+    let responseData = null;
+    const req = { body: {}, user: { _id: 'user_123' } };
+    const res = {
+      status: (code) => {
+        statusCode = code;
+        return res;
+      },
+      json: (data) => {
+        responseData = data;
+        return res;
+      },
+    };
+    await submit(req, res, () => {});
+    assert.equal(statusCode, 400);
+    assert.match(responseData.message, /name is required/i);
+  });
 });
 
