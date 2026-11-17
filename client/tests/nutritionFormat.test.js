@@ -62,5 +62,9 @@ describe('client nutritionFormat utility tests', () => {
   it('formatGrams returns default fallback for empty string input', () => {
     assert.equal(formatGrams(''), '0g');
   });
+
+  it('formats numeric zero grams as 0g', () => {
+    assert.equal(formatGrams(0), '0g');
+  });
 });
 
