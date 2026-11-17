@@ -2,10 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 /**
- * Protect routes — JWT Bearer required.
- * - Strict "Bearer <token>" parse
- * - algorithms: ['HS256'] only
- * - tokenVersion must match user.tokenVersion (logout-all / password change)
+ * Express route protection middleware requiring valid Bearer JWT.
+ * Verifies HS256 signature, ensures user existence, and validates tokenVersion matching.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
  */
 const auth = async (req, res, next) => {
   try {
