@@ -31,5 +31,11 @@ describe('validateEnv and envSummary unit tests', () => {
       process.env.JWT_SECRET = originalJwt;
     }
   });
+
+  it('envSummary includes CLIENT_URL and GEMINI_API_KEY status indicators', () => {
+    const summary = envSummary();
+    assert.equal(typeof summary.CLIENT_URL, 'string');
+    assert.ok(summary.GEMINI_API_KEY === 'set' || summary.GEMINI_API_KEY === 'missing');
+  });
 });
 
