@@ -102,6 +102,16 @@ describe('requireRole Middleware & Seed Route Authorization', () => {
       assert.equal(body.success, false);
       assert.match(body.message, /Admin only/i);
     });
+
+    it('calls next() when user role matches one in allowed roles array', () => {
+      const middleware = requireRole('admin', 'editor');
+      const req = { user: { id: 'ed1', role: 'editor' } };
+      let nextCalled = false;
+      middleware(req, {}, () => {
+        nextCalled = true;
+      });
+      assert.equal(nextCalled, true);
+    });
   });
 
   describe('foodController seedFoods controller authorization', () => {
