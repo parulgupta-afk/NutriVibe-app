@@ -54,5 +54,9 @@ describe('client servingUnit utility tests', () => {
   it('converts cups to metric grams/ml accurately', () => {
     assert.equal(convertToMetricGrams(1, 'cup'), 240);
   });
+
+  it('converts milliliters to metric grams 1:1', () => {
+    assert.equal(convertToMetricGrams(200, 'ml'), 200);
+  });
 });
 
