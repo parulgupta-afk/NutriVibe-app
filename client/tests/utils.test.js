@@ -63,6 +63,10 @@ describe('client apiError utils', () => {
   it('returns default fallback when error object is an empty dictionary', () => {
     assert.equal(getApiErrorMessage({}), 'Something went wrong');
   });
+
+  it('isUnauthorized returns false when error has empty response object', () => {
+    assert.equal(isUnauthorized({ response: {} }), false);
+  });
 });
 
 describe('client lastScanCache utils', () => {
