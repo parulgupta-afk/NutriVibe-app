@@ -55,5 +55,10 @@ describe('client safeStorage utility tests', () => {
     safeStorage.setItem('is_active', false);
     assert.equal(safeStorage.getItem('is_active'), false);
   });
+
+  it('stores and retrieves numeric zero without converting to falsy fallback', () => {
+    safeStorage.setItem('zero_val', 0);
+    assert.equal(safeStorage.getItem('zero_val'), 0);
+  });
 });
 
