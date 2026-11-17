@@ -3,9 +3,9 @@
  */
 
 /**
- * Computes standard modulo-10 EAN/UPC checksum digit.
- * @param {string} barcodeWithoutCheckDigit Digits excluding check digit.
- * @returns {number|null} Expected check digit.
+ * Computes standard modulo-10 EAN/UPC checksum digit using alternating weights (3 and 1).
+ * @param {string} barcodeWithoutCheckDigit Digits excluding check digit
+ * @returns {number|null} Expected check digit or null for invalid inputs
  */
 export function calculateEanChecksum(barcodeWithoutCheckDigit) {
   if (!barcodeWithoutCheckDigit || typeof barcodeWithoutCheckDigit !== 'string') {
