@@ -50,6 +50,12 @@ function clip(v, max = 200) {
   return String(v ?? '').replace(/[<>]/g, '').slice(0, max);
 }
 
+/**
+ * Constructs prompt instructing Gemini to explain product ingredients safely.
+ * @param {object} product Product document
+ * @param {object} user User profile with preferences
+ * @returns {string} Fully formed LLM prompt
+ */
 function buildPrompt(product, user) {
   const prefs = user.preferences || {};
   const allergies = prefs.allergies?.length ? prefs.allergies.join(', ') : 'none listed';
