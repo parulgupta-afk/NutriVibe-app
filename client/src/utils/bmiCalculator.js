@@ -3,9 +3,10 @@
  */
 
 /**
- * Calculate BMI and return categorization with healthy weight boundaries.
- * @param {number|string} weightKg
- * @param {number|string} heightCm
+ * Calculate Body Mass Index (BMI) and return categorization with healthy weight boundaries.
+ * Formula: weight (kg) / (height (m) ^ 2), rounded to 1 decimal place.
+ * @param {number|string} weightKg Body weight in kilograms
+ * @param {number|string} heightCm Stature height in centimeters
  * @returns {{ bmi: number|null, category: string, healthyWeightRange: { min: number, max: number }|null }}
  */
 export function calculateBmi(weightKg, heightCm) {
