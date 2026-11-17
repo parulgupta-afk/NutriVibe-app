@@ -5,6 +5,13 @@
  */
 const crypto = require('crypto');
 
+/**
+ * Express middleware for structured JSON HTTP request/response logging.
+ * Injects or preserves X-Request-Id header and logs elapsed time on response finish.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 function requestLogger(req, res, next) {
   const requestId =
     req.get('X-Request-Id') || crypto.randomBytes(8).toString('hex');
