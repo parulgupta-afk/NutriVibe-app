@@ -22,4 +22,11 @@ describe('INS additives', () => {
   it('returns empty array when text input is undefined', () => {
     assert.deepEqual(matchInsInText(undefined), []);
   });
+
+  it('detects tartrazine colour additive by code INS 102', () => {
+    const hits = matchInsInText('Food colouring INS 102');
+    assert.equal(hits.length, 1);
+    assert.equal(hits[0].code, 'INS 102');
+    assert.equal(hits[0].category, 'colour');
+  });
 });
