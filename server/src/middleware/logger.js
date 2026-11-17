@@ -21,6 +21,11 @@ const REDACT_PATHS = [
   'res.headers["set-cookie"]',
 ];
 
+/**
+ * Factory creating Pino logger instance or resilient fallback console logger.
+ * @param {object} [opts={}] Optional Pino configuration overrides
+ * @returns {object} Structured logger instance
+ */
 function createLogger(opts = {}) {
   if (!pino) {
     return {
