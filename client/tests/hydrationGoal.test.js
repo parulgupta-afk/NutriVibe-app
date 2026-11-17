@@ -58,5 +58,12 @@ describe('client hydrationGoal utility tests', () => {
   it('calculateDailyWaterGoal uses default parameters when called with no arguments', () => {
     assert.equal(calculateDailyWaterGoal(), 2450);
   });
+
+  it('calculateHydrationProgress marks isGoalMet when current exactly equals target', () => {
+    const progress = calculateHydrationProgress(2000, 2000);
+    assert.equal(progress.percentage, 100);
+    assert.equal(progress.remainingMl, 0);
+    assert.equal(progress.isGoalMet, true);
+  });
 });
 
