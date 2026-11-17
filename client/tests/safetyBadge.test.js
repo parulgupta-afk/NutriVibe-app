@@ -88,4 +88,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Safe', null);
     assert.equal(config.ariaLabel, 'Safety level: Safe');
   });
+
+  it('formats aria-label with score for Unknown level', () => {
+    const config = getBadgeConfig('Unknown', 50);
+    assert.equal(config.ariaLabel, 'Safety level: Unknown, score 50');
+  });
 });
