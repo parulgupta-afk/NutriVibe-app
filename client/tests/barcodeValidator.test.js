@@ -47,5 +47,10 @@ describe('client barcodeValidator utility tests', () => {
   it('calculateEanChecksum returns null for object input', () => {
     assert.equal(calculateEanChecksum({}), null);
   });
+
+  it('isValidBarcode returns false for boolean and numeric inputs', () => {
+    assert.equal(isValidBarcode(false), false);
+    assert.equal(isValidBarcode(4006381333931), false);
+  });
 });
 
