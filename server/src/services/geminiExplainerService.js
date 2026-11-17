@@ -40,6 +40,12 @@ function buildCacheKey(product, user) {
  * user actually cares about (their allergies, diet, goals, meds) —
  * without ever asking it to give medical advice or a diagnosis.
  */
+/**
+ * Sanitizes and clips user preference string to prevent prompt overflow.
+ * @param {*} v Input value
+ * @param {number} [max=200] Maximum allowed character length
+ * @returns {string} Sanitized and truncated string
+ */
 function clip(v, max = 200) {
   return String(v ?? '').replace(/[<>]/g, '').slice(0, max);
 }
