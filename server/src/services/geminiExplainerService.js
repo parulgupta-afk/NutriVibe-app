@@ -24,6 +24,12 @@ function cacheSet(key, value) {
   explanationCache.set(key, value);
 }
 
+/**
+ * Generates deterministic cache key from product ID and user preferences.
+ * @param {object} product Product entity
+ * @param {object} user User profile with preferences
+ * @returns {string} Cache key string
+ */
 function buildCacheKey(product, user) {
   return `${product._id}::${JSON.stringify(user.preferences || {})}`;
 }
