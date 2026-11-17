@@ -3,10 +3,10 @@
  */
 
 /**
- * Format date input to ISO YYYY-MM-DD string.
- * @param {string|Date|number} dateInput
- * @param {string} [fallback='N/A']
- * @returns {string}
+ * Format date input to ISO YYYY-MM-DD string with fallback for invalid or empty inputs.
+ * @param {string|Date|number} dateInput Input timestamp, Date instance, or ISO string
+ * @param {string} [fallback='N/A'] Fallback string to return if date is invalid or empty
+ * @returns {string} Formatted YYYY-MM-DD date string or fallback
  */
 export function formatDate(dateInput, fallback = 'N/A') {
   if (!dateInput) return fallback;
