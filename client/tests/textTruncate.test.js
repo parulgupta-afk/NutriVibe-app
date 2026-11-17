@@ -54,5 +54,9 @@ describe('client textTruncate utility tests', () => {
   it('converts single lowercase word to title case in toTitleCase', () => {
     assert.equal(toTitleCase('apple'), 'Apple');
   });
+
+  it('applies custom suffix when truncating text', () => {
+    assert.equal(truncateText('Hello World Today', 5, '..'), 'Hello..');
+  });
 });
 
