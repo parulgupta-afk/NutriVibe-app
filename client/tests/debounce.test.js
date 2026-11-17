@@ -66,5 +66,14 @@ describe('client debounce utility tests', () => {
       debounced.cancel();
     });
   });
+
+  it('handles multiple consecutive cancel calls idempotently', () => {
+    const debounced = debounce(() => {}, 50);
+    debounced();
+    debounced.cancel();
+    assert.doesNotThrow(() => {
+      debounced.cancel();
+    });
+  });
 });
 
