@@ -20,9 +20,9 @@ const DEFAULT_COLOR =
   'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-300';
 
 /**
- * Normalizes allergen name token to trimmed lowercase string.
- * @param {string} allergen Raw allergen label.
- * @returns {string} Lowercase token.
+ * Normalizes allergen name token to trimmed lowercase string. Returns empty string for invalid inputs.
+ * @param {string} allergen Raw allergen label
+ * @returns {string} Lowercase trimmed token
  */
 export function normalizeAllergenName(allergen) {
   if (!allergen || typeof allergen !== 'string') return '';
