@@ -75,5 +75,11 @@ describe('client debounce utility tests', () => {
       debounced.cancel();
     });
   });
+
+  it('debounced function returns undefined synchronously upon invocation', () => {
+    const fn = debounce(() => 'result', 50);
+    assert.equal(fn(), undefined);
+    fn.cancel();
+  });
 });
 
