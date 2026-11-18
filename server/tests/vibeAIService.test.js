@@ -31,6 +31,10 @@ describe('vibeAIService unit tests', () => {
       assert.equal(isSafetyQuestion(null), false);
       assert.equal(isSafetyQuestion(undefined), false);
     });
+
+    it('detects reaction queries using react keyword', () => {
+      assert.equal(isSafetyQuestion('Will this trigger an adverse reaction?'), true);
+    });
   });
 });
 
