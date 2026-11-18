@@ -52,5 +52,9 @@ describe('client barcodeValidator utility tests', () => {
     assert.equal(isValidBarcode(false), false);
     assert.equal(isValidBarcode(4006381333931), false);
   });
+
+  it('isValidBarcode returns false for boolean true input', () => {
+    assert.equal(isValidBarcode(true), false);
+  });
 });
 
