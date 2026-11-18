@@ -5,10 +5,11 @@
 
 /**
  * Calculate nutrition for a given quantity from per-100g values.
- * @param {Object} per100g - { calories, protein, carbs, fat, fiber, ... }
- * @param {number} grams - actual weight consumed
+ * Pro-rates calories, macronutrients, and fiber proportionally to grams consumed.
+ * @param {Record<string, number>} per100g Nutritional components per 100 grams
+ * @param {number} grams Actual weight consumed in grams
+ * @returns {{ calories: number, protein: number, carbs: number, fat: number, fiber: number }}
  */
-// Pro-rates nutritional components proportionally to weight consumed
 function calculateFromGrams(per100g, grams) {
   if (!per100g || !grams || grams <= 0) {
     return { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
