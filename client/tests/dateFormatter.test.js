@@ -53,5 +53,9 @@ describe('client dateFormatter utility tests', () => {
   it('formatTime returns fallback for empty string input', () => {
     assert.equal(formatTime(''), '--:--');
   });
+
+  it('formatTime returns default fallback for undefined input', () => {
+    assert.equal(formatTime(undefined), '--:--');
+  });
 });
 
