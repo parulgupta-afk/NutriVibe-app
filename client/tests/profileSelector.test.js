@@ -65,4 +65,8 @@ describe('client ProfileSelector logic tests', () => {
     assert.deepEqual(getDependentBadge(null), { label: 'Dependent', color: 'gray' });
     assert.deepEqual(getDependentBadge(undefined), { label: 'Dependent', color: 'gray' });
   });
+
+  it('maps empty string relationship to default Dependent gray badge', () => {
+    assert.deepEqual(getDependentBadge(''), { label: 'Dependent', color: 'gray' });
+  });
 });
