@@ -1,5 +1,11 @@
 const Reaction = require('../models/Reaction');
 
+/**
+ * Creates new user reaction log documenting symptoms, suspected foods, and severity.
+ * @param {import('express').Request} req Express request with user and reaction payload
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function createReaction(req, res, next) {
   try {
     const { foods, productName, productId, mealId, symptoms, severity, occurredAt, notes, profileId } = req.body;
