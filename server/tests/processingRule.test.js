@@ -70,5 +70,11 @@ describe('processingRule unit tests', () => {
     const snap = buildNutritionSnapshot(zeroCal);
     assert.equal(snap.calories, 0);
   });
+
+  it('buildNutritionSnapshot handles zero protein value correctly', () => {
+    const zeroProtein = { nutritionalInfo: { protein: 0 } };
+    const snap = buildNutritionSnapshot(zeroProtein);
+    assert.equal(snap.protein, 0);
+  });
 });
 
