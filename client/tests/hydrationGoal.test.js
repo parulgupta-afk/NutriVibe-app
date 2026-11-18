@@ -65,5 +65,12 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.remainingMl, 0);
     assert.equal(progress.isGoalMet, true);
   });
+
+  it('calculateHydrationProgress caps percentage at 100 when intake exceeds target', () => {
+    const progress = calculateHydrationProgress(2500, 2000);
+    assert.equal(progress.percentage, 100);
+    assert.equal(progress.remainingMl, 0);
+    assert.equal(progress.isGoalMet, true);
+  });
 });
 
