@@ -90,4 +90,8 @@ describe('intro: pile fill detection', () => {
     assert.equal(easeOutCubic(0), 0);
     assert.equal(easeOutCubic(1), 1);
   });
+
+  it('pieceBaseSize clamps to upper bound for ultra-wide viewports', () => {
+    assert.equal(pieceBaseSize(5000), 118);
+  });
 });
