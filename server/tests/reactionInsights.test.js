@@ -65,5 +65,13 @@ describe('reaction insights correlation tests', () => {
     assert.equal(result.totalEntries, 0);
     assert.deepEqual(result.topFoodsMentioned, []);
   });
+
+  it('ignores empty string or null items inside foods and symptoms arrays', () => {
+    const reactions = [{ foods: ['', null], symptoms: [null, ''] }];
+    const result = calculateReactionInsights(reactions);
+    assert.equal(result.totalEntries, 1);
+    assert.deepEqual(result.topFoodsMentioned, []);
+    assert.deepEqual(result.topSymptoms, []);
+  });
 });
 
