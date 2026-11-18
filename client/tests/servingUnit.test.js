@@ -58,5 +58,9 @@ describe('client servingUnit utility tests', () => {
   it('converts milliliters to metric grams 1:1', () => {
     assert.equal(convertToMetricGrams(200, 'ml'), 200);
   });
+
+  it('convertToMetricGrams returns 0 for zero quantity', () => {
+    assert.equal(convertToMetricGrams(0, 'ml'), 0);
+  });
 });
 
