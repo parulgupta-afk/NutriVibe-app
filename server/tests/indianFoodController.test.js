@@ -82,5 +82,15 @@ describe('indianFoodController and INS additives tests', () => {
     assert.equal(result.success, true);
     assert.equal(result.data.matches.length, 0);
   });
+
+  it('lookupIns searches body.text correctly for additives', async () => {
+    let result = null;
+    const req = { body: { text: 'monosodium glutamate' } };
+    const res = { json: (d) => { result = d; return res; } };
+    await lookupIns(req, res);
+    assert.equal(result.success, true);
+    assert.ok(result.data.matches.length > 0);
+    assert.equal(result.data.matches[0].code, 'INS 621');
+  });
 });
 
