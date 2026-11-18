@@ -67,6 +67,10 @@ describe('client apiError utils', () => {
   it('isUnauthorized returns false when error has empty response object', () => {
     assert.equal(isUnauthorized({ response: {} }), false);
   });
+
+  it('isUnauthorized returns false for 404 not found status', () => {
+    assert.equal(isUnauthorized({ response: { status: 404 } }), false);
+  });
 });
 
 describe('client lastScanCache utils', () => {
