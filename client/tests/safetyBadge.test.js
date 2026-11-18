@@ -93,4 +93,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Unknown', 50);
     assert.equal(config.ariaLabel, 'Safety level: Unknown, score 50');
   });
+
+  it('applies small sizeClass for sm size option', () => {
+    const config = getBadgeConfig('Safe', 100, 'sm');
+    assert.equal(config.sizeClass, 'px-2 py-0.5 text-xs gap-1');
+  });
 });
