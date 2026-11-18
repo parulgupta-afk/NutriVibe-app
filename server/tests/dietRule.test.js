@@ -62,5 +62,12 @@ describe('dietRule unit tests', () => {
     const state = applyDietRules({}, ['Vegetarian'], initialState);
     assert.equal(state.level, 'Safe');
   });
+
+  it('handles undefined userRestrictions safely', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyDietRules({ name: 'Apple' }, undefined, initialState);
+    assert.equal(state.level, 'Safe');
+    assert.equal(state.score, 100);
+  });
 });
 
