@@ -58,5 +58,9 @@ describe('client textTruncate utility tests', () => {
   it('applies custom suffix when truncating text', () => {
     assert.equal(truncateText('Hello World Today', 5, '..'), 'Hello..');
   });
+
+  it('converts all-caps word to title case in toTitleCase', () => {
+    assert.equal(toTitleCase('HELLO'), 'Hello');
+  });
 });
 
