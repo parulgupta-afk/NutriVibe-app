@@ -80,5 +80,10 @@ describe('nutritionCalculator edge cases and boundary conditions', () => {
     const rounded = roundTotals({});
     assert.deepEqual(rounded, { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
   });
+
+  it('handles zero macro totals in roundTotals safely', () => {
+    const rounded = roundTotals({ calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
+    assert.deepEqual(rounded, { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
+  });
 });
 
