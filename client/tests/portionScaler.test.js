@@ -87,5 +87,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.grams, 100);
     assert.equal(scaled.calories, 0);
   });
+
+  it('handles undefined base nutrition parameter with custom target grams', () => {
+    const scaled = scaleNutrition(undefined, 200);
+    assert.equal(scaled.grams, 200);
+    assert.equal(scaled.calories, 0);
+  });
 });
 
