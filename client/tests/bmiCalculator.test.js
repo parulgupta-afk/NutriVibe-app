@@ -79,5 +79,11 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res.bmi, null);
     assert.equal(res.category, 'Unknown');
   });
+
+  it('returns Unknown category when both weight and height are zero', () => {
+    const res = calculateBmi(0, 0);
+    assert.equal(res.bmi, null);
+    assert.equal(res.category, 'Unknown');
+  });
 });
 
