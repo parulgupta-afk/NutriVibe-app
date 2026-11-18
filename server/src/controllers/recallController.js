@@ -1,7 +1,12 @@
 const Recall = require('../models/Recall');
 const Product = require('../models/Product');
 
-/** Conservative match: barcode exact OR (normalized name + brand) */
+/**
+ * Conservative recall query handler matching exact barcode or normalized product and brand.
+ * @param {import('express').Request} req Express request containing barcode or productId query
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function matchesForUser(req, res, next) {
   try {
     const barcode = req.query.barcode;
