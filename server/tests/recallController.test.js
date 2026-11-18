@@ -66,9 +66,9 @@ describe('recallController unit tests', () => {
     assert.match(responseData.message, /Admin only/i);
   });
 
-  it('rejects seedDemo request when user property is null with 403', async () => {
+  it('rejects seedDemo request from guest user with 403', async () => {
     let statusCode = null;
-    const req = { user: null };
+    const req = { user: { role: 'guest' } };
     const res = { status: (c) => { statusCode = c; return res; }, json: () => res };
     await seedDemo(req, res, () => {});
     assert.equal(statusCode, 403);
