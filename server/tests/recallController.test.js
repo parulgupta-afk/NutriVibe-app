@@ -65,5 +65,13 @@ describe('recallController unit tests', () => {
     assert.equal(statusCode, 403);
     assert.match(responseData.message, /Admin only/i);
   });
+
+  it('rejects seedDemo request when user property is null with 403', async () => {
+    let statusCode = null;
+    const req = { user: null };
+    const res = { status: (c) => { statusCode = c; return res; }, json: () => res };
+    await seedDemo(req, res, () => {});
+    assert.equal(statusCode, 403);
+  });
 });
 
