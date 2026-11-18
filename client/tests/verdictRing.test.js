@@ -94,4 +94,10 @@ describe('client VerdictRing logic & styles tests', () => {
     const result = getVerdictConfig('');
     assert.equal(result.label, 'CANNOT VERIFY');
   });
+
+  it('formats aria-label with score 0 in getVerdictConfig', () => {
+    const config = getVerdictConfig('UNSAFE', 0);
+    assert.equal(config.pct, 0);
+    assert.equal(config.ariaLabel, 'Safety verdict: UNSAFE, score 0');
+  });
 });
