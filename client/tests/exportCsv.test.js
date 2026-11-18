@@ -85,5 +85,9 @@ describe('client exportCsv utility tests', () => {
   it('escapeCell formats numeric zero as string 0', () => {
     assert.equal(escapeCell(0), '0');
   });
+
+  it('escapeCell preserves empty string input unchanged', () => {
+    assert.equal(escapeCell(''), '');
+  });
 });
 
