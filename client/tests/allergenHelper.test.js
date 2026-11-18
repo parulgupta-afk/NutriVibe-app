@@ -60,5 +60,10 @@ describe('client allergenHelper utility tests', () => {
     assert.equal(formatAllergenTitle(123), '');
     assert.equal(formatAllergenTitle({}), '');
   });
+
+  it('formatAllergenTitle handles boolean inputs safely returning empty string', () => {
+    assert.equal(formatAllergenTitle(false), '');
+    assert.equal(formatAllergenTitle(true), '');
+  });
 });
 
