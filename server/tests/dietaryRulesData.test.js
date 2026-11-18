@@ -56,4 +56,9 @@ describe('dietaryRules dataset and checker tests', () => {
     };
     assert.deepEqual(checkDietaryRestrictions(['vegan'], product), []);
   });
+
+  it('ignores empty and whitespace-only restrictions', () => {
+    const product = { name: 'Apple', ingredients_text: 'Fresh apple' };
+    assert.deepEqual(checkDietaryRestrictions(['   ', ''], product), []);
+  });
 });
