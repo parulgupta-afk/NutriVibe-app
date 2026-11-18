@@ -62,5 +62,12 @@ describe('medicationRule unit tests', () => {
     const state = applyMedicationRules({ ingredients: null }, ['atorvastatin'], initialState);
     assert.equal(state.level, 'Safe');
   });
+
+  it('returns state unchanged when medications parameter is null', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyMedicationRules({ name: 'Apple' }, null, initialState);
+    assert.equal(state.level, 'Safe');
+    assert.equal(state.score, 100);
+  });
 });
 
