@@ -46,7 +46,9 @@ function sumNutrition(items) {
 }
 
 /**
- * Round totals to 1 decimal for display consistency.
+ * Rounds nutritional totals to 1 decimal place for consistent UI display.
+ * @param {Record<string, number>} totals Raw accumulated nutrition totals
+ * @returns {{ calories: number, protein: number, carbs: number, fat: number, fiber: number }} Rounded totals
  */
 function roundTotals(totals) {
   return {
