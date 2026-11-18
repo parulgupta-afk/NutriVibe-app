@@ -60,5 +60,10 @@ describe('client safeStorage utility tests', () => {
     safeStorage.setItem('zero_val', 0);
     assert.equal(safeStorage.getItem('zero_val'), 0);
   });
+
+  it('stores and retrieves empty string without converting to fallback', () => {
+    safeStorage.setItem('empty_str', '');
+    assert.equal(safeStorage.getItem('empty_str'), '');
+  });
 });
 
