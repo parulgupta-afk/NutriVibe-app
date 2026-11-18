@@ -66,5 +66,9 @@ describe('client nutritionFormat utility tests', () => {
   it('formats numeric zero grams as 0g', () => {
     assert.equal(formatGrams(0), '0g');
   });
+
+  it('formats numeric zero calories as 0 kcal', () => {
+    assert.equal(formatCalories(0), '0 kcal');
+  });
 });
 
