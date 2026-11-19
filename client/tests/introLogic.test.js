@@ -94,4 +94,8 @@ describe('intro: pile fill detection', () => {
   it('pieceBaseSize clamps to upper bound for ultra-wide viewports', () => {
     assert.equal(pieceBaseSize(5000), 118);
   });
+
+  it('spawnInterval returns 130 at 0 elapsed time', () => {
+    assert.equal(spawnInterval(0), 130);
+  });
 });
