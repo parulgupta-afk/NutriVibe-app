@@ -65,5 +65,9 @@ describe('client allergenHelper utility tests', () => {
     assert.equal(formatAllergenTitle(false), '');
     assert.equal(formatAllergenTitle(true), '');
   });
+
+  it('normalizeAllergenName returns empty string for empty whitespace string', () => {
+    assert.equal(normalizeAllergenName('   '), '');
+  });
 });
 
