@@ -37,5 +37,10 @@ describe('validateEnv and envSummary unit tests', () => {
     assert.equal(typeof summary.CLIENT_URL, 'string');
     assert.ok(summary.GEMINI_API_KEY === 'set' || summary.GEMINI_API_KEY === 'missing');
   });
+
+  it('envSummary returns PORT as a string value', () => {
+    const summary = envSummary();
+    assert.equal(typeof summary.PORT, 'string');
+  });
 });
 
