@@ -56,5 +56,9 @@ describe('client barcodeValidator utility tests', () => {
   it('isValidBarcode returns false for boolean true input', () => {
     assert.equal(isValidBarcode(true), false);
   });
+
+  it('isValidBarcode returns false for undefined input', () => {
+    assert.equal(isValidBarcode(undefined), false);
+  });
 });
 
