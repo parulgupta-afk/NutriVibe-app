@@ -112,6 +112,16 @@ describe('requireRole Middleware & Seed Route Authorization', () => {
       });
       assert.equal(nextCalled, true);
     });
+
+    it('calls next() when allowed roles are passed as a flat array', () => {
+      const middleware = requireRole(['admin', 'moderator']);
+      const req = { user: { id: 'm1', role: 'moderator' } };
+      let nextCalled = false;
+      middleware(req, {}, () => {
+        nextCalled = true;
+      });
+      assert.equal(nextCalled, true);
+    });
   });
 
   describe('foodController seedFoods controller authorization', () => {
