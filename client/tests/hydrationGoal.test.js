@@ -72,5 +72,10 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.remainingMl, 0);
     assert.equal(progress.isGoalMet, true);
   });
+
+  it('calculateDailyWaterGoal returns 2450 when weightKg is missing', () => {
+    const goal = calculateDailyWaterGoal({ activityMinutes: 0 });
+    assert.equal(goal, 2450);
+  });
 });
 
