@@ -76,5 +76,11 @@ describe('processingRule unit tests', () => {
     const snap = buildNutritionSnapshot(zeroProtein);
     assert.equal(snap.protein, 0);
   });
+
+  it('buildNutritionSnapshot handles zero fiber value correctly', () => {
+    const zeroFiber = { nutritionalInfo: { fiber: 0 } };
+    const snap = buildNutritionSnapshot(zeroFiber);
+    assert.equal(snap.fiber, 0);
+  });
 });
 
