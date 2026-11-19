@@ -57,5 +57,9 @@ describe('client dateFormatter utility tests', () => {
   it('formatTime returns default fallback for undefined input', () => {
     assert.equal(formatTime(undefined), '--:--');
   });
+
+  it('isToday returns false for past Date instance', () => {
+    assert.equal(isToday(new Date('1999-12-31')), false);
+  });
 });
 
