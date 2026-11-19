@@ -62,5 +62,9 @@ describe('client textTruncate utility tests', () => {
   it('converts all-caps word to title case in toTitleCase', () => {
     assert.equal(toTitleCase('HELLO'), 'Hello');
   });
+
+  it('truncateWords returns empty string for non-string input', () => {
+    assert.equal(truncateWords(12345), '');
+  });
 });
 
