@@ -65,5 +65,9 @@ describe('client safeStorage utility tests', () => {
     safeStorage.setItem('empty_str', '');
     assert.equal(safeStorage.getItem('empty_str'), '');
   });
+
+  it('safeStorage.getItem returns custom default value when key does not exist', () => {
+    assert.equal(safeStorage.getItem('missing_custom', 'custom_default'), 'custom_default');
+  });
 });
 
