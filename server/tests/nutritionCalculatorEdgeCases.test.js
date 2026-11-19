@@ -85,5 +85,10 @@ describe('nutritionCalculator edge cases and boundary conditions', () => {
     const rounded = roundTotals({ calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
     assert.deepEqual(rounded, { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
   });
+
+  it('roundTotals rounds fractional calories to one decimal', () => {
+    const rounded = roundTotals({ calories: 12.34 });
+    assert.equal(rounded.calories, 12.3);
+  });
 });
 
