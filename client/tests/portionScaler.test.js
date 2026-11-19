@@ -93,5 +93,11 @@ describe('client portionScaler utility tests', () => {
     assert.equal(scaled.grams, 200);
     assert.equal(scaled.calories, 0);
   });
+
+  it('scaleNutrition scales 100g portion exactly to 1x multiplier', () => {
+    const base = { calories: 300 };
+    const scaled = scaleNutrition(base, 100);
+    assert.equal(scaled.calories, 300);
+  });
 });
 
