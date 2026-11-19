@@ -22,6 +22,11 @@ async function lookupIns(req, res) {
   });
 }
 
+/**
+ * Returns comprehensive reference catalog of supported Indian INS food additives.
+ * @param {import('express').Request} _req Express request
+ * @param {import('express').Response} res Express response
+ */
 async function listIns(_req, res) {
   // strip the function export
   const entries = Array.isArray(insList) ? insList : [];
