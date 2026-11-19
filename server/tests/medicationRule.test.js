@@ -69,5 +69,12 @@ describe('medicationRule unit tests', () => {
     assert.equal(state.level, 'Safe');
     assert.equal(state.score, 100);
   });
+
+  it('applyMedicationRules handles empty product and empty medications cleanly', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyMedicationRules({}, [], initialState);
+    assert.equal(state.level, 'Safe');
+    assert.equal(state.score, 100);
+  });
 });
 
