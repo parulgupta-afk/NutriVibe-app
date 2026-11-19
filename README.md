@@ -133,14 +133,14 @@ This boots the client, server, MongoDB, and Redis instances concurrently.
 Run the comprehensive test suites across both projects:
 
 ```bash
-# Run backend tests (268 tests in 47 suites)
+# Run backend tests (278 tests in 47 suites)
 cd server
 npm test
 
 # Run canonical 14-mode safety engine verification
 node --test tests/safetyEngineCanonical.test.js
 
-# Run frontend unit tests (203 tests in 22 suites)
+# Run frontend unit tests (221 tests in 22 suites)
 cd ../client
 npm test
 
