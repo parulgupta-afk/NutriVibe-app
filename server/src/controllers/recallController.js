@@ -51,9 +51,10 @@ async function matchesForUser(req, res, next) {
 
 /**
  * Seed illustrative demo recall record (restricted to admin users only).
- * @param {object} req Express request
- * @param {object} res Express response
- * @param {Function} next Express next callback
+ * Upserts sample DEMO-RECALL-001 recall document for integration testing.
+ * @param {import('express').Request} req Express request with admin user
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
  */
 async function seedDemo(req, res, next) {
   try {
