@@ -69,4 +69,8 @@ describe('client ProfileSelector logic tests', () => {
   it('maps empty string relationship to default Dependent gray badge', () => {
     assert.deepEqual(getDependentBadge(''), { label: 'Dependent', color: 'gray' });
   });
+
+  it('resolveProfileDisplayName returns Me when dependent not found in non-empty array', () => {
+    assert.equal(resolveProfileDisplayName('dep_missing', [{ _id: 'dep_1', name: 'Kid' }]), 'Me');
+  });
 });
