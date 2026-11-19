@@ -85,5 +85,11 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res.bmi, null);
     assert.equal(res.category, 'Unknown');
   });
+
+  it('calculateBmi returns null and Unknown for non-numeric string inputs', () => {
+    const res = calculateBmi('abc', 'def');
+    assert.equal(res.bmi, null);
+    assert.equal(res.category, 'Unknown');
+  });
 });
 
