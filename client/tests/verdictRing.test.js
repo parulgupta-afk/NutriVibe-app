@@ -100,4 +100,9 @@ describe('client VerdictRing logic & styles tests', () => {
     assert.equal(config.pct, 0);
     assert.equal(config.ariaLabel, 'Safety verdict: UNSAFE, score 0');
   });
+
+  it('getVerdictConfig clamps negative score to pct 0', () => {
+    const config = getVerdictConfig('SAFE', -10);
+    assert.equal(config.pct, 0);
+  });
 });
