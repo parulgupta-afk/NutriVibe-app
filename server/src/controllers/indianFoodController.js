@@ -5,9 +5,9 @@ const { matchInsInText } = require('../data/insAdditives');
 const insList = require('../data/insAdditives');
 
 /**
- * Lookup matching INS additives from query param or request body text.
- * @param {object} req Express request
- * @param {object} res Express response
+ * Lookup matching INS additives from query parameter or request body text.
+ * @param {import('express').Request} req Express request containing q query or text body
+ * @param {import('express').Response} res Express response
  */
 async function lookupIns(req, res) {
   const text = req.body?.text || req.query?.q || '';
