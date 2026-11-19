@@ -146,5 +146,28 @@ describe('submissionController unit tests', () => {
     assert.equal(statusCode, 400);
     assert.match(responseData.message, /name is required/i);
   });
+
+  it('adminReview rejects status archived with 400', async () => {
+    let statusCode = null;
+    let responseData = null;
+    const req = {
+      user: { role: 'admin' },
+      params: { id: 'sub_123' },
+      body: { status: 'archived' },
+    };
+    const res = {
+      status: (code) => {
+        statusCode = code;
+        return res;
+      },
+      json: (data) => {
+        responseData = data;
+        return res;
+      },
+    };
+    await adminReview(req, res, () => {});
+    assert.equal(statusCode, 400);
+    assert.match(responseData.message, /status must be approved or rejected/i);
+  });
 });
 
