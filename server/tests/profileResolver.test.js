@@ -64,6 +64,14 @@ describe('profileResolver unit tests', () => {
     assert.deepEqual(result.effectiveUser, user);
     assert.equal(result.profileId, null);
   });
+
+  it('returns account owner when query.profileId is undefined and body is omitted', async () => {
+    const user = { id: 'owner_103', preferences: {} };
+    const req = { user, query: { profileId: undefined } };
+    const result = await resolveEffectiveUser(req);
+    assert.deepEqual(result.effectiveUser, user);
+    assert.equal(result.profileId, null);
+  });
 });
 
 
