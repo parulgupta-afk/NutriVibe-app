@@ -72,6 +72,7 @@ async function gatherContext(userId, user) {
 
 /**
  * Detects whether user message involves food safety, allergies, or drug interactions.
+ * Checks for allergen, medication, adverse reaction, or ingestion safety keywords.
  * @param {string} text Input prompt text
  * @returns {boolean} True if query requires deterministic safety engine check
  */
