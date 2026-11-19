@@ -34,6 +34,12 @@ async function createReaction(req, res, next) {
   }
 }
 
+/**
+ * Retrieves chronological reaction history for authenticated user with pagination limit.
+ * @param {import('express').Request} req Express request containing user and optional limit query
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function listReactions(req, res, next) {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 50, 100);
