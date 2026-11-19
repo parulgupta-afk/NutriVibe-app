@@ -81,5 +81,13 @@ describe('client debounce utility tests', () => {
     assert.equal(fn(), undefined);
     fn.cancel();
   });
+
+  it('debounce handles wait time of zero milliseconds', async () => {
+    let called = false;
+    const fn = debounce(() => { called = true; }, 0);
+    fn();
+    await new Promise((r) => setTimeout(r, 10));
+    assert.equal(called, true);
+  });
 });
 
