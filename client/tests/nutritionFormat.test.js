@@ -70,5 +70,9 @@ describe('client nutritionFormat utility tests', () => {
   it('formats numeric zero calories as 0 kcal', () => {
     assert.equal(formatCalories(0), '0 kcal');
   });
+
+  it('formats numeric 500 correctly', () => {
+    assert.equal(formatCalories(500), '500 kcal');
+  });
 });
 
