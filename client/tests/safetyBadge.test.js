@@ -98,4 +98,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Safe', 100, 'sm');
     assert.equal(config.sizeClass, 'px-2 py-0.5 text-xs gap-1');
   });
+
+  it('getBadgeConfig applies lg sizeClass for lg size option', () => {
+    const config = getBadgeConfig('Safe', 90, 'lg');
+    assert.equal(config.sizeClass, 'px-4 py-2 text-base gap-2');
+  });
 });
