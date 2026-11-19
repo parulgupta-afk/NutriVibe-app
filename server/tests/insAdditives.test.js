@@ -29,4 +29,9 @@ describe('INS additives', () => {
     assert.equal(hits[0].code, 'INS 102');
     assert.equal(hits[0].category, 'colour');
   });
+
+  it('detects citric acid acidity regulator by name', () => {
+    const hits = matchInsInText('Contains citric acid');
+    assert.ok(hits.some((h) => h.code === 'INS 330'));
+  });
 });
