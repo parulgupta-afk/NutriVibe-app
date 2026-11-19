@@ -52,5 +52,10 @@ describe('AppError class and Codes dictionary tests', () => {
   it('defines UPSTREAM_UNAVAILABLE in Codes dictionary', () => {
     assert.equal(Codes.UPSTREAM_UNAVAILABLE, 'UPSTREAM_UNAVAILABLE');
   });
+
+  it('defines INTERNAL_ERROR and VALIDATION_ERROR in Codes dictionary', () => {
+    assert.equal(Codes.INTERNAL_ERROR, 'INTERNAL_ERROR');
+    assert.equal(Codes.VALIDATION_ERROR, 'VALIDATION_ERROR');
+  });
 });
 
