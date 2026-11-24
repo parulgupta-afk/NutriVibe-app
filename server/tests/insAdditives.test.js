@@ -34,4 +34,9 @@ describe('INS additives', () => {
     const hits = matchInsInText('Contains citric acid');
     assert.ok(hits.some((h) => h.code === 'INS 330'));
   });
+
+  it('detects acesulfame k sweetener by name', () => {
+    const hits = matchInsInText('Contains acesulfame k');
+    assert.ok(hits.some((h) => h.code === 'INS 950'));
+  });
 });
