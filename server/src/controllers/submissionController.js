@@ -31,6 +31,12 @@ async function submit(req, res, next) {
   }
 }
 
+/**
+ * Retrieves list of product contributions submitted by currently authenticated user.
+ * @param {import('express').Request} req Express request with user
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function listMine(req, res, next) {
   try {
     const list = await ProductSubmission.find({ submittedBy: req.user._id }).sort({ createdAt: -1 });
