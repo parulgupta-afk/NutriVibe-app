@@ -69,5 +69,10 @@ describe('client allergenHelper utility tests', () => {
   it('normalizeAllergenName returns empty string for empty whitespace string', () => {
     assert.equal(normalizeAllergenName('   '), '');
   });
+
+  it('getAllergenBadgeStyle returns default color for empty string allergen', () => {
+    const style = getAllergenBadgeStyle('');
+    assert.match(style, /bg-gray-100/);
+  });
 });
 
