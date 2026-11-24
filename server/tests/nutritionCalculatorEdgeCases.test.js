@@ -90,5 +90,10 @@ describe('nutritionCalculator edge cases and boundary conditions', () => {
     const rounded = roundTotals({ calories: 12.34 });
     assert.equal(rounded.calories, 12.3);
   });
+
+  it('roundTotals rounds fractional protein to one decimal', () => {
+    const rounded = roundTotals({ protein: 18.78 });
+    assert.equal(rounded.protein, 18.8);
+  });
 });
 
