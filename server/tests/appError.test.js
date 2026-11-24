@@ -57,5 +57,10 @@ describe('AppError class and Codes dictionary tests', () => {
     assert.equal(Codes.INTERNAL_ERROR, 'INTERNAL_ERROR');
     assert.equal(Codes.VALIDATION_ERROR, 'VALIDATION_ERROR');
   });
+
+  it('defines RATE_LIMITED and FORBIDDEN in Codes dictionary', () => {
+    assert.equal(Codes.RATE_LIMITED, 'RATE_LIMITED');
+    assert.equal(Codes.FORBIDDEN, 'FORBIDDEN');
+  });
 });
 
