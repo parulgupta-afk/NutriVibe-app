@@ -68,5 +68,9 @@ describe('client scoreColor utility tests', () => {
   it('getScoreColor returns Poor for negative score', () => {
     assert.equal(getScoreColor(-5).label, 'Poor');
   });
+
+  it('getScoreColor returns Poor styling for score 0', () => {
+    assert.equal(getScoreColor(0).label, 'Poor');
+  });
 });
 
