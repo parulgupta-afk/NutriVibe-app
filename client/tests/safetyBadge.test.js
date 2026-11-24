@@ -103,4 +103,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Safe', 90, 'lg');
     assert.equal(config.sizeClass, 'px-4 py-2 text-base gap-2');
   });
+
+  it('getBadgeConfig applies md sizeClass for default md size option', () => {
+    const config = getBadgeConfig('Safe', 85, 'md');
+    assert.equal(config.sizeClass, 'px-3 py-1 text-sm gap-1.5');
+  });
 });
