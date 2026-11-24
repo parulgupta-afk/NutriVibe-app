@@ -42,5 +42,10 @@ describe('validateEnv and envSummary unit tests', () => {
     const summary = envSummary();
     assert.equal(typeof summary.PORT, 'string');
   });
+
+  it('envSummary returns NODE_ENV as a string value', () => {
+    const summary = envSummary();
+    assert.equal(typeof summary.NODE_ENV, 'string');
+  });
 });
 
