@@ -66,5 +66,9 @@ describe('client servingUnit utility tests', () => {
   it('convertToMetricGrams returns converted amount for 1 tbsp', () => {
     assert.equal(convertToMetricGrams(1, 'tbsp'), 15);
   });
+
+  it('convertToMetricGrams returns converted amount for 1 tsp', () => {
+    assert.equal(convertToMetricGrams(1, 'tsp'), 5);
+  });
 });
 
