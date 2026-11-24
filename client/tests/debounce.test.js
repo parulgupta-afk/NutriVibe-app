@@ -89,5 +89,13 @@ describe('client debounce utility tests', () => {
     await new Promise((r) => setTimeout(r, 10));
     assert.equal(called, true);
   });
+
+  it('debounce invokes function with correct context and arguments', async () => {
+    let capturedArg = null;
+    const fn = debounce((arg) => { capturedArg = arg; }, 10);
+    fn('hello-debounce');
+    await new Promise((r) => setTimeout(r, 30));
+    assert.equal(capturedArg, 'hello-debounce');
+  });
 });
 
