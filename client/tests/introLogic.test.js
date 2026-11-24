@@ -98,4 +98,8 @@ describe('intro: pile fill detection', () => {
   it('spawnInterval returns 130 at 0 elapsed time', () => {
     assert.equal(spawnInterval(0), 130);
   });
+
+  it('pieceBaseSize clamps to lower bound for small viewport width', () => {
+    assert.equal(pieceBaseSize(100), 48);
+  });
 });
