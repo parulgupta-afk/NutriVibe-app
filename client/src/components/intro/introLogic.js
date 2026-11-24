@@ -5,7 +5,15 @@
 export const INTRO_STORAGE_KEY = 'nv_intro_seen';
 export const COLS = 14;
 
-/** Show once per browser session, never for reduced-motion users; `?intro` forces a replay. */
+/**
+ * Determines whether falling food physics intro animation should be presented.
+ * Checks session storage history and respects prefers-reduced-motion user settings.
+ * @param {object} [options={}] Parameter options
+ * @param {Storage|null} [options.storage] Storage engine
+ * @param {string} [options.search=''] Window location query string
+ * @param {boolean} [options.prefersReducedMotion=false] OS motion preference
+ * @returns {boolean} Whether intro should display
+ */
 export function shouldShowIntro({ storage, search = '', prefersReducedMotion = false } = {}) {
   if (prefersReducedMotion) return false;
   if (/(^|[?&])intro(=1|=true)?(&|$)/.test(search)) return true;
