@@ -122,6 +122,15 @@ describe('requireRole Middleware & Seed Route Authorization', () => {
       });
       assert.equal(nextCalled, true);
     });
+
+    it('returns 403 when user role is empty string', () => {
+      const middleware = requireRole('admin');
+      const req = { user: { id: 'u3', role: '' } };
+      let statusCode = null;
+      const res = { status: (c) => { statusCode = c; return res; }, json: () => res };
+      middleware(req, res, () => {});
+      assert.equal(statusCode, 403);
+    });
   });
 
   describe('foodController seedFoods controller authorization', () => {
