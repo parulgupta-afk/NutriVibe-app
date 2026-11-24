@@ -46,6 +46,12 @@ async function listMine(req, res, next) {
   }
 }
 
+/**
+ * Administrative endpoint listing submitted products filtered by moderation status.
+ * @param {import('express').Request} req Express request with admin user and status query
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function adminList(req, res, next) {
   try {
     if (req.user.role !== 'admin') {
