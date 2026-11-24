@@ -77,5 +77,12 @@ describe('client hydrationGoal utility tests', () => {
     const goal = calculateDailyWaterGoal({ activityMinutes: 0 });
     assert.equal(goal, 2450);
   });
+
+  it('calculateHydrationProgress calculates 50 percent progress correctly', () => {
+    const progress = calculateHydrationProgress(1000, 2000);
+    assert.equal(progress.percentage, 50);
+    assert.equal(progress.remainingMl, 1000);
+    assert.equal(progress.isGoalMet, false);
+  });
 });
 
