@@ -73,4 +73,8 @@ describe('client ProfileSelector logic tests', () => {
   it('resolveProfileDisplayName returns Me when dependent not found in non-empty array', () => {
     assert.equal(resolveProfileDisplayName('dep_missing', [{ _id: 'dep_1', name: 'Kid' }]), 'Me');
   });
+
+  it('resolveProfileDisplayName returns Me when activeProfileId is null and dependents is empty', () => {
+    assert.equal(resolveProfileDisplayName(null, []), 'Me');
+  });
 });
