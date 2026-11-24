@@ -39,6 +39,10 @@ describe('vibeAIService unit tests', () => {
     it('detects queries phrased with can i eat', () => {
       assert.equal(isSafetyQuestion('Can I eat these cookies?'), true);
     });
+
+    it('detects queries phrased with should i avoid', () => {
+      assert.equal(isSafetyQuestion('Should I avoid this soda?'), true);
+    });
   });
 });
 
