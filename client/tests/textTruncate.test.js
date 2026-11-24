@@ -66,5 +66,9 @@ describe('client textTruncate utility tests', () => {
   it('truncateWords returns empty string for non-string input', () => {
     assert.equal(truncateWords(12345), '');
   });
+
+  it('truncateText returns empty string for non-string input', () => {
+    assert.equal(truncateText(99999), '');
+  });
 });
 
