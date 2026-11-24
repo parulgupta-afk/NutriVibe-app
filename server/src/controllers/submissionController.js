@@ -1,5 +1,12 @@
 const ProductSubmission = require('../models/ProductSubmission');
 
+/**
+ * Handles community food product contribution submission.
+ * Saves candidate product into pending review state for manual administrator moderation.
+ * @param {import('express').Request} req Express request containing user and product payload
+ * @param {import('express').Response} res Express response
+ * @param {import('express').NextFunction} next Express next callback
+ */
 async function submit(req, res, next) {
   try {
     const { barcode, name, brand, ingredients, imageUrl, notes } = req.body;
