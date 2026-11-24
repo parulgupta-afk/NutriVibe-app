@@ -69,5 +69,9 @@ describe('client safeStorage utility tests', () => {
   it('safeStorage.getItem returns custom default value when key does not exist', () => {
     assert.equal(safeStorage.getItem('missing_custom', 'custom_default'), 'custom_default');
   });
+
+  it('safeStorage.getItem returns null by default when key is missing and no fallback provided', () => {
+    assert.equal(safeStorage.getItem('nonexistent_key_xyz'), null);
+  });
 });
 
