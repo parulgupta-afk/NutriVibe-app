@@ -105,4 +105,9 @@ describe('client VerdictRing logic & styles tests', () => {
     const config = getVerdictConfig('SAFE', -10);
     assert.equal(config.pct, 0);
   });
+
+  it('getVerdictConfig clamps score exceeding 100 to pct 1', () => {
+    const config = getVerdictConfig('SAFE', 120);
+    assert.equal(config.pct, 1);
+  });
 });
