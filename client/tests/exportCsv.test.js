@@ -93,5 +93,9 @@ describe('client exportCsv utility tests', () => {
   it('escapeCell handles undefined value returning empty string', () => {
     assert.equal(escapeCell(undefined), '');
   });
+
+  it('escapeCell handles null value returning empty string', () => {
+    assert.equal(escapeCell(null), '');
+  });
 });
 
