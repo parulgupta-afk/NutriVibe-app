@@ -74,5 +74,9 @@ describe('client nutritionFormat utility tests', () => {
   it('formats numeric 500 correctly', () => {
     assert.equal(formatCalories(500), '500 kcal');
   });
+
+  it('formatGrams formats numeric 25 correctly', () => {
+    assert.equal(formatGrams(25), '25g');
+  });
 });
 
