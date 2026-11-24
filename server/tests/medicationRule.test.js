@@ -76,5 +76,11 @@ describe('medicationRule unit tests', () => {
     assert.equal(state.level, 'Safe');
     assert.equal(state.score, 100);
   });
+
+  it('applyMedicationRules preserves factors array when no interaction exists', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [{ name: 'Existing note' }], recommendations: [] };
+    const state = applyMedicationRules({ name: 'Apple' }, [], initialState);
+    assert.equal(state.factors.length, 1);
+  });
 });
 
