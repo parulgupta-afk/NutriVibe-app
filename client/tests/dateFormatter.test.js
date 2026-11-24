@@ -61,5 +61,9 @@ describe('client dateFormatter utility tests', () => {
   it('isToday returns false for past Date instance', () => {
     assert.equal(isToday(new Date('1999-12-31')), false);
   });
+
+  it('formatDate returns custom fallback for null input', () => {
+    assert.equal(formatDate(null, 'CustomEmpty'), 'CustomEmpty');
+  });
 });
 
