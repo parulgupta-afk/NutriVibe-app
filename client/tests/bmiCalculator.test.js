@@ -91,5 +91,11 @@ describe('client bmiCalculator utility tests', () => {
     assert.equal(res.bmi, null);
     assert.equal(res.category, 'Unknown');
   });
+
+  it('calculateBmi returns null and Unknown for negative weight input', () => {
+    const res = calculateBmi(-60, 170);
+    assert.equal(res.bmi, null);
+    assert.equal(res.category, 'Unknown');
+  });
 });
 
