@@ -75,6 +75,10 @@ describe('client apiError utils', () => {
   it('isUnauthorized returns true strictly for status 401', () => {
     assert.equal(isUnauthorized({ response: { status: 401 } }), true);
   });
+
+  it('isUnauthorized returns false for status 500 server error', () => {
+    assert.equal(isUnauthorized({ response: { status: 500 } }), false);
+  });
 });
 
 describe('client lastScanCache utils', () => {
