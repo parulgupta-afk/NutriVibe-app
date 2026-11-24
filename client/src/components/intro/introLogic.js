@@ -24,7 +24,10 @@ export function shouldShowIntro({ storage, search = '', prefersReducedMotion = f
   }
 }
 
-// Marks intro splash as viewed in client storage
+/**
+ * Records that the intro animation has been displayed for the current browser session.
+ * @param {Storage|null} [storage] Web storage instance
+ */
 export function markIntroSeen(storage) {
   try {
     storage?.setItem(INTRO_STORAGE_KEY, '1');
