@@ -110,4 +110,9 @@ describe('client VerdictRing logic & styles tests', () => {
     const config = getVerdictConfig('SAFE', 120);
     assert.equal(config.pct, 1);
   });
+
+  it('getVerdictConfig returns CAUTION label for CAUTION verdict', () => {
+    const config = getVerdictConfig('CAUTION', 65);
+    assert.equal(config.label, 'CAUTION');
+  });
 });
