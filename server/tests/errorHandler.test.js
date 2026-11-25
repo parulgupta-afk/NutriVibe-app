@@ -125,4 +125,15 @@ describe('errorHandler', () => {
     assert.equal(res.statusCode, 500);
     assert.equal(res.body.error.code, 'INTERNAL_ERROR');
   });
+
+  it('preserves custom 400 statusCode and error code', () => {
+    const req = { path: '/api/test', method: 'POST' };
+    const res = mockRes();
+    const err = new Error('Bad request payload');
+    err.statusCode = 400;
+    err.code = 'BAD_REQUEST';
+    errorHandler(err, req, res, () => {});
+    assert.equal(res.statusCode, 400);
+    assert.equal(res.body.error.code, 'BAD_REQUEST');
+  });
 });
