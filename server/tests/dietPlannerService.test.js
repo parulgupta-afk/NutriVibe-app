@@ -61,5 +61,10 @@ describe('dietPlannerService unit tests', () => {
   it('returns empty array when foods input is empty', () => {
     assert.deepEqual(filterFoodsByPreferences([], {}), []);
   });
+
+  it('returns all foods when preferences object is empty', () => {
+    const result = filterFoodsByPreferences(sampleFoods, {});
+    assert.equal(result.length, sampleFoods.length);
+  });
 });
 
