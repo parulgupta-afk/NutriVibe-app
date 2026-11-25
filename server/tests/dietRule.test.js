@@ -69,5 +69,12 @@ describe('dietRule unit tests', () => {
     assert.equal(state.level, 'Safe');
     assert.equal(state.score, 100);
   });
+
+  it('handles empty userRestrictions array safely', () => {
+    const initialState = { level: 'Safe', score: 100, factors: [], recommendations: [] };
+    const state = applyDietRules({ name: 'Oats' }, [], initialState);
+    assert.equal(state.level, 'Safe');
+    assert.equal(state.score, 100);
+  });
 });
 
