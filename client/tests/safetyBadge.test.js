@@ -108,4 +108,9 @@ describe('client SafetyBadge logic tests', () => {
     const config = getBadgeConfig('Safe', 85, 'md');
     assert.equal(config.sizeClass, 'px-3 py-1 text-sm gap-1.5');
   });
+
+  it('getBadgeConfig returns Unknown key for empty string level', () => {
+    const config = getBadgeConfig('');
+    assert.equal(config.key, 'Unknown');
+  });
 });
