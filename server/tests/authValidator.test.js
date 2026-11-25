@@ -66,6 +66,7 @@ describe('auth validator schemas and email normalization', () => {
   });
 
   it('accepts valid 24-char hex string in objectId validator', () => {
+    const { objectId } = require('../src/validators/common.validator');
     const validId = '507f1f77bcf86cd799439011';
     assert.equal(objectId.parse(validId), validId);
   });

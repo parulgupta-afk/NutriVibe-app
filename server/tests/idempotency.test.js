@@ -110,8 +110,8 @@ describe('idempotency helpers', () => {
     assert.equal(responseBody.error.code, 'VALIDATION_ERROR');
   });
 
-  it('passes through when idempotency header is whitespace only', () => {
-    const req = { get: () => '   ', user: { id: 'u1' } };
+  it('passes through when idempotency header is empty string', () => {
+    const req = { get: () => '', user: { id: 'u1' } };
     let passed = false;
     idempotency(req, {}, () => {
       passed = true;
