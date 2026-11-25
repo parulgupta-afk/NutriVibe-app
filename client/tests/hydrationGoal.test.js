@@ -84,5 +84,12 @@ describe('client hydrationGoal utility tests', () => {
     assert.equal(progress.remainingMl, 1000);
     assert.equal(progress.isGoalMet, false);
   });
+
+  it('calculateHydrationProgress returns 0 percentage when current intake is 0', () => {
+    const progress = calculateHydrationProgress(0, 2000);
+    assert.equal(progress.percentage, 0);
+    assert.equal(progress.remainingMl, 2000);
+    assert.equal(progress.isGoalMet, false);
+  });
 });
 
