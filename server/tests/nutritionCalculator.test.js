@@ -37,4 +37,10 @@ describe('nutritionCalculator', () => {
     assert.equal(n.calories, 0);
     assert.equal(n.protein, 0);
   });
+
+  it('returns zeros when grams is zero', () => {
+    const n = calculateFromGrams({ calories: 250, protein: 12 }, 0);
+    assert.equal(n.calories, 0);
+    assert.equal(n.protein, 0);
+  });
 });
