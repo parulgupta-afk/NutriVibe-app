@@ -70,5 +70,9 @@ describe('client textTruncate utility tests', () => {
   it('truncateText returns empty string for non-string input', () => {
     assert.equal(truncateText(99999), '');
   });
+
+  it('toTitleCase returns empty string for empty input', () => {
+    assert.equal(toTitleCase(''), '');
+  });
 });
 
