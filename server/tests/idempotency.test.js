@@ -109,4 +109,13 @@ describe('idempotency helpers', () => {
     assert.equal(statusCode, 400);
     assert.equal(responseBody.error.code, 'VALIDATION_ERROR');
   });
+
+  it('passes through when idempotency header is whitespace only', () => {
+    const req = { get: () => '   ', user: { id: 'u1' } };
+    let passed = false;
+    idempotency(req, {}, () => {
+      passed = true;
+    });
+    assert.equal(passed, true);
+  });
 });
