@@ -73,5 +73,11 @@ describe('client safeStorage utility tests', () => {
   it('safeStorage.getItem returns null by default when key is missing and no fallback provided', () => {
     assert.equal(safeStorage.getItem('nonexistent_key_xyz'), null);
   });
+
+  it('safeStorage.removeItem removes stored key cleanly', () => {
+    safeStorage.setItem('temp_remove_key', 'abc');
+    safeStorage.removeItem('temp_remove_key');
+    assert.equal(safeStorage.getItem('temp_remove_key'), null);
+  });
 });
 
