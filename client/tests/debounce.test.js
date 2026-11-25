@@ -97,5 +97,14 @@ describe('client debounce utility tests', () => {
     await new Promise((r) => setTimeout(r, 30));
     assert.equal(capturedArg, 'hello-debounce');
   });
+
+  it('debounce cancel prevents pending invocation', async () => {
+    let called = false;
+    const fn = debounce(() => { called = true; }, 20);
+    fn();
+    fn.cancel();
+    await new Promise((r) => setTimeout(r, 40));
+    assert.equal(called, false);
+  });
 });
 
