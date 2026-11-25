@@ -77,4 +77,8 @@ describe('client ProfileSelector logic tests', () => {
   it('resolveProfileDisplayName returns Me when activeProfileId is null and dependents is empty', () => {
     assert.equal(resolveProfileDisplayName(null, []), 'Me');
   });
+
+  it('resolveProfileDisplayName returns Me when activeProfileId is undefined', () => {
+    assert.equal(resolveProfileDisplayName(undefined, []), 'Me');
+  });
 });
