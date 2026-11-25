@@ -66,7 +66,13 @@ export function columnTops(bodies, width, height, cols = COLS) {
   return tops;
 }
 
-/** Full = at least 86% of the width is stacked into the top fifth of the stage. */
+/**
+ * Checks whether at least 86% of columns are stacked into the top fifth of the stage.
+ * @param {number[]} tops Column top boundary positions
+ * @param {number} height Stage viewport height in pixels
+ * @param {number} [cols=COLS] Number of vertical columns
+ * @returns {boolean} True when the pile has filled the stage
+ */
 export function isPileFull(tops, height, cols = COLS) {
   const filled = tops.filter((t) => t < height * 0.2).length;
   return filled >= Math.ceil(cols * 0.86);
