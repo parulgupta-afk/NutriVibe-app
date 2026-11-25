@@ -78,5 +78,9 @@ describe('client nutritionFormat utility tests', () => {
   it('formatGrams formats numeric 25 correctly', () => {
     assert.equal(formatGrams(25), '25g');
   });
+
+  it('formatCalories formats undefined input with default fallback', () => {
+    assert.equal(formatCalories(undefined), '0 kcal');
+  });
 });
 
