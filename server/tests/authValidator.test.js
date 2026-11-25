@@ -64,5 +64,10 @@ describe('auth validator schemas and email normalization', () => {
   it('rejects empty string in emailString validator', () => {
     assert.throws(() => emailString.parse(''));
   });
+
+  it('accepts valid 24-char hex string in objectId validator', () => {
+    const validId = '507f1f77bcf86cd799439011';
+    assert.equal(objectId.parse(validId), validId);
+  });
 });
 
