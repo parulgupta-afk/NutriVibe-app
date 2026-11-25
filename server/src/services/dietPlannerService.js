@@ -13,6 +13,12 @@ const DietPlan = require('../models/DietPlan');
 const { calculateFromGrams, sumNutrition, roundTotals } = require('./nutritionCalculator');
 const { computeSafetyVerdict } = require('./safetyEngine');
 
+/**
+ * Filters a list of food items according to user allergies and vegetarian diet preferences.
+ * @param {Array<object>} [foods=[]] Candidate food items
+ * @param {object} [preferences={}] User dietary preferences
+ * @returns {Array<object>} Filtered safe food items
+ */
 function filterFoodsByPreferences(foods = [], preferences = {}) {
   const allergies = (preferences.allergies || []).map((a) => a.toLowerCase());
   const isVeg =
