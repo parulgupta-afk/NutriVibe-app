@@ -97,5 +97,9 @@ describe('client exportCsv utility tests', () => {
   it('escapeCell handles null value returning empty string', () => {
     assert.equal(escapeCell(null), '');
   });
+
+  it('escapeCell quotes strings containing commas', () => {
+    assert.equal(escapeCell('milk, soy'), '"milk, soy"');
+  });
 });
 
