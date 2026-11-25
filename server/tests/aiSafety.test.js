@@ -122,5 +122,13 @@ describe('AI safety', () => {
       assert.ok(delimited.includes('<<<UNTRUSTED_QUERY_START>>>'));
       assert.ok(delimited.includes('<<<UNTRUSTED_QUERY_END>>>'));
     });
+
+    test('checkUserQuota tracks separate user IDs independently', () => {
+      const resA = checkUserQuota('isolated-user-a', 5);
+      const resB = checkUserQuota('isolated-user-b', 5);
+      assert.strictEqual(resA.allowed, true);
+      assert.strictEqual(resB.allowed, true);
+      assert.strictEqual(resB.remaining, 4);
+    });
   });
 });
