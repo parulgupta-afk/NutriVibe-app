@@ -50,6 +50,10 @@ function validateEnv() {
   };
 }
 
+/**
+ * Returns a redacted summary of environment configuration status for startup logging.
+ * @returns {Record<string, string>} Masked environment summary
+ */
 function envSummary() {
   return {
     NODE_ENV: process.env.NODE_ENV || 'development',
