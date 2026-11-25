@@ -101,4 +101,9 @@ export function spawnInterval(elapsedMs) {
   return 130 - 104 * Math.min(1, elapsedMs / 2600);
 }
 
+/**
+ * Clamped cubic ease-out curve for smooth UI animation transitions.
+ * @param {number} t Progress ratio in [0, 1]
+ * @returns {number} Eased output value in [0, 1]
+ */
 export const easeOutCubic = (t) => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
