@@ -64,5 +64,9 @@ describe('client barcodeValidator utility tests', () => {
   it('isValidBarcode returns false for null input', () => {
     assert.equal(isValidBarcode(null), false);
   });
+
+  it('isValidBarcode returns false for empty string input', () => {
+    assert.equal(isValidBarcode(''), false);
+  });
 });
 
