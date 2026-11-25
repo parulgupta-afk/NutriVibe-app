@@ -65,5 +65,9 @@ describe('client dateFormatter utility tests', () => {
   it('formatDate returns custom fallback for null input', () => {
     assert.equal(formatDate(null, 'CustomEmpty'), 'CustomEmpty');
   });
+
+  it('formatTime returns default fallback for null input', () => {
+    assert.equal(formatTime(null), '--:--');
+  });
 });
 
