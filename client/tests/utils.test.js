@@ -125,5 +125,11 @@ describe('client lastScanCache utils', () => {
     assert.equal(loadLastScan(), null);
     clearLastScan();
   });
+
+  it('clearLastScan clears cached scan without throwing when already empty', () => {
+    clearLastScan();
+    clearLastScan();
+    assert.equal(loadLastScan(), null);
+  });
 });
 
