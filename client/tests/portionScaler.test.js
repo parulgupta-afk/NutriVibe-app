@@ -105,5 +105,11 @@ describe('client portionScaler utility tests', () => {
     const scaled = scaleNutrition(base, 50);
     assert.equal(scaled.calories, 100);
   });
+
+  it('scaleNutrition scales 200g portion to double base calories', () => {
+    const base = { calories: 150 };
+    const scaled = scaleNutrition(base, 200);
+    assert.equal(scaled.calories, 300);
+  });
 });
 
