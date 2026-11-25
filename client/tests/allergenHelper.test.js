@@ -74,5 +74,9 @@ describe('client allergenHelper utility tests', () => {
     const style = getAllergenBadgeStyle('');
     assert.match(style, /bg-gray-100/);
   });
+
+  it('normalizeAllergenName trims and lowercases mixed-case input', () => {
+    assert.equal(normalizeAllergenName('  Peanuts  '), 'peanuts');
+  });
 });
 
