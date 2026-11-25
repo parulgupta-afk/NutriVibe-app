@@ -61,4 +61,9 @@ describe('dietaryRules dataset and checker tests', () => {
     const product = { name: 'Apple', ingredients_text: 'Fresh apple' };
     assert.deepEqual(checkDietaryRestrictions(['   ', ''], product), []);
   });
+
+  it('returns empty array when restrictions list is empty', () => {
+    const product = { name: 'Chicken Soup', ingredients_text: 'Chicken, water' };
+    assert.deepEqual(checkDietaryRestrictions([], product), []);
+  });
 });
