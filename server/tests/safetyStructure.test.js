@@ -55,4 +55,10 @@ describe('Phase 8 structure', () => {
     assert.equal(Array.isArray(v.recommendations), true);
     assert.equal(typeof v.verdict, 'string');
   });
+
+  it('verifies computeSafetyVerdict returns processing object with level string', () => {
+    const v = computeSafetyVerdict(product(), user());
+    assert.ok(v.processing);
+    assert.equal(typeof v.processing.level, 'string');
+  });
 });
