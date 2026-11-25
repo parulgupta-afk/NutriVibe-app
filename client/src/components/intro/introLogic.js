@@ -92,7 +92,11 @@ export function lowestColumn(tops, rand = Math.random) {
   return best;
 }
 
-/** Interval between pieces: starts slow, speeds up over the first 2.6 s. */
+/**
+ * Computes the spawn interval in milliseconds, ramping down from 130ms to 26ms over 2.6 seconds.
+ * @param {number} elapsedMs Elapsed animation time in milliseconds
+ * @returns {number} Spawn interval in milliseconds
+ */
 export function spawnInterval(elapsedMs) {
   return 130 - 104 * Math.min(1, elapsedMs / 2600);
 }
