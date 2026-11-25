@@ -72,5 +72,9 @@ describe('allergenRule detailed unit tests', () => {
   it('returns false for hasRelevantCrossContamination when product is null', () => {
     assert.equal(hasRelevantCrossContamination(null, ['Peanuts']), false);
   });
+
+  it('returns empty array for findMatchingAllergens when product is null', () => {
+    assert.deepEqual(findMatchingAllergens(null, ['Peanuts']), []);
+  });
 });
 
